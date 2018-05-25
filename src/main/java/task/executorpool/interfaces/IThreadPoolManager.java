@@ -1,9 +1,9 @@
 package task.executorpool.interfaces;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.BaseConsumerTask;
-import com.yyz.CurrencyThreadTask.task.executor.BaseLoopTask;
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ITaskContainer;
+import task.executor.BaseConsumerTask;
+import task.executor.BaseLoopTask;
+import task.executor.interfaces.ITaskContainer;
 
 /**
  * 可复用的线程接口

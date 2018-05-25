@@ -1,12 +1,12 @@
 package task.message;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.BaseConsumerTask;
-import com.yyz.CurrencyThreadTask.task.executor.ConsumerTaskExecutor;
-import com.yyz.CurrencyThreadTask.task.executor.TaskContainer;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IEnvelope;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IMsgCourier;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IMsgPostOffice;
+import task.executor.BaseConsumerTask;
+import task.executor.ConsumerTaskExecutor;
+import task.executor.TaskContainer;
+import task.message.interfaces.IEnvelope;
+import task.message.interfaces.IMsgCourier;
+import task.message.interfaces.IMsgPostOffice;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

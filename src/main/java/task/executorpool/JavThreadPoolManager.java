@@ -1,12 +1,12 @@
 package task.executorpool;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.BaseConsumerTask;
-import com.yyz.CurrencyThreadTask.task.executor.BaseLoopTask;
-import com.yyz.CurrencyThreadTask.task.executor.TaskContainer;
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ITaskContainer;
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ITaskExecutor;
-import com.yyz.CurrencyThreadTask.task.executorpool.interfaces.IThreadPoolManager;
+import task.executor.BaseConsumerTask;
+import task.executor.BaseLoopTask;
+import task.executor.TaskContainer;
+import task.executor.interfaces.ITaskContainer;
+import task.executor.interfaces.ITaskExecutor;
+import task.executorpool.interfaces.IThreadPoolManager;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

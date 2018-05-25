@@ -1,8 +1,8 @@
 package task.message;
 
 
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IEnvelope;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IMsgPostOffice;
+import task.message.interfaces.IEnvelope;
+import task.message.interfaces.IMsgPostOffice;
 
 /**
  * 线程消息类

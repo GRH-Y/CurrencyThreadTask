@@ -1,8 +1,8 @@
 package task.executor;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ILoopTaskExecutor;
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ITaskContainer;
+import task.executor.interfaces.ILoopTaskExecutor;
+import task.executor.interfaces.ITaskContainer;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

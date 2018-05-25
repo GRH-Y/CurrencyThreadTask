@@ -1,11 +1,11 @@
 package task.message;
 
 
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IEnvelope;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IMsgCourier;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.IMsgPostOffice;
-import com.yyz.CurrencyThreadTask.task.message.interfaces.INotifyListener;
-import com.yyz.CurrencyThreadTask.task.utils.ThreadAnnotation;
+import task.message.interfaces.IEnvelope;
+import task.message.interfaces.IMsgCourier;
+import task.message.interfaces.IMsgPostOffice;
+import task.message.interfaces.INotifyListener;
+import task.utils.ThreadAnnotation;
 
 import java.util.Enumeration;
 import java.util.Queue;

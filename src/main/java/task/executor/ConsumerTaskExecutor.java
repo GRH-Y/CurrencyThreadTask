@@ -1,8 +1,8 @@
 package task.executor;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.IConsumerTaskExecutor;
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ITaskExecutor;
+import task.executor.interfaces.IConsumerTaskExecutor;
+import task.executor.interfaces.ITaskExecutor;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

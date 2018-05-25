@@ -1,7 +1,7 @@
 package task.executor.interfaces;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.BaseLoopTask;
+import task.executor.BaseLoopTask;
 
 /**
  * 线程容器

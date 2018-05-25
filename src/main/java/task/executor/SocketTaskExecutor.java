@@ -1,7 +1,7 @@
 package task.executor;
 
 
-import com.yyz.CurrencyThreadTask.task.executor.interfaces.ISocketTaskExecutor;
+import task.executor.interfaces.ISocketTaskExecutor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
