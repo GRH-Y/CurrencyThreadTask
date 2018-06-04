@@ -183,7 +183,9 @@ public class IoUtils {
                 }
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            if (e instanceof SocketTimeoutException == false) {
+                e.printStackTrace();
+            }
         } finally {
             result = stream.toByteArray();
             try {
@@ -214,7 +216,9 @@ public class IoUtils {
                     sum = FAIL;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                if (e instanceof SocketTimeoutException == false) {
+                    e.printStackTrace();
+                }
                 sum = FAIL;
             }
         } while (sum >= 0 && channel.isConnected());
