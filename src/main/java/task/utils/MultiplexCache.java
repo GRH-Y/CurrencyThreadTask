@@ -11,8 +11,8 @@ import java.util.List;
 
 public class MultiplexCache<T> {
     private int popIndex = 0;
-    private List<CacheItem<T>> cache = null;
-    private List<CacheItem<T>> useCache = null;
+    private List<CacheItem<T>> cache;
+    private List<CacheItem<T>> useCache;
     private final int FAIL = -1;
     private boolean isRelease = false;
 
@@ -37,6 +37,9 @@ public class MultiplexCache<T> {
      * @param data 复用数据
      */
     public synchronized void setRepeatData(T data) {
+        if (data == null) {
+            return;
+        }
         int index = contains(useCache, data);
         if (useCache != null && index != FAIL) {
             //该数据块是已存在的
@@ -44,7 +47,7 @@ public class MultiplexCache<T> {
             item.lock = false;
             useCache.remove(index);
         } else {
-            if (data != null && cache != null && contains(cache, data) == FAIL) {
+            if (cache != null && contains(cache, data) == FAIL) {
                 CacheItem item = new CacheItem<>();
                 item.data = data;
                 cache.add(item);
@@ -63,7 +66,7 @@ public class MultiplexCache<T> {
         if (list != null && data != null) {
             int index = 0;
             for (CacheItem<T> tmp : list) {
-                if (tmp == data) {
+                if (tmp.data == data) {
                     return index;
                 }
                 index++;
@@ -83,10 +86,7 @@ public class MultiplexCache<T> {
             popIndex = popIndex >= cache.size() ? 0 : popIndex;
             CacheItem<T> item = cache.get(popIndex);
             if (item.lock) {
-                item = null;
-                while (item == null && !isRelease) {
-                    item = getCanUseData();
-                }
+                item = getCanUseData();
             }
             item.lock = true;
             useCache.add(item);//记录正在使用的item
@@ -104,6 +104,9 @@ public class MultiplexCache<T> {
     private CacheItem<T> getCanUseData() {
         CacheItem<T> item = null;
         for (CacheItem<T> tmp : cache) {
+            if (!isRelease) {
+                break;
+            }
             if (!tmp.lock) {
                 item = tmp;
                 break;

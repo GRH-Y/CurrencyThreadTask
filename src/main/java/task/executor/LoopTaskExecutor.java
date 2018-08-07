@@ -24,7 +24,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     /*** 任务*/
     protected BaseLoopTask loopTask;
     /*** 执行接口*/
-    private CoreTask coreTask;
+    private Engine engine;
 
     /*** 线程状态*/
     private volatile boolean isAlive = false;
@@ -61,16 +61,16 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
         this.container = container;
         this.loopTask = container.getTask();
-        coreTask = new CoreTask();
+        engine = new Engine();
     }
 
     @Override
     public Runnable getRunnable() {
-        return coreTask;
+        return engine;
     }
 
 
-    private class CoreTask extends BaseLoopTask implements Runnable {
+    private class Engine implements Runnable {
 
         @Override
         public void run() {
@@ -81,7 +81,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
             do {
                 //执行初始化事件
-                onInitTask();
+                loopTask.onInitTask();
                 while (getLoopState()) {
                     // 是否暂停执行
                     if (getPauseState() && getLoopState()) {
@@ -89,18 +89,18 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                     }
                     if (getLoopState()) {
                         // 执行任务事件
-                        onRunLoopTask();
+                        loopTask.onRunLoopTask();
                     }
                     if (isLoopInit && getLoopState()) {
-                        onInitTask();
+                        loopTask.onInitTask();
                     }
                 }
                 // 执行任务懒关闭事件
                 if (getIdleStopState()) {
-                    onIdleStop();
+                    loopTask.onIdleStop();
                 }
                 //执行销毁事件
-                onDestroyTask();
+                loopTask.onDestroyTask();
 
                 if (getMultiplexState()) {
                     // 设置线程空闲状态
@@ -118,28 +118,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             isStart = false;
             isAlive = false;
         }
-
-
-        @Override
-        protected void onInitTask() {
-            loopTask.onInitTask();
-        }
-
-        @Override
-        protected void onRunLoopTask() {
-            loopTask.onRunLoopTask();
-        }
-
-        @Override
-        protected void onIdleStop() {
-            loopTask.onIdleStop();
-        }
-
-        @Override
-        protected void onDestroyTask() {
-            loopTask.onDestroyTask();
-        }
-
     }
 
     // -------------------End run ---------------------
@@ -172,15 +150,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     }
 
     // -------------------End get set LoopState setLoopInit ---------------------
-
-//    /**
-//     * 设置暂停状态
-//     *
-//     * @param state
-//     */
-//    private void setPauseState(boolean state) {
-//        isPause = state;
-//    }
 
     /**
      * 获取线程暂停状态
@@ -346,7 +315,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
 
     @Override
-    public boolean changeTask(BaseLoopTask task) {
+    public final boolean changeTask(BaseLoopTask task) {
         if (isIdleState()) {
             this.loopTask = task;
         }

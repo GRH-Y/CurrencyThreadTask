@@ -1,6 +1,10 @@
 package task.executor.interfaces;
 
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 /**
  * socket网络通信任务控制接口
  * Created by dell on 3/27/2018.
@@ -8,7 +12,11 @@ package task.executor.interfaces;
  * @author yyz
  */
 
-public interface ISocketTaskExecutor<D> {
+public interface ISocketAttribute {
+
+    void initSocket();
+
+    void setSocket(Socket socket);
 
 
     /**
@@ -69,6 +77,10 @@ public interface ISocketTaskExecutor<D> {
      */
     int getRemotePort();
 
+    InputStream getInputStream();
+
+    OutputStream getOutputStream();
+
 
     /**
      * 当前网络连接状态
@@ -82,6 +94,12 @@ public interface ISocketTaskExecutor<D> {
      * 重新链接
      */
     void restartConnect();
+
+
+    /**
+     * 关闭socket
+     */
+    void closeSocket();
 
 
 }

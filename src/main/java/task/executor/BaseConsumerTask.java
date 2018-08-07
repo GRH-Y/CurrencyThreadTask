@@ -13,21 +13,15 @@ package task.executor;
 public class BaseConsumerTask<D> extends BaseLoopTask {
 
     /**
-     * 生产消费数据
+     * 创建数据
      */
     protected void onCreateData() {
     }
 
-//    /**
-//     * 处理消费数据
-//     *
-//     * @param data
-//     */
-//    protected void onProcessData(D data) {
-//    }
 
-
+    /**
+     * 处理数据
+     */
     protected void onProcess() {
-
     }
 }

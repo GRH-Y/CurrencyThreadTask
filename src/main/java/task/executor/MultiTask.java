@@ -43,7 +43,7 @@ public abstract class MultiTask<T> {
      */
     public void setCacheMaxCount(int count) {
         for (Task task : taskList) {
-            task.getExecutor().setCacheMaxCount(count);
+            task.getExecutor().getAttribute().setCacheMaxCount(count);
         }
     }
 
@@ -55,7 +55,7 @@ public abstract class MultiTask<T> {
     public void pushData(T data) {
         Task task = taskList.get(token++);
         TaskEntity entity = new TaskEntity(productionMark++, data);
-        task.getExecutor().pushToCache(entity);
+        task.getExecutor().getAttribute().pushToCache(entity);
         if (token >= taskList.size()) {
             token = 0;
         }
@@ -162,7 +162,7 @@ public abstract class MultiTask<T> {
 
         @Override
         protected void onProcess() {
-            TaskEntity entity = executor.popCacheData();
+            TaskEntity entity = executor.getAttribute().popCacheData();
             if (entity != null) {
                 onExecTask(this, entity.data, entity.mark);
             }

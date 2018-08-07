@@ -167,7 +167,7 @@ public class IoUtils {
         boolean isExit = false;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
-            while (isExit == false) {
+            while (!isExit) {
                 int available = inputStream.available();
                 available = available == 0 ? SIZE : available;
                 if (available > 0) {
@@ -183,11 +183,13 @@ public class IoUtils {
                 }
             }
         } catch (Throwable e) {
-            if (e instanceof SocketTimeoutException == false) {
+            if (!(e instanceof SocketTimeoutException)) {
                 e.printStackTrace();
             }
         } finally {
-            result = stream.toByteArray();
+            if (stream.size() > 0) {
+                result = stream.toByteArray();
+            }
             try {
                 stream.close();
             } catch (IOException e) {
@@ -197,7 +199,7 @@ public class IoUtils {
         return result;
     }
 
-    public static byte[] tryRead(SocketChannel channel) {
+    public static byte[] tryRead(SocketChannel channel) throws IOException {
         byte[] data = null;
         if (channel == null) {
             return data;
@@ -205,23 +207,27 @@ public class IoUtils {
         int ret;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         ByteBuffer buffer = ByteBuffer.allocate(SIZE);
-        int sum = buffer.array().length;
         do {
             try {
                 ret = channel.read(buffer);
-                stream.write(buffer.array(), 0, ret);
-                if (ret == sum) {
+                if (ret > 0) {
+                    stream.write(buffer.array(), 0, ret);
                     buffer.clear();
                 } else {
-                    sum = FAIL;
+                    ret = stream.size() > 0 ? SUCCESS : FAIL;
                 }
             } catch (IOException e) {
-                if (e instanceof SocketTimeoutException == false) {
-                    e.printStackTrace();
-                }
-                sum = FAIL;
+                ret = FAIL;
             }
-        } while (sum >= 0 && channel.isConnected());
+        } while (ret > 0 && channel.isConnected());
+        if (ret == FAIL) {
+            throw new IOException("Read SocketChannel error !") {
+                @Override
+                public synchronized Throwable fillInStackTrace() {
+                    return this;
+                }
+            };
+        }
         data = stream.toByteArray();
         try {
             stream.close();
@@ -424,12 +430,12 @@ public class IoUtils {
     /**
      * 读取数据
      *
-     * @param channel      数据流
-     * @param buffer       读取数据到该缓存区
-     * @param timeoutCount 大于0则socket超时重试次数,0则不重试，-1则永远重试
+     * @param channel  数据流
+     * @param buffer   读取数据到该缓存区
+     * @param tryCount 大于0则socket超时重试次数,0则不重试，-1则永远重试
      * @return 成功返回 0
      */
-    public static int readToFull(SocketChannel channel, ByteBuffer buffer, int timeoutCount) {
+    public static int readToFull(SocketChannel channel, ByteBuffer buffer, int tryCount) {
         int ret = FAIL;
         if (buffer == null || channel == null) {
             return ret;
@@ -438,15 +444,16 @@ public class IoUtils {
         do {
             try {
                 ret = channel.read(buffer);
-                if (ret < 1 && timeoutCount > 0) {
-                    if (timeoutCount == 0) {
+                if (ret < 1) {
+                    if (tryCount == 0) {
                         sum = 0;
                         ret = FAIL;
                     }
-                    timeoutCount--;
+                    tryCount--;
+                } else {
+                    sum -= ret;
+                    ret = SUCCESS;
                 }
-                sum -= ret;
-                ret = SUCCESS;
             } catch (IOException e) {
                 e.printStackTrace();
                 sum = 0;

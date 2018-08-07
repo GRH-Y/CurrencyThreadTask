@@ -11,12 +11,6 @@ import task.executor.interfaces.ITaskContainer;
  * @author yyz
  */
 public interface IThreadPoolManager {
-    /**
-     * 添加任务,线程池会自动执行
-     *
-     * @param runnable
-     */
-    void addTask(Runnable runnable);
 
     /**
      * 添加任务,线程池会自动执行
@@ -32,13 +26,27 @@ public interface IThreadPoolManager {
      */
     void addTask(BaseConsumerTask consumerTask);
 
+    /**
+     * 移除任务
+     *
+     * @param loopTask
+     */
+    void removeTask(BaseLoopTask loopTask);
+
+    /**
+     * 移除任务
+     *
+     * @param loopTask
+     */
+    void removeTask(BaseConsumerTask loopTask);
+
 
     /**
      * 回收线程（线程不是销毁状态才可以用）
      *
-     * @param thread 线程
+     * @param container 线程
      */
-    void recycleThread(ITaskContainer thread);
+    void recycleThread(ITaskContainer container);
 
     /**
      * 切换任务
@@ -51,17 +59,17 @@ public interface IThreadPoolManager {
     /**
      * 销毁线程
      */
-    void destroy(ITaskContainer thread);
+    void destroy(ITaskContainer container);
 
     /**
      * 线程是否空闲状态
      *
      * @return true 空闲
      */
-    boolean isIdleState();
+    boolean isIdleState(ITaskContainer container);
 
     /**
      * 释放资源
      */
-    void recycle();
+    void destroyAll();
 }

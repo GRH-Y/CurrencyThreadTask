@@ -24,7 +24,7 @@ public class JavThreadPoolManager implements IThreadPoolManager {
     private static Queue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
 
     private JavThreadPoolManager() {
-        RecycleTask recycleTask = new RecycleTask();
+        DestroyTask recycleTask = new DestroyTask();
         Thread thread = new Thread(recycleTask);
         Runtime.getRuntime().addShutdownHook(thread);
     }
@@ -50,19 +50,43 @@ public class JavThreadPoolManager implements IThreadPoolManager {
         return thread;
     }
 
-
-    @Override
-    public void addTask(Runnable runnable) {
-
+    private ITaskContainer getTaskContainer() {
+        if (containerCache.size() > 0) {
+            for (ITaskContainer container : containerCache) {
+                boolean isIdleState = container.getTaskExecutor().isIdleState();
+                if (isIdleState) {
+                    return container;
+                }
+            }
+        }
+        return null;
     }
+
 
     @Override
     public void addTask(BaseLoopTask loopTask) {
-
+        ITaskContainer taskContainer = getTaskContainer();
+        if (taskContainer == null) {
+            taskContainer = new TaskContainer(loopTask);
+            taskContainer.getTaskExecutor().startTask();
+            containerCache.add(taskContainer);
+        } else {
+            taskContainer.getTaskExecutor().changeTask(loopTask);
+        }
     }
 
     @Override
     public void addTask(BaseConsumerTask consumerTask) {
+        addTask((BaseLoopTask) consumerTask);
+    }
+
+    @Override
+    public void removeTask(BaseLoopTask loopTask) {
+
+    }
+
+    @Override
+    public void removeTask(BaseConsumerTask loopTask) {
 
     }
 
@@ -76,7 +100,7 @@ public class JavThreadPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public boolean changeTask(ITaskContainer container, BaseLoopTask newTask) {
+    public final boolean changeTask(ITaskContainer container, BaseLoopTask newTask) {
         ITaskExecutor executor = container.getTaskExecutor();
         return executor.changeTask(newTask);
     }
@@ -89,12 +113,12 @@ public class JavThreadPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public boolean isIdleState() {
-        return false;
+    public boolean isIdleState(ITaskContainer container) {
+        return container.getTaskExecutor().isIdleState();
     }
 
     @Override
-    public void recycle() {
+    public void destroyAll() {
         for (ITaskContainer container : containerCache) {
             ITaskExecutor executor = container.getTaskExecutor();
             executor.destroyTask();
@@ -102,11 +126,11 @@ public class JavThreadPoolManager implements IThreadPoolManager {
         containerCache.clear();
     }
 
-    private class RecycleTask implements Runnable {
+    private class DestroyTask implements Runnable {
 
         @Override
         public void run() {
-            recycle();
+            destroyAll();
         }
     }
 

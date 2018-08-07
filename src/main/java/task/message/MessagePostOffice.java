@@ -62,9 +62,9 @@ public class MessagePostOffice implements IMsgPostOffice {
         ThreadHandler handler = getNoBusyThread();
         if (!handler.getExecutor().getAliveState()) {
             handler.getExecutor().startTask();
-            handler.getExecutor().pushToCache(message);
+            handler.getExecutor().getAttribute().pushToCache(message);
         } else
-            handler.getExecutor().pushToCache(message);
+            handler.getExecutor().getAttribute().pushToCache(message);
     }
 
     /**
@@ -298,15 +298,15 @@ public class MessagePostOffice implements IMsgPostOffice {
 
         @Override
         protected void onProcess() {
-            IEnvelope envelope = executor.popCacheData();
+            IEnvelope envelope = executor.getAttribute().popCacheData();
             if (envelope != null) {
                 isNotify = true;
                 disposeMessage(this, envelope);
                 execCache();
                 ConsumerTaskExecutor executor = container.getTaskExecutor();
-                if (executor.getCacheDataSize() == 0) {
+                if (executor.getAttribute().getCacheDataSize() == 0) {
                     executor.waitTask(8000);
-                    if (executor.getCacheDataSize() == 0) {
+                    if (executor.getAttribute().getCacheDataSize() == 0) {
                         executor.stopTask();
                     }
                 }
