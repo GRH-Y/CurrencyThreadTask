@@ -22,7 +22,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     private ITaskContainer container;
 
     /*** 任务*/
-    protected BaseLoopTask loopTask;
+    protected BaseLoopTask executorTask;
     /*** 执行接口*/
     private Engine engine;
 
@@ -60,7 +60,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             throw new NullPointerException(" container is null");
         }
         this.container = container;
-        this.loopTask = container.getTask();
+        this.executorTask = container.getTask();
         engine = new Engine();
     }
 
@@ -81,7 +81,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
             do {
                 //执行初始化事件
-                loopTask.onInitTask();
+                executorTask.onInitTask();
                 while (getLoopState()) {
                     // 是否暂停执行
                     if (getPauseState() && getLoopState()) {
@@ -89,18 +89,18 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                     }
                     if (getLoopState()) {
                         // 执行任务事件
-                        loopTask.onRunLoopTask();
+                        executorTask.onRunLoopTask();
                     }
                     if (isLoopInit && getLoopState()) {
-                        loopTask.onInitTask();
+                        executorTask.onInitTask();
                     }
                 }
                 // 执行任务懒关闭事件
                 if (getIdleStopState()) {
-                    loopTask.onIdleStop();
+                    executorTask.onIdleStop();
                 }
                 //执行销毁事件
-                loopTask.onDestroyTask();
+                executorTask.onDestroyTask();
 
                 if (getMultiplexState()) {
                     // 设置线程空闲状态
@@ -182,7 +182,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void startTask() {
-        startTask(loopTask.getClass().getName());
+        startTask(executorTask.getClass().getName());
     }
 
     @Override
@@ -203,7 +203,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void blockStartTask() {
-        blockStartTask(loopTask.getClass().getName());
+        blockStartTask(executorTask.getClass().getName());
     }
 
     @Override
@@ -317,9 +317,9 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     @Override
     public final boolean changeTask(BaseLoopTask task) {
         if (isIdleState()) {
-            this.loopTask = task;
+            this.executorTask = task;
         }
-        return this.loopTask == task;
+        return this.executorTask == task;
     }
 
     /**

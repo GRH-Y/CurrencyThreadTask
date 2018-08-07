@@ -1,9 +1,8 @@
-package task.executorpool.interfaces;
+package task.executor.interfaces;
 
 
 import task.executor.BaseConsumerTask;
 import task.executor.BaseLoopTask;
-import task.executor.interfaces.ITaskContainer;
 
 /**
  * 可复用的线程接口
@@ -12,19 +11,23 @@ import task.executor.interfaces.ITaskContainer;
  */
 public interface IThreadPoolManager {
 
+    ITaskContainer createJThread(BaseLoopTask loopTask);
+
+    ITaskContainer createJThread(BaseConsumerTask consumerTask);
+
     /**
      * 添加任务,线程池会自动执行
      *
      * @param loopTask
      */
-    void addTask(BaseLoopTask loopTask);
+    void runTask(BaseLoopTask loopTask);
 
     /**
      * 添加任务,线程池会自动执行
      *
      * @param consumerTask
      */
-    void addTask(BaseConsumerTask consumerTask);
+    void runTask(BaseConsumerTask consumerTask);
 
     /**
      * 移除任务

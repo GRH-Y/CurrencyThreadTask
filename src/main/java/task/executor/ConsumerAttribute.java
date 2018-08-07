@@ -125,7 +125,7 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
         @Override
         public void onRunLoopTask() {
             if (getCacheDataSize() > 0) {
-                ((BaseConsumerTask) (mTaskExecutor.loopTask)).onProcess();
+                ((BaseConsumerTask) (mTaskExecutor.executorTask)).onProcess();
             } else {
                 asyncTaskExecutor.waitTask(0);
             }

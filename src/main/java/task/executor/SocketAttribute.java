@@ -55,10 +55,10 @@ public class SocketAttribute implements ISocketAttribute {
                 outputStream = mSocket.getOutputStream();
                 isConnect = true;
                 mTaskExecutor.setLoopInit(false);
-                BaseSocketTask socketTask = (BaseSocketTask) mTaskExecutor.loopTask;
+                BaseSocketTask socketTask = (BaseSocketTask) mTaskExecutor.executorTask;
                 socketTask.onConnectSuccess();
             } catch (Throwable e) {
-                BaseSocketTask socketTask = (BaseSocketTask) mTaskExecutor.loopTask;
+                BaseSocketTask socketTask = (BaseSocketTask) mTaskExecutor.executorTask;
                 closeSocket();
                 socketTask.onConnectFailure();
                 if (e instanceof ConnectException && ip != null) {

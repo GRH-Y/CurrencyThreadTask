@@ -27,7 +27,7 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
     protected ConsumerTaskExecutor(TaskContainer container) {
         super(container);
         this.consumerTask = container.getTask();
-        loopTask = new CoreTask();
+        executorTask = new CoreTask();
 
     }
 
@@ -99,7 +99,7 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
     @Override
     public void stopTask() {
         super.stopTask();
-        CoreTask coreTask = (CoreTask) loopTask;
+        CoreTask coreTask = (CoreTask) executorTask;
         coreTask.attribute.stopAsyncProcessData();
     }
 
@@ -111,7 +111,7 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
      */
     @Override
     public IConsumerAttribute<D> getAttribute() {
-        CoreTask coreTask = (CoreTask) loopTask;
+        CoreTask coreTask = (CoreTask) executorTask;
         return coreTask.attribute;
     }
 }
