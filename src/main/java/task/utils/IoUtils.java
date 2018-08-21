@@ -448,8 +448,9 @@ public class IoUtils {
                     if (tryCount == 0) {
                         sum = 0;
                         ret = FAIL;
+                    } else if (tryCount > 0) {
+                        tryCount--;
                     }
-                    tryCount--;
                 } else {
                     sum -= ret;
                     ret = SUCCESS;

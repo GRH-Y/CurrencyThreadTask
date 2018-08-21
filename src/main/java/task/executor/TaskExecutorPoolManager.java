@@ -13,23 +13,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author YDZ
  */
-public class JavThreadPoolManager implements IThreadPoolManager {
-    private static JavThreadPoolManager pool = null;
+public class TaskExecutorPoolManager implements IThreadPoolManager {
+    private static TaskExecutorPoolManager pool = null;
     /**
      * 缓存线程栈
      */
     private static Queue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
 
-    private JavThreadPoolManager() {
+    private TaskExecutorPoolManager() {
         DestroyTask recycleTask = new DestroyTask();
         Thread thread = new Thread(recycleTask);
         Runtime.getRuntime().addShutdownHook(thread);
     }
 
-    public synchronized static JavThreadPoolManager getInstance() {
+    public synchronized static TaskExecutorPoolManager getInstance() {
         if (pool == null) {
-            synchronized (JavThreadPoolManager.class) {
-                pool = new JavThreadPoolManager();
+            synchronized (TaskExecutorPoolManager.class) {
+                pool = new TaskExecutorPoolManager();
             }
         }
         return pool;
