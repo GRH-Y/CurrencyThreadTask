@@ -36,7 +36,7 @@ public class IoUtils {
     public static long skip(InputStream is, int skipLength) {
         try {
             return is.skip(skipLength);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return FAIL;
@@ -51,7 +51,7 @@ public class IoUtils {
     public static void skip(RandomAccessFile is, int skipLength) {
         try {
             is.seek(skipLength);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -94,17 +94,16 @@ public class IoUtils {
                     os.write(buffer, 0, len);
                     os.flush();
                 } else {
-                    state = missCount >= 8 ? false : state;
-                    state = isCanTimeOut ? state && isCanTimeOut : false;
+                    state = missCount < 8 && isCanTimeOut;
                     missCount++;
                 }
             } catch (Throwable e) {
-                if (e instanceof SocketTimeoutException == false) {
+                if (e instanceof SocketTimeoutException) {
+                    state = missCount < 8 && isCanTimeOut;
+                    missCount++;
+                } else {
                     state = false;
                     e.printStackTrace();
-                } else {
-                    state = missCount >= 8 ? false : state;
-                    missCount++;
                 }
             }
         }
@@ -127,7 +126,7 @@ public class IoUtils {
         boolean isExit = false;
         boolean isFist = true;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        while (isExit == false) {
+        while (!isExit) {
             try {
                 int available = inputStream.available();
                 available = isFist && available == 0 ? SIZE : available;
@@ -354,20 +353,21 @@ public class IoUtils {
      * @return 成功返回  0
      */
     public static int readToFull(RandomAccessFile inputStream, byte[] buffer, int offset, int length) {
-        int sum = 0, len, ret = FAIL;
+        int sum = 0;
+        int ret = FAIL;
         if (buffer == null || inputStream == null || offset < 0 || length < 0) {
             return ret;
         }
         while (sum < length) {
             try {
-                len = inputStream.read(buffer, offset + sum, length - sum);
+                int len = inputStream.read(buffer, offset + sum, length - sum);
                 if (len < 0) {
                     length = 0;
                 } else {
                     sum += len;
                 }
                 ret = SUCCESS;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 length = 0;
                 ret = FAIL;
             }
@@ -476,7 +476,7 @@ public class IoUtils {
      */
     public static boolean writeToFull(OutputStream outputStream, byte[] data, boolean isUnpack) {
         boolean result = false;
-        if (data == null && outputStream == null) {
+        if (data == null && outputStream == null || data == null) {
             return result;
         }
         try {

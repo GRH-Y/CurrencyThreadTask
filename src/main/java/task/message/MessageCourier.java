@@ -7,9 +7,7 @@ import task.message.interfaces.IMsgPostOffice;
 import task.message.interfaces.INotifyListener;
 import task.utils.ThreadAnnotation;
 
-import java.util.Enumeration;
 import java.util.Queue;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -24,8 +22,8 @@ public class MessageCourier implements IMsgCourier {
     private Object target = null;
     private final String courierKey;
     /***消息栈*/
-    private Queue<IEnvelope> msgStack = new ConcurrentLinkedQueue();
-    private final Stack<IMsgPostOffice> serverList = new Stack<>();
+    private Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
+    private final Queue<IMsgPostOffice> serverQueue = new ConcurrentLinkedQueue();
 
     public MessageCourier(INotifyListener listener) {
         if (listener == null) {
@@ -62,14 +60,14 @@ public class MessageCourier implements IMsgCourier {
                 break;
             //非即时消息
             case MAIL:
-                msgStack.add(message);
+                msgQueue.add(message);
                 break;
         }
     }
 
     @Override
     public void removeEnvelopeServer(IMsgPostOffice sender) {
-        serverList.remove(sender);
+        serverQueue.remove(sender);
     }
 
     @Override
@@ -84,8 +82,8 @@ public class MessageCourier implements IMsgCourier {
      */
     public IEnvelope popMessage() {
         IEnvelope data = null;
-        if (!msgStack.isEmpty()) {
-            data = msgStack.remove();
+        if (!msgQueue.isEmpty()) {
+            data = msgQueue.remove();
         }
         return data;
     }
@@ -97,8 +95,8 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void setEnvelopeServer(IMsgPostOffice postOffice) {
-        if (serverList.contains(postOffice) == false) {
-            serverList.add(postOffice);
+        if (!serverQueue.contains(postOffice)) {
+            serverQueue.add(postOffice);
             postOffice.registeredListener(this);
         }
     }
@@ -121,11 +119,7 @@ public class MessageCourier implements IMsgCourier {
         if (message.getSenderKey() == null) {
             message.setSenderKey(courierKey);
         }
-        Enumeration<IMsgPostOffice> enumeration = serverList.elements();
-        while (enumeration.hasMoreElements()) {
-            IMsgPostOffice sender = enumeration.nextElement();
-            sender.sendEnvelope(message);
-        }
+        serverQueue.forEach(item -> item.sendEnvelope(message));
     }
 
     /**
@@ -147,12 +141,8 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void release() {
-        Enumeration<IMsgPostOffice> enumeration = serverList.elements();
-        while (enumeration.hasMoreElements()) {
-            IMsgPostOffice sender = enumeration.nextElement();
-            sender.unRegisteredListener(this);
-        }
-        serverList.clear();
-        msgStack.clear();
+        serverQueue.forEach(item -> item.unRegisteredListener(this));
+        serverQueue.clear();
+        msgQueue.clear();
     }
 }

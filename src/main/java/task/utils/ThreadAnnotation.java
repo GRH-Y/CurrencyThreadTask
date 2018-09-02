@@ -12,6 +12,10 @@ import java.lang.reflect.Method;
  */
 public class ThreadAnnotation {
 
+    private ThreadAnnotation() {
+        throw new IllegalStateException("cannot new ThreadAnnotation class");
+    }
+
     /**
      * invoke methodName for target
      *

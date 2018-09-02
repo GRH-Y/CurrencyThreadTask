@@ -9,7 +9,7 @@ import task.executor.BaseLoopTask;
  *
  * @author yyz
  */
-public interface ITaskContainer {
+public interface ITaskContainer extends IAttribute{
 
     /**
      * 获取线程体

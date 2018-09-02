@@ -11,18 +11,20 @@ import task.executor.interfaces.ITaskContainer;
  */
 public class TaskContainer implements ITaskContainer {
 
+    private static final String EXCEPTION = "task is null";
+
     /**
      * 要执行的任务
      */
-    private BaseLoopTask task = null;
+    private BaseLoopTask task;
     /**
      * 线程体
      */
-    private Thread thread = null;
+    private Thread thread ;
     /**
      * 执行体
      */
-    private LoopTaskExecutor objectExecutor = null;
+    private LoopTaskExecutor objectExecutor;
 
 
     /**
@@ -42,7 +44,7 @@ public class TaskContainer implements ITaskContainer {
      */
     public <D> TaskContainer(BaseConsumerTask<D> task, String threadName) {
         if (task == null) {
-            throw new NullPointerException("task is null");
+            throw new NullPointerException(EXCEPTION);
         } else {
             this.task = task;
             ConsumerTaskExecutor<D> executor = new ConsumerTaskExecutor(this);
@@ -61,9 +63,9 @@ public class TaskContainer implements ITaskContainer {
         this(task, task.getClass().getName());
     }
 
-    public TaskContainer( BaseLoopTask task, String threadName) {
+    public TaskContainer(BaseLoopTask task, String threadName) {
         if (task == null) {
-            throw new NullPointerException("task is null");
+            throw new NullPointerException(EXCEPTION);
         } else {
             this.task = task;
             LoopTaskExecutor taskExecutor = new LoopTaskExecutor(this);
@@ -87,9 +89,9 @@ public class TaskContainer implements ITaskContainer {
      * @param task
      * @param threadName socket任务名
      */
-    public <D> TaskContainer( BaseSocketTask<D> task,  String threadName) {
+    public <D> TaskContainer(BaseSocketTask<D> task, String threadName) {
         if (task == null) {
-            throw new NullPointerException("task is null");
+            throw new NullPointerException(EXCEPTION);
         } else {
             this.task = task;
             SocketTaskExecutor<D> executor = new SocketTaskExecutor(this);
@@ -121,11 +123,9 @@ public class TaskContainer implements ITaskContainer {
         return (T) task;
     }
 
+
     @Override
-    protected void finalize() throws Throwable {
-        task = null;
-        thread = null;
-        objectExecutor = null;
-        super.finalize();
+    public <T> T getAttribute() {
+        return objectExecutor.getAttribute();
     }
 }

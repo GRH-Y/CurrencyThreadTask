@@ -1,8 +1,8 @@
 package task.executor;
 
 
+import task.executor.interfaces.ILoopTaskExecutor;
 import task.executor.interfaces.ITaskContainer;
-import task.executor.interfaces.ITaskExecutor;
 import task.executor.interfaces.IThreadPoolManager;
 
 import java.util.Queue;
@@ -26,7 +26,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         Runtime.getRuntime().addShutdownHook(thread);
     }
 
-    public synchronized static TaskExecutorPoolManager getInstance() {
+    public static synchronized TaskExecutorPoolManager getInstance() {
         if (pool == null) {
             synchronized (TaskExecutorPoolManager.class) {
                 pool = new TaskExecutorPoolManager();
@@ -36,7 +36,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     private ITaskContainer getTaskContainer() {
-        if (containerCache.size() > 0) {
+        if (!containerCache.isEmpty()) {
             for (ITaskContainer container : containerCache) {
                 boolean isIdleState = container.getTaskExecutor().isIdleState();
                 if (isIdleState) {
@@ -50,32 +50,36 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     @Override
     public ITaskContainer createJThread(BaseLoopTask loopTask) {
         TaskContainer thread = new TaskContainer(loopTask);
+        thread.getTaskExecutor().setMultiplexTask(true);
         containerCache.add(thread);
         return thread;
     }
 
     public ITaskContainer createJThread(BaseConsumerTask consumerTask) {
         TaskContainer thread = new TaskContainer(consumerTask);
+        thread.getTaskExecutor().setMultiplexTask(true);
         containerCache.add(thread);
         return thread;
     }
 
 
     @Override
-    public void runTask(BaseLoopTask loopTask) {
+    public ITaskContainer runTask(BaseLoopTask loopTask) {
         ITaskContainer taskContainer = getTaskContainer();
         if (taskContainer == null) {
             taskContainer = new TaskContainer(loopTask);
+            taskContainer.getTaskExecutor().setMultiplexTask(true);
             taskContainer.getTaskExecutor().startTask();
             containerCache.add(taskContainer);
         } else {
             taskContainer.getTaskExecutor().changeTask(loopTask);
         }
+        return taskContainer;
     }
 
     @Override
-    public void runTask(BaseConsumerTask consumerTask) {
-        runTask((BaseLoopTask) consumerTask);
+    public ITaskContainer runTask(BaseConsumerTask consumerTask) {
+        return runTask((BaseLoopTask) consumerTask);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     @Override
     public void recycleThread(ITaskContainer container) {
-        ITaskExecutor executor = container.getTaskExecutor();
+        ILoopTaskExecutor executor = container.getTaskExecutor();
         boolean state = executor.getMultiplexState() && executor.isIdleState();
         if (state) {
             containerCache.add(container);
@@ -115,14 +119,14 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     @Override
     public final boolean changeTask(ITaskContainer container, BaseLoopTask newTask) {
-        ITaskExecutor executor = container.getTaskExecutor();
+        ILoopTaskExecutor executor = container.getTaskExecutor();
         return executor.changeTask(newTask);
     }
 
 
     @Override
     public void destroy(ITaskContainer container) {
-        ITaskExecutor executor = container.getTaskExecutor();
+        ILoopTaskExecutor executor = container.getTaskExecutor();
         executor.destroyTask();
     }
 
@@ -134,7 +138,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     @Override
     public void destroyAll() {
         for (ITaskContainer container : containerCache) {
-            ITaskExecutor executor = container.getTaskExecutor();
+            ILoopTaskExecutor executor = container.getTaskExecutor();
             executor.destroyTask();
         }
         containerCache.clear();

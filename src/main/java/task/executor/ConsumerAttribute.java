@@ -1,7 +1,7 @@
 package task.executor;
 
 import task.executor.interfaces.IConsumerAttribute;
-import task.executor.interfaces.ITaskExecutor;
+import task.executor.interfaces.ILoopTaskExecutor;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -26,7 +26,7 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
     private ConsumerTaskExecutor mTaskExecutor;
 
     /***异步处理数据任务*/
-    private ITaskExecutor asyncTaskExecutor = null;
+    private ILoopTaskExecutor asyncTaskExecutor = null;
 
     public ConsumerAttribute(ConsumerTaskExecutor taskExecutor) {
         this.mTaskExecutor = taskExecutor;
@@ -79,7 +79,7 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
         }
         if (mCacheMaxCount > 0) {
             if (mCache.size() >= mCacheMaxCount && crowdOutModel) {
-                mCache.remove(0);
+                mCache.remove();
                 mCache.add(data);
             }
         } else {

@@ -12,7 +12,7 @@ import java.util.Map;
  * @author yyz
  */
 public class ReflectionCache {
-    private static ReflectionCache cache = null;
+    private static volatile ReflectionCache cache = null;
     private static Map<String, Class> classMap = null;
     private static Map<String, Method> methodMap = null;
     private static Map<String, Method[]> methodsMap = null;
@@ -27,15 +27,18 @@ public class ReflectionCache {
         fieldsMap = new HashMap<>();
     }
 
-    public synchronized static ReflectionCache getCache() {
+    public static ReflectionCache getCache() {
+        ReflectionCache tmp = cache;
         if (cache == null) {
             synchronized (ReflectionCache.class) {
+                tmp = cache;
                 if (cache == null) {
                     cache = new ReflectionCache();
+                    tmp = cache;
                 }
             }
         }
-        return cache;
+        return tmp;
     }
 
     public void setClass(Class clx) {
@@ -50,16 +53,14 @@ public class ReflectionCache {
     }
 
     public Class getClass(String className) {
-        Class clx = classMap.get(className);
-        if (clx == null) {
+        return classMap.computeIfAbsent(className, k -> {
             try {
-                clx = Class.forName(className);
-                classMap.put(className, clx);
-            } catch (Exception e) {
+                return Class.forName(className);
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }
-        return clx;
+            return null;
+        });
     }
 
     public Method getMethod(Object object, String methodName, Class<?>... parameterTypes) {
@@ -75,15 +76,17 @@ public class ReflectionCache {
         String key = getMethodKey(className, methodName, parameterTypes);
         Method method = methodMap.get(key);
         if (method == null) {
-            try {
-                method = clx.getDeclaredMethod(methodName, parameterTypes);
-                methodMap.put(key, method);
-            } catch (Exception e) {
-                Class supperClx = clx.getSuperclass();
-                if (supperClx != Object.class) {
-                    return getMethod(supperClx, methodName, parameterTypes);
+            method = methodMap.computeIfAbsent(key, k -> {
+                try {
+                    return clx.getDeclaredMethod(methodName, parameterTypes);
+                } catch (Exception e) {
+                    Class supperClx = clx.getSuperclass();
+                    if (supperClx != Object.class) {
+                        return getMethod(supperClx, methodName, parameterTypes);
+                    }
                 }
-            }
+                return null;
+            });
         }
         return method;
     }
@@ -93,16 +96,18 @@ public class ReflectionCache {
         String key = getMethodKey(clx.getName(), "");
         Method[] method = methodsMap.get(key);
         if (method == null) {
-            try {
-                method = clx.getMethods();
-                methodsMap.put(key, method);
-            } catch (Exception e) {
+            method = methodsMap.computeIfAbsent(key, k -> {
                 try {
-                    method = clx.getDeclaredMethods();
-                    methodsMap.put(key, method);
-                } catch (Exception e1) {
+                    return clx.getMethods();
+                } catch (Exception e) {
+                    try {
+                        return clx.getDeclaredMethods();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
+                return null;
+            });
         }
         return method;
     }
@@ -128,23 +133,19 @@ public class ReflectionCache {
     }
 
     public Field[] getAllField(Class clx) {
-        Field[] field;
+
         String key = getFieldKey(clx.getName(), "");
-        field = fieldsMap.get(key);
-        if (field == null) {
+        return fieldsMap.computeIfAbsent(key, k -> {
             try {
-                field = clx.getDeclaredFields();
-                fieldsMap.put(key, field);
+                return clx.getDeclaredFields();
             } catch (Exception e) {
                 Class supperClx = clx.getSuperclass();
                 if (supperClx != Object.class) {
                     return getAllField(supperClx);
-                } else {
-                    return null;
                 }
             }
-        }
-        return field;
+            return null;
+        });
     }
 
     private String getFieldKey(String className, String fieldName) {
@@ -167,7 +168,7 @@ public class ReflectionCache {
         return builder.toString();
     }
 
-    public synchronized static void release() {
+    public static synchronized void release() {
         if (classMap != null) {
             classMap.clear();
             classMap = null;

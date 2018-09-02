@@ -17,10 +17,5 @@ public interface IConsumerTaskExecutor<D> {
      */
     void setIdleStateSleep(boolean state);
 
-    /**
-     * 获取属性
-     * @return
-     */
-    <T> T getAttribute();
 
 }

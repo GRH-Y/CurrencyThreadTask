@@ -18,31 +18,38 @@ public class NetUtils {
      * @return
      * @throws SocketException
      */
-    public static String getLocalIp(String netType) throws SocketException {
+    public static String getLocalIp(String netType) {
+
         String wlan = null;
         String eth = null;
         String ret = null;
-        Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();
-        while (allNetInterfaces.hasMoreElements() && ret == null) {
-            NetworkInterface netInterface = allNetInterfaces.nextElement();
-            String name = netInterface.getName();
-            String displayName = netInterface.getDisplayName();
-            Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
-            while (addresses.hasMoreElements() && ret == null) {
-                InetAddress address = addresses.nextElement();
-                if (address != null && address instanceof Inet4Address && !displayName.contains("VMware") && !displayName.contains("Virtual")) {
-                    if (name.contains("wlan")) {
-                        wlan = address.getHostAddress();
-                    } else if (!name.contains("lo"))//|| name.contains("eth") || name.contains("en")
-                    {
-                        eth = address.getHostAddress();
-                    }
-                    if (name.equals(netType)) {
-                        ret = address.getHostAddress();
+
+        try {
+            Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (allNetInterfaces.hasMoreElements() && ret == null) {
+                NetworkInterface netInterface = allNetInterfaces.nextElement();
+                String name = netInterface.getName();
+                String displayName = netInterface.getDisplayName();
+                Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
+                while (addresses.hasMoreElements() && ret == null) {
+                    InetAddress address = addresses.nextElement();
+                    if (address instanceof Inet4Address && !displayName.contains("VMware") && !displayName.contains("Virtual")) {
+                        if (name.contains("wlan")) {
+                            wlan = address.getHostAddress();
+                        } else if (!name.contains("lo"))//|| name.contains("eth") || name.contains("en")
+                        {
+                            eth = address.getHostAddress();
+                        }
+                        if (name.equals(netType)) {
+                            ret = address.getHostAddress();
+                        }
                     }
                 }
             }
+        } catch (SocketException e) {
+            e.printStackTrace();
         }
+
         return ret == null ? wlan == null ? eth == null ? "127.0.0.1" : eth : wlan : ret;
     }
 }

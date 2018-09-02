@@ -183,10 +183,8 @@ public class MessageEnvelope implements IEnvelope {
         if (sender == null) {
             throw new NullPointerException("The MsgPostOffice was not used and the specified MsgPostOffice was not found !");
         }
-        if (sender != null) {
-            setMethodName(methodName);
-            setData(data);
-            sender.sendEnvelope(this);
-        }
+        setMethodName(methodName);
+        setData(data);
+        sender.sendEnvelope(this);
     }
 }

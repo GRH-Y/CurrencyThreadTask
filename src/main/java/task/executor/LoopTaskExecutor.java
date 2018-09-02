@@ -69,6 +69,11 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         return engine;
     }
 
+    @Override
+    public <T> T getAttribute() {
+        return null;
+    }
+
 
     private class Engine implements Runnable {
 
@@ -106,7 +111,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                     // 设置线程空闲状态
                     setIdleState(true);
                     // 线程挂起 等待切换任务或者停止
-                    waitTask();
+                    waitChangeTask();
                     // 设置线程非空闲状态
                     setIdleState(false);
                     // 设置任务为循环状态
@@ -213,6 +218,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
         startTask(threadName);
@@ -222,6 +228,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -248,6 +255,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -261,6 +269,21 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         waitTask(0);
     }
 
+    protected void waitChangeTask() {
+        if (getAliveState()) {
+            lock.lock();
+            try {
+                while (isLoop && isIdle) {
+                    condition.await();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
     /**
      * 暂停线程
      *
@@ -269,8 +292,8 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     @Override
     public void waitTask(long time) {
         if (getAliveState()) {
+            lock.lock();
             try {
-                lock.lock();
                 if (isLoop) {
                     isPause = true;
                     if (time == 0) {
@@ -279,7 +302,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                         condition.await(time, TimeUnit.MILLISECONDS);
                     }
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 lock.unlock();
@@ -294,9 +317,14 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     protected void wakeUpTask() {
         if (isPause) {
             lock.lock();
-            isPause = false;
-            condition.signal();
-            lock.unlock();
+            try {
+                isPause = false;
+                condition.signal();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
         }
     }
 
@@ -307,6 +335,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 Thread.sleep(time);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -315,9 +344,11 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
 
     @Override
-    public final boolean changeTask(BaseLoopTask task) {
+    public final synchronized boolean changeTask(BaseLoopTask task) {
         if (isIdleState()) {
             this.executorTask = task;
+            setIdleState(false);
+            wakeUpTask();
         }
         return this.executorTask == task;
     }

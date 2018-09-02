@@ -4,12 +4,14 @@ package task.message;
 import task.executor.BaseConsumerTask;
 import task.executor.ConsumerTaskExecutor;
 import task.executor.TaskContainer;
+import task.executor.interfaces.IConsumerAttribute;
 import task.message.interfaces.IEnvelope;
 import task.message.interfaces.IMsgCourier;
 import task.message.interfaces.IMsgPostOffice;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 线程消息服务者
@@ -20,19 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MessagePostOffice implements IMsgPostOffice {
     /*** 消息通知最大耗时，超过则会引发开新线程处理*/
-    private final double TASK_EXEC_MAX_TIME = 2 * 10e9;
+    private static final double TASK_EXEC_MAX_TIME = 2 * 10e9;
     private volatile boolean isBusy = false;
     private volatile boolean isNotify = false;
-    private static Map<String, IMsgCourier> courierMap = null;
-    private static List<ThreadHandler> threadList = null;
-    private static List<IMsgPostOffice> msgPostOfficeList = null;
-    private static Stack<Entity> busyCache = null;
+    private Map<String, IMsgCourier> courierMap;
+    private List<ThreadHandler> threadList;
+    private List<IMsgPostOffice> msgPostOfficeList;
+    private Queue<Entity> busyCache;
 
 
     public MessagePostOffice() {
         Runtime.getRuntime().addShutdownHook(new HookThread());
         courierMap = new ConcurrentHashMap<>();
-        busyCache = new Stack<>();
+        busyCache = new ConcurrentLinkedQueue();
         threadList = new ArrayList<>();
         msgPostOfficeList = new ArrayList<>();
     }
@@ -62,17 +64,17 @@ public class MessagePostOffice implements IMsgPostOffice {
         ThreadHandler handler = getNoBusyThread();
         if (!handler.getExecutor().getAliveState()) {
             handler.getExecutor().startTask();
-            handler.getExecutor().getAttribute().pushToCache(message);
+            handler.getAttribute().pushToCache(message);
         } else
-            handler.getExecutor().getAttribute().pushToCache(message);
+            handler.getAttribute().pushToCache(message);
     }
 
     /**
      * 处理在分发数据中的没有注册的对象
      */
     private void execCache() {
-        if (busyCache.size() > 0) {
-            Entity entity = busyCache.remove(0);
+        if (!busyCache.isEmpty()) {
+            Entity entity = busyCache.remove();
             if (entity == Entity.ADD) {
                 registeredListener(entity.getCourier());
             } else if (entity == Entity.DEL) {
@@ -252,21 +254,19 @@ public class MessagePostOffice implements IMsgPostOffice {
      */
     @Override
     public void removeAllNotifyListener() {
-        if (courierMap != null) {
-            if (!isNotify) {
-                Set<Map.Entry<String, IMsgCourier>> entrySet = courierMap.entrySet();
-                for (Map.Entry<String, IMsgCourier> entry : entrySet) {
-                    IMsgCourier receive = entry.getValue();
-                    if (isNotify) {
-                        busyCache.add(Entity.DEL.setCourier(receive));
-                    }
-                    receive.removeEnvelopeServer(this);
-                }
+        if (!isNotify) {
+            Set<Map.Entry<String, IMsgCourier>> entrySet = courierMap.entrySet();
+            for (Map.Entry<String, IMsgCourier> entry : entrySet) {
+                IMsgCourier receive = entry.getValue();
                 if (isNotify) {
-                    busyCache.add(Entity.DEL_ALL);
-                } else {
-                    courierMap.clear();
+                    busyCache.add(Entity.DEL.setCourier(receive));
                 }
+                receive.removeEnvelopeServer(this);
+            }
+            if (isNotify) {
+                busyCache.add(Entity.DEL_ALL);
+            } else {
+                courierMap.clear();
             }
         }
     }
@@ -281,14 +281,20 @@ public class MessagePostOffice implements IMsgPostOffice {
 
         private TaskContainer container;
         private ConsumerTaskExecutor<IEnvelope> executor;
+        private IConsumerAttribute<IEnvelope> attribute;
 
         public ThreadHandler() {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
+            attribute = container.getAttribute();
         }
 
         public ConsumerTaskExecutor<IEnvelope> getExecutor() {
             return executor;
+        }
+
+        public IConsumerAttribute getAttribute() {
+            return attribute;
         }
 
         @Override
@@ -298,15 +304,14 @@ public class MessagePostOffice implements IMsgPostOffice {
 
         @Override
         protected void onProcess() {
-            IEnvelope envelope = executor.getAttribute().popCacheData();
+            IEnvelope envelope = attribute.popCacheData();
             if (envelope != null) {
                 isNotify = true;
                 disposeMessage(this, envelope);
                 execCache();
-                ConsumerTaskExecutor executor = container.getTaskExecutor();
-                if (executor.getAttribute().getCacheDataSize() == 0) {
+                if (attribute.getCacheDataSize() == 0) {
                     executor.waitTask(8000);
-                    if (executor.getAttribute().getCacheDataSize() == 0) {
+                    if (attribute.getCacheDataSize() == 0) {
                         executor.stopTask();
                     }
                 }

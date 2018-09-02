@@ -1,9 +1,6 @@
 package task.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,20 +14,22 @@ import java.util.Date;
  */
 
 public class Logcat {
-    private final static String NULL = "";
-    private static boolean IS_DEBUG = true;
-    private static Class<?> cls;
+    private static final String FORMAT_TIME = "yyyy/MM/dd HH:mm:ss";
+    private static boolean sIsDEBUG = true;
+    private static Class<?> sCls;
+    private static volatile Method sMethod = null;
+    private static SimpleDateFormat sDateFormat = new SimpleDateFormat(FORMAT_TIME);
 
     static {
         try {
-            cls = Class.forName("android.util.Log");
+            sCls = Class.forName("android.util.Log");
         } catch (Exception e) {
-            cls = null;
+            sCls = null;
         }
     }
 
-    public static void setIsDebug(boolean isDebug) {
-        Logcat.IS_DEBUG = isDebug;
+    public static void setsIsDEBUG(boolean sIsDEBUG) {
+        Logcat.sIsDEBUG = sIsDEBUG;
     }
 
     private Logcat() {
@@ -40,76 +39,31 @@ public class Logcat {
     /**
      * 保存日志
      *
-     * @param path 保存路径
-     * @param log  日志内容
+     * @param pathFile 保存文件
+     * @param log      日志内容
      */
-    public synchronized static void saveLog(String path, String log) {
-        if (path == null || log == null) {
+    public synchronized static void saveLog(String pathFile, String log) {
+        if (pathFile == null || log == null) {
             return;
         }
-        File dir;
-        File file;
-        try {
-            dir = new File(path);
-            if (dir.exists() == false) {
-                dir.mkdirs();
-            }
-        } catch (Exception e) {
-            return;
+
+        File saveFile = new File(pathFile);
+
+        boolean exists = saveFile.exists();
+        if (!exists) {
+            exists = saveFile.getParentFile().mkdirs();
         }
-        long time = System.currentTimeMillis() / (864 * 100000);
-        DirFilter filter = new DirFilter(String.valueOf(time));
-        String[] strings = dir.list(filter);
-        if (strings.length > 0) {
-            if (strings.length == 1) {
-                file = new File(dir, strings[0]);
-                if (file.exists() && file.length() > 1024 * 2) {
-                    file = new File(dir, time + "-" + 1 + ".log");
-                }
-            } else {
-                int index = 0;
-                for (String name : strings) {
-                    String[] str = name.split("-");
-                    if (str.length == 2) {
-                        str = str[1].split("\\.");
-                        if (str.length == 2) {
-                            int tmp = Integer.parseInt(str[0]);
-                            if (tmp > index) {
-                                index = tmp;
-                            }
-                        }
-                    }
-                }
-                file = new File(dir, time + "-" + index + ".log");
-                if (file.exists() && file.length() > 1024 * 2) {
-                    index++;
-                    file = new File(dir, time + "-" + index + ".log");
-                }
-            }
-        } else {
-            file = new File(dir, time + ".log");
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file, true);
-            if (file.length() > 0) {
+
+        if (exists) {
+            try (FileOutputStream fos = new FileOutputStream(saveFile, true)) {
+                Date date = new Date();
+                String currentTime = sDateFormat.format(date);
+                fos.write(currentTime.getBytes());
                 fos.write("\r\n".getBytes());
-            }
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            String currentTime = dateFormat.format(date);
-            fos.write(currentTime.getBytes());
-            fos.write("\r\n".getBytes());
-            fos.write(log.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                fos.write(log.getBytes());
+                fos.write("\r\n".getBytes());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -205,43 +159,44 @@ public class Logcat {
     }
 
     private static void print(String mtd, String msg) {
-        if (!IS_DEBUG) {
+        if (!sIsDEBUG) {
             return;
         }
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        String className = elements[elements.length - 1].getClassName();
+        StackTraceElement element = elements[3];
+        String className = element.getClassName();
+        String methodName = element.getMethodName();
         String[] tmp = className.split("\\.");
-        className = NULL;
-        for (String str : tmp) {
-            className += str.charAt(0) + ".";
-        }
-        String methodName = elements[elements.length - 1].getMethodName().substring(0);
-        if (cls != null) {
+        if (sCls != null) {
             try {
-                Method method = cls.getDeclaredMethod(mtd, String.class, String.class);
-                method.invoke(cls, className + "-" + "-" + methodName + "()", msg);
+                if (sMethod == null) {
+                    sMethod = sCls.getDeclaredMethod(mtd, String.class, String.class);
+                }
+                sMethod.invoke(sCls, mtd, tmp[tmp.length - 1] + "-" + methodName + "()");
+                sMethod.invoke(sCls, mtd, msg);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             if ("e".equals(mtd)) {
-                System.err.println(className + "-" + methodName + "()  " + msg);
+                System.err.println(tmp[tmp.length - 1] + "-" + methodName + "()  " + msg);
             } else {
-                System.out.println(className + "-" + methodName + "()  " + msg);
+                System.out.println(tmp[tmp.length - 1] + "-" + methodName + "()  " + msg);
             }
         }
     }
 
-    private static class DirFilter implements FilenameFilter {
-        private String regex;
-
-        public DirFilter(String regex) {
-            this.regex = regex;
-        }
-
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.startsWith(regex);
-        }
-    }
+//    private static class DirFilter implements FilenameFilter {
+//        private String regex;
+//
+//        public DirFilter(String regex) {
+//            this.regex = regex;
+//        }
+//
+//        @Override
+//        public boolean accept(File dir, String name) {
+//            return name.startsWith(regex);
+//        }
+//    }
 }
 

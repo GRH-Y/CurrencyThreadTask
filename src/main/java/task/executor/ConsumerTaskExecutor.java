@@ -110,8 +110,8 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
      * @return
      */
     @Override
-    public IConsumerAttribute<D> getAttribute() {
+    public <T> T getAttribute() {
         CoreTask coreTask = (CoreTask) executorTask;
-        return coreTask.attribute;
+        return (T) coreTask.attribute;
     }
 }

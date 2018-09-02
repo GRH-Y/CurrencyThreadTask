@@ -118,4 +118,10 @@ public class SocketTaskExecutor<D> extends ConsumerTaskExecutor<D> {
 
     // -----------------------end 周期回调方法 -------------------------------
 
+
+    @Override
+    public <T> T getAttribute() {
+        CoreTask coreTask = (CoreTask) executorTask;
+        return (T) coreTask.socketAttribute;
+    }
 }

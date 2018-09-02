@@ -1,6 +1,8 @@
 package task.executor;
 
 
+import task.executor.interfaces.IConsumerAttribute;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +15,8 @@ import java.util.List;
  */
 
 public abstract class MultiTask<T> {
-    private List<StackTraceElement> lockList = null;
-    private List<Task> taskList = null;
+    private List<StackTraceElement> lockList;
+    private List<Task> taskList;
     private int token = 0;
     /***生产标记*/
     private long productionMark = 0;
@@ -43,7 +45,7 @@ public abstract class MultiTask<T> {
      */
     public void setCacheMaxCount(int count) {
         for (Task task : taskList) {
-            task.getExecutor().getAttribute().setCacheMaxCount(count);
+            task.getAttribute().setCacheMaxCount(count);
         }
     }
 
@@ -55,7 +57,7 @@ public abstract class MultiTask<T> {
     public void pushData(T data) {
         Task task = taskList.get(token++);
         TaskEntity entity = new TaskEntity(productionMark++, data);
-        task.getExecutor().getAttribute().pushToCache(entity);
+        task.getAttribute().pushToCache(entity);
         if (token >= taskList.size()) {
             token = 0;
         }
@@ -79,14 +81,8 @@ public abstract class MultiTask<T> {
                 break;
             }
         }
-        if (isHas) {
-            while (taskList.size() > 1 && isHas) {
-                if (isHas = lockList.contains(elements[elements.length - 1])) {
-                    task.getExecutor().waitTask(0);
-                } else {
-                    break;
-                }
-            }
+        if (isHas && taskList.size() > 1) {
+            task.getExecutor().waitTask(0);
         } else {
             lockList.add(elements[elements.length - 1]);
         }
@@ -136,13 +132,15 @@ public abstract class MultiTask<T> {
      * 任务线程
      */
     protected class Task extends BaseConsumerTask<TaskEntity> {
-        protected int token = 0;
+        protected int token;
         private TaskContainer container;
         private ConsumerTaskExecutor<TaskEntity> executor;
+        private IConsumerAttribute<TaskEntity> attribute;
 
         Task(int token) {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
+            attribute = container.getAttribute();
             this.token = token;
         }
 
@@ -154,6 +152,10 @@ public abstract class MultiTask<T> {
             return token;
         }
 
+        public IConsumerAttribute getAttribute() {
+            return attribute;
+        }
+
         @Override
         protected void onInitTask() {
             MultiTask.this.onInitTask();
@@ -162,7 +164,7 @@ public abstract class MultiTask<T> {
 
         @Override
         protected void onProcess() {
-            TaskEntity entity = executor.getAttribute().popCacheData();
+            TaskEntity entity = attribute.popCacheData();
             if (entity != null) {
                 onExecTask(this, entity.data, entity.mark);
             }

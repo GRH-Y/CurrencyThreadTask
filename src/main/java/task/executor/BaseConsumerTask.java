@@ -16,6 +16,7 @@ public class BaseConsumerTask<D> extends BaseLoopTask {
      * 创建数据
      */
     protected void onCreateData() {
+        //Do something
     }
 
 
@@ -23,5 +24,6 @@ public class BaseConsumerTask<D> extends BaseLoopTask {
      * 处理数据
      */
     protected void onProcess() {
+        //Do something
     }
 }

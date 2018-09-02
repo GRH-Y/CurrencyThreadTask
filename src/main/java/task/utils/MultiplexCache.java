@@ -13,7 +13,7 @@ public class MultiplexCache<T> {
     private int popIndex = 0;
     private List<CacheItem<T>> cache;
     private List<CacheItem<T>> useCache;
-    private final int FAIL = -1;
+    private static final int FAIL = -1;
     private boolean isRelease = false;
 
     public MultiplexCache(int number) {
@@ -82,16 +82,18 @@ public class MultiplexCache<T> {
      * @return 没有可用数据则返回null
      */
     public synchronized T getRepeatData() {
-        if (cache != null && cache.size() > 0) {
+        if (cache != null && !cache.isEmpty()) {
             popIndex = popIndex >= cache.size() ? 0 : popIndex;
             CacheItem<T> item = cache.get(popIndex);
             if (item.lock) {
                 item = getCanUseData();
             }
-            item.lock = true;
-            useCache.add(item);//记录正在使用的item
-            popIndex++;
-            return item.data;
+            if (item != null) {
+                item.lock = true;
+                useCache.add(item);//记录正在使用的item
+                popIndex++;
+                return item.data;
+            }
         }
         return null;
     }
@@ -115,12 +117,6 @@ public class MultiplexCache<T> {
         return item;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        isRelease = true;
-        release();
-        super.finalize();
-    }
 
     /**
      * 释放资源
@@ -145,15 +141,5 @@ public class MultiplexCache<T> {
     private class CacheItem<T> {
         public boolean lock = false;
         public T data = null;
-
-        @Override
-        protected void finalize() throws Throwable {
-            release();
-            super.finalize();
-        }
-
-        public void release() {
-            data = null;
-        }
     }
 }
