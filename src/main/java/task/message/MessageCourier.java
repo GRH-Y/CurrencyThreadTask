@@ -5,8 +5,9 @@ import task.message.interfaces.IEnvelope;
 import task.message.interfaces.IMsgCourier;
 import task.message.interfaces.IMsgPostOffice;
 import task.message.interfaces.INotifyListener;
-import task.utils.ThreadAnnotation;
+import util.JdkVersion;
 
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -119,7 +120,15 @@ public class MessageCourier implements IMsgCourier {
         if (message.getSenderKey() == null) {
             message.setSenderKey(courierKey);
         }
-        serverQueue.forEach(item -> item.sendEnvelope(message));
+        if (JdkVersion.isJava8()) {
+            serverQueue.forEach(item -> item.sendEnvelope(message));
+        } else {
+            Iterator<IMsgPostOffice> iterator =  serverQueue.iterator();
+            while (iterator.hasNext()) {
+                IMsgPostOffice sender = iterator.next();
+                sender.sendEnvelope(message);
+            }
+        }
     }
 
     /**
@@ -141,7 +150,15 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void release() {
-        serverQueue.forEach(item -> item.unRegisteredListener(this));
+        if (JdkVersion.isJava8()) {
+            serverQueue.forEach(item -> item.unRegisteredListener(this));
+        } else {
+            Iterator<IMsgPostOffice> iterator =  serverQueue.iterator();
+            while (iterator.hasNext()) {
+                IMsgPostOffice sender = iterator.next();
+                sender.unRegisteredListener(this);
+            }
+        }
         serverQueue.clear();
         msgQueue.clear();
     }

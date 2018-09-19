@@ -7,7 +7,7 @@ package task.executor.interfaces;
  * @author yyz
  */
 
-public interface IConsumerTaskExecutor<D> {
+public interface IConsumerTaskExecutor<D>{
 
 
     /**
@@ -16,6 +16,27 @@ public interface IConsumerTaskExecutor<D> {
      * @param state true 则进入休眠状态
      */
     void setIdleStateSleep(boolean state);
+
+
+
+    /**
+     * 开启异步处理数据模式,
+     * 开启后 onCreateData ,onProcess 分别不同线程来执行
+     */
+    void startAsyncProcessData();
+
+
+    /**
+     * 关闭异步处理数据模式
+     */
+    void stopAsyncProcessData();
+
+    /**
+     * 当前是否异步处理数据
+     *
+     * @return
+     */
+    ILoopTaskExecutor getAsyncTaskExecutor();
 
 
 }

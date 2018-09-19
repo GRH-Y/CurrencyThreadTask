@@ -1,6 +1,7 @@
 package task.executor;
 
 
+import task.executor.interfaces.IAttribute;
 import task.executor.interfaces.ILoopTaskExecutor;
 import task.executor.interfaces.ITaskContainer;
 
@@ -127,5 +128,10 @@ public class TaskContainer implements ITaskContainer {
     @Override
     public <T> T getAttribute() {
         return objectExecutor.getAttribute();
+    }
+
+    @Override
+    public void setAttribute(IAttribute attribute) {
+        objectExecutor.setAttribute(attribute);
     }
 }

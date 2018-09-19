@@ -1,16 +1,16 @@
 package task.executor;
 
 import task.executor.interfaces.IConsumerAttribute;
-import task.executor.interfaces.ILoopTaskExecutor;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
+ * 线程安全的缓存
  *
  * @param <D>
  */
-public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
+public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
     /**
      * 设置缓存区的大小
      * (特别注意:如果设置为小于1则存储为无限，当大于0时，如果当前缓存区数据大于该值，则会根据crowdOutModel来处理)
@@ -18,18 +18,17 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
     private int mCacheMaxCount = 0;
 
     /***缓冲区*/
-    private final Queue<D> mCache = new ConcurrentLinkedQueue();
+    private final Queue<D> mCache;
 
     /***true 则缓冲区满时挤掉最早的数据，false为缓冲区满则不保存*/
     private boolean crowdOutModel = false;
 
-    private ConsumerTaskExecutor mTaskExecutor;
+    public ConsumerQueueAttribute() {
+        mCache = new ConcurrentLinkedQueue();
+    }
 
-    /***异步处理数据任务*/
-    private ILoopTaskExecutor asyncTaskExecutor = null;
-
-    public ConsumerAttribute(ConsumerTaskExecutor taskExecutor) {
-        this.mTaskExecutor = taskExecutor;
+    public ConsumerQueueAttribute(Queue<D> queue) {
+        mCache = queue;
     }
 
     /**
@@ -74,7 +73,7 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
      */
     @Override
     public void pushToCache(D data) {
-        if (!mTaskExecutor.getLoopState() || data == null) {
+        if (data == null) {
             return;
         }
         if (mCacheMaxCount > 0) {
@@ -84,11 +83,6 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
             }
         } else {
             mCache.add(data);
-        }
-        if (asyncTaskExecutor != null) {
-            asyncTaskExecutor.resumeTask();
-        } else {
-            mTaskExecutor.resumeTask();
         }
     }
 
@@ -112,61 +106,7 @@ public class ConsumerAttribute<D> implements IConsumerAttribute<D> {
      */
     @Override
     public void clearCacheData() {
-        if (!mTaskExecutor.getIdleStopState()) {
-            mCache.clear();
-        }
-    }
-
-    /**
-     * 异步处理数据线程
-     */
-    private class AsyncProcessDataTask extends BaseLoopTask {
-
-        @Override
-        public void onRunLoopTask() {
-            if (getCacheDataSize() > 0) {
-                ((BaseConsumerTask) (mTaskExecutor.executorTask)).onProcess();
-            } else {
-                asyncTaskExecutor.waitTask(0);
-            }
-        }
-    }
-
-
-    /**
-     * 开启异步处理数据模式,
-     * 开启后 onCreateData ,onProcess 分别不同线程来执行
-     */
-    @Override
-    public void startAsyncProcessData() {
-        if (asyncTaskExecutor == null) {
-            AsyncProcessDataTask asyncTask = new AsyncProcessDataTask();
-            TaskContainer container = new TaskContainer(asyncTask);
-            asyncTaskExecutor = container.getTaskExecutor();
-            asyncTaskExecutor.startTask();
-        }
-    }
-
-    /**
-     * 关闭异步处理数据模式
-     */
-    @Override
-    public void stopAsyncProcessData() {
-        if (asyncTaskExecutor != null) {
-            asyncTaskExecutor.stopTask();
-            asyncTaskExecutor = null;
-        }
-    }
-
-
-    /**
-     * 当前是否异步处理数据
-     *
-     * @return
-     */
-    @Override
-    public boolean isAsyncState() {
-        return asyncTaskExecutor != null;
+        mCache.clear();
     }
 
 }

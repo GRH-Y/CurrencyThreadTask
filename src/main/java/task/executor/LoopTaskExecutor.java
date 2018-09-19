@@ -1,6 +1,7 @@
 package task.executor;
 
 
+import task.executor.interfaces.IAttribute;
 import task.executor.interfaces.ILoopTaskExecutor;
 import task.executor.interfaces.ITaskContainer;
 
@@ -72,6 +73,10 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     @Override
     public <T> T getAttribute() {
         return null;
+    }
+
+    @Override
+    public void setAttribute(IAttribute attribute) {
     }
 
 

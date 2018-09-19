@@ -12,7 +12,7 @@ import java.net.Socket;
  * @author yyz
  */
 
-public interface ISocketAttribute {
+public interface ISocketAttribute extends IAttribute{
 
     void initSocket();
 

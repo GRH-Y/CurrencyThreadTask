@@ -58,6 +58,7 @@ public abstract class MultiTask<T> {
         Task task = taskList.get(token++);
         TaskEntity entity = new TaskEntity(productionMark++, data);
         task.getAttribute().pushToCache(entity);
+        task.getExecutor().resumeTask();
         if (token >= taskList.size()) {
             token = 0;
         }
@@ -140,7 +141,8 @@ public abstract class MultiTask<T> {
         Task(int token) {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
-            attribute = container.getAttribute();
+            attribute = new ConsumerQueueAttribute<>();
+            container.setAttribute(attribute);
             this.token = token;
         }
 

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="CurrencyThreadTask_main:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/CurrencyThreadTask_main_jar</output-path>
-    <root id="archive" name="CurrencyThreadTask_main.jar">
-      <element id="module-output" name="CurrencyThreadTask_main" />
-    </root>
-  </artifact>
-</component>

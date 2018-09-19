@@ -20,14 +20,14 @@ public interface IThreadPoolManager {
      *
      * @param loopTask
      */
-    ITaskContainer runTask(BaseLoopTask loopTask);
+    ITaskContainer runTask(BaseLoopTask loopTask, IAttribute attribute);
 
     /**
      * 添加任务,线程池会自动执行
      *
      * @param consumerTask
      */
-    ITaskContainer runTask(BaseConsumerTask consumerTask);
+    ITaskContainer runTask(BaseConsumerTask consumerTask, IAttribute attribute);
 
     /**
      * 移除任务

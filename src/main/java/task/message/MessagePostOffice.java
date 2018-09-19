@@ -2,6 +2,7 @@ package task.message;
 
 
 import task.executor.BaseConsumerTask;
+import task.executor.ConsumerQueueAttribute;
 import task.executor.ConsumerTaskExecutor;
 import task.executor.TaskContainer;
 import task.executor.interfaces.IConsumerAttribute;
@@ -63,10 +64,12 @@ public class MessagePostOffice implements IMsgPostOffice {
     private void assignmentMsg(IEnvelope message) {
         ThreadHandler handler = getNoBusyThread();
         if (!handler.getExecutor().getAliveState()) {
+            handler.getAttribute().pushToCache(message);
             handler.getExecutor().startTask();
+        } else {
             handler.getAttribute().pushToCache(message);
-        } else
-            handler.getAttribute().pushToCache(message);
+            handler.getExecutor().resumeTask();
+        }
     }
 
     /**
@@ -286,7 +289,8 @@ public class MessagePostOffice implements IMsgPostOffice {
         public ThreadHandler() {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
-            attribute = container.getAttribute();
+            attribute = new ConsumerQueueAttribute<>();
+            container.setAttribute(attribute);
         }
 
         public ConsumerTaskExecutor<IEnvelope> getExecutor() {

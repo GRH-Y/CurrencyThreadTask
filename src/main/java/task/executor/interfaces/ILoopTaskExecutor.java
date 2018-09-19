@@ -8,7 +8,15 @@ import task.executor.BaseLoopTask;
  *
  * @author yyz
  */
-public interface ILoopTaskExecutor extends IAttribute{
+public interface ILoopTaskExecutor {
+
+
+    <T> T getAttribute();
+
+    /**
+     * 设置扩展属性
+     */
+    void setAttribute(IAttribute attribute);
 
     /**
      * 设置任务是否循环执行

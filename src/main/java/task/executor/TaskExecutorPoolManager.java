@@ -1,9 +1,7 @@
 package task.executor;
 
 
-import task.executor.interfaces.ILoopTaskExecutor;
-import task.executor.interfaces.ITaskContainer;
-import task.executor.interfaces.IThreadPoolManager;
+import task.executor.interfaces.*;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -64,23 +62,33 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
 
     @Override
-    public ITaskContainer runTask(BaseLoopTask loopTask) {
+    public ITaskContainer runTask(BaseLoopTask loopTask, IAttribute attribute) {
+        return runTask(loopTask, null, attribute);
+    }
+
+    @Override
+    public ITaskContainer runTask(BaseConsumerTask consumerTask, IAttribute attribute) {
+        return runTask(null, consumerTask, attribute);
+    }
+
+    private ITaskContainer runTask(BaseLoopTask loopTask, BaseConsumerTask consumerTask, IAttribute attribute) {
         ITaskContainer taskContainer = getTaskContainer();
         if (taskContainer == null) {
-            taskContainer = new TaskContainer(loopTask);
+            if (loopTask == null) {
+                taskContainer = new TaskContainer(consumerTask);
+            } else {
+                taskContainer = new TaskContainer(loopTask);
+            }
+            taskContainer.setAttribute(attribute);
             taskContainer.getTaskExecutor().setMultiplexTask(true);
             taskContainer.getTaskExecutor().startTask();
             containerCache.add(taskContainer);
         } else {
-            taskContainer.getTaskExecutor().changeTask(loopTask);
+            taskContainer.getTaskExecutor().changeTask(consumerTask);
         }
         return taskContainer;
     }
 
-    @Override
-    public ITaskContainer runTask(BaseConsumerTask consumerTask) {
-        return runTask((BaseLoopTask) consumerTask);
-    }
 
     @Override
     public void removeTask(BaseLoopTask loopTask) {
@@ -100,9 +108,12 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         for (ITaskContainer container : containerCache) {
             if (container instanceof ConsumerTaskExecutor) {
                 ConsumerTaskExecutor taskExecutor = (ConsumerTaskExecutor) container;
-                if (taskExecutor.consumerTask == consumerTask) {
-                    taskExecutor.stopTask();
-                    return;
+                if (taskExecutor.executorTask instanceof ConsumerCoreTask) {
+                    ConsumerCoreTask coreTask = (ConsumerCoreTask) taskExecutor.executorTask;
+                    if (coreTask == consumerTask) {
+                        taskExecutor.stopTask();
+                        return;
+                    }
                 }
             }
         }

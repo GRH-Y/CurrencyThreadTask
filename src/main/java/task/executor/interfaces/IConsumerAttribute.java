@@ -1,15 +1,13 @@
 package task.executor.interfaces;
 
-import java.util.Queue;
-
-public interface IConsumerAttribute<D> {
+public interface IConsumerAttribute<D> extends IAttribute {
 
     /**
      * 获取缓存
      *
      * @return
      */
-    Queue<D> getCache();
+    <T> T getCache();
 
     /**
      * 获取当前缓存区数据的数量
@@ -52,22 +50,4 @@ public interface IConsumerAttribute<D> {
      */
     D popCacheData();
 
-    /**
-     * 开启异步处理数据模式,
-     * 开启后 onCreateData ,onProcess 分别不同线程来执行
-     */
-    void startAsyncProcessData();
-
-
-    /**
-     * 关闭异步处理数据模式
-     */
-    void stopAsyncProcessData();
-
-    /**
-     * 当前是否异步处理数据
-     *
-     * @return
-     */
-    boolean isAsyncState();
 }

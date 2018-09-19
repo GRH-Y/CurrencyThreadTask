@@ -1,8 +1,10 @@
 package task.executor;
 
 
+import task.executor.interfaces.IAttribute;
 import task.executor.interfaces.IConsumerAttribute;
 import task.executor.interfaces.IConsumerTaskExecutor;
+import task.executor.interfaces.ILoopTaskExecutor;
 
 /**
  * 消费任务执行者
@@ -15,7 +17,8 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
     /***没有输任务则休眠标志位，为true则休眠*/
     private boolean isIdleStateSleep = false;
 
-    protected BaseConsumerTask consumerTask;
+    /***异步处理数据任务*/
+    private volatile ILoopTaskExecutor asyncTaskExecutor = null;
 
 
     /**
@@ -26,64 +29,27 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
      */
     protected ConsumerTaskExecutor(TaskContainer container) {
         super(container);
-        this.consumerTask = container.getTask();
-        executorTask = new CoreTask();
-
+        BaseConsumerTask consumerTask = container.getTask();
+        executorTask = new ConsumerCoreTask(this, consumerTask);
     }
 
-    // -------------------start run ---------------------
-
-    private class CoreTask<D> extends BaseConsumerTask<D> {
-
-        protected IConsumerAttribute<D> attribute;
-
-        CoreTask() {
-            attribute = new ConsumerAttribute<>(ConsumerTaskExecutor.this);
-        }
-
-        @Override
-        protected void onInitTask() {
-            consumerTask.onInitTask();
-        }
-
-        @Override
-        protected void onRunLoopTask() {
-            consumerTask.onRunLoopTask();
-            onCreateData();
-            // 没有数据是否需要线程休眠
-            if (attribute.getCacheDataSize() == 0 && isIdleStateSleep) {
-                waitTask();
-            } else if (!attribute.isAsyncState() && getLoopState()) {
-                onProcess();
-            }
-        }
-
-
-        @Override
-        protected void onCreateData() {
-            consumerTask.onCreateData();
-        }
-
-        @Override
-        protected void onProcess() {
-            consumerTask.onProcess();
-        }
-
-
-        @Override
-        protected void onIdleStop() {
-            consumerTask.onIdleStop();
-        }
-
-        @Override
-        protected void onDestroyTask() {
-            consumerTask.onDestroyTask();
-            attribute.clearCacheData();
-        }
+    /**
+     * 获取属性
+     *
+     * @return
+     */
+    @Override
+    public <T> T getAttribute() {
+        ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+        return (T) coreTask.getAttribute();
     }
 
-    // -------------------End run ---------------------
 
+    @Override
+    public void setAttribute(IAttribute attribute) {
+        ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+        coreTask.setAttribute((IConsumerAttribute) attribute);
+    }
 
     /**
      * 设置缓存区没有数据线程进入休眠
@@ -95,23 +61,50 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
         this.isIdleStateSleep = state;
     }
 
+    protected boolean isIdleStateSleep() {
+        return isIdleStateSleep;
+    }
+
 
     @Override
     public void stopTask() {
         super.stopTask();
-        CoreTask coreTask = (CoreTask) executorTask;
-        coreTask.attribute.stopAsyncProcessData();
+        stopAsyncProcessData();
     }
 
 
     /**
-     * 获取属性
+     * 开启异步处理数据模式,
+     * 开启后 onCreateData ,onProcess 分别不同线程来执行
+     */
+    @Override
+    public synchronized void startAsyncProcessData() {
+        if (asyncTaskExecutor == null) {
+            ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+            AsyncProcessDataTask asyncTask = new AsyncProcessDataTask(coreTask);
+            asyncTaskExecutor = asyncTask.startTask();
+        }
+    }
+
+    /**
+     * 关闭异步处理数据模式
+     */
+    @Override
+    public synchronized void stopAsyncProcessData() {
+        if (asyncTaskExecutor != null) {
+            asyncTaskExecutor.stopTask();
+            asyncTaskExecutor = null;
+        }
+    }
+
+
+    /**
+     * 获取异步处理执行器
      *
      * @return
      */
     @Override
-    public <T> T getAttribute() {
-        CoreTask coreTask = (CoreTask) executorTask;
-        return (T) coreTask.attribute;
+    public synchronized ILoopTaskExecutor getAsyncTaskExecutor() {
+        return asyncTaskExecutor;
     }
 }
