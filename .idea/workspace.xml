@@ -13,103 +13,22 @@
       <change afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/CurrencyThreadTask_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/JavaUtils.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/JavaUtils.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/BaseConsumerTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/BaseLoopTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/BaseSocketTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/ConsumerTaskExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/LoopTaskExecutor$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/LoopTaskExecutor$Engine.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/LoopTaskExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/MultiTask$Task.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/MultiTask$TaskEntity.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/MultiTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/SocketTaskExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/TaskContainer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/interfaces/IConsumerAttribute.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/interfaces/IConsumerTaskExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/interfaces/ILoopTaskExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/executor/interfaces/ITaskContainer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessageCourier$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessageCourier.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessageEnvelope.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessagePostOffice$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessagePostOffice$Entity.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessagePostOffice$HookThread.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessagePostOffice$ThreadHandler.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/MessagePostOffice.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/interfaces/IEnvelope$MegType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/interfaces/IEnvelope.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/interfaces/IMsgCourier.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/interfaces/IMsgPostOffice.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/classes/task/message/interfaces/INotifyListener.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/CacheManger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/CacheMemory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/LinkedCacheMemory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/RwLockEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/RwLockFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/SerializableUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/joggle/ICache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/cache/joggle/ICacheResultListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/executor/AsyncProcessDataTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerCoreTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerListAttribute.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerMapAttribute.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/task/executor/SocketCoreTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/CurrencyThreadTask_main_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/CurrencyThreadTask_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/BaseConsumerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/BaseConsumerTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/BaseLoopTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/BaseLoopTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/BaseSocketTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/BaseSocketTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerQueueAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerTaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/ConsumerTaskExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/JavaUtils.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/JavaUtils.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/CacheManger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/CacheMemory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/LinkedCacheMemory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/RwLockEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/RwLockFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/SerializableUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/joggle/ICache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/task/cache/joggle/ICacheResultListener.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/MultiTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/MultiTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/SocketAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/SocketAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/SocketTaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/SocketTaskExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/TaskContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/TaskContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/TaskExecutorPoolManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/TaskExecutorPoolManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IConsumerAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IConsumerAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IConsumerTaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IConsumerTaskExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ISocketAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ISocketAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ITaskContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ITaskContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IThreadPoolManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IThreadPoolManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/MessageCourier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/MessageCourier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/MessageEnvelope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/MessageEnvelope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/MessagePostOffice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/MessagePostOffice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IEnvelope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IEnvelope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IMsgCourier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IMsgCourier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IMsgPostOffice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/interfaces/IMsgPostOffice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/message/interfaces/INotifyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/interfaces/INotifyListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/IoUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/Logcat.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/MultiplexCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/NetUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/ProxyClass.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/ReflectionCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/StringUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/task/utils/ThreadAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/task/message/ThreadAnnotation.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -171,7 +90,7 @@
     <session id="-2133570184">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="16" />
+          <entry key="project.closed" value="17" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.10" value="1" />
@@ -179,33 +98,34 @@
           <entry key="project.open.time.2" value="3" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.29" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="3" />
-          <entry key="java" value="110" />
+          <entry key="class" value="4" />
+          <entry key="java" value="112" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="3" />
-          <entry key="JAVA" value="110" />
+          <entry key="CLASS" value="4" />
+          <entry key="JAVA" value="112" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="2990" />
+          <entry key="java" value="3011" />
           <entry key="txt" value="44" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2990" />
+          <entry key="JAVA" value="3011" />
           <entry key="PLAIN_TEXT" value="44" />
         </counts>
       </usages-collector>
@@ -213,46 +133,48 @@
     <session id="489486636">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="33" />
-          <entry key="project.open.time.0" value="4" />
-          <entry key="project.open.time.1" value="13" />
+          <entry key="project.closed" value="38" />
+          <entry key="project.open.time.0" value="5" />
+          <entry key="project.open.time.1" value="14" />
           <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.11" value="4" />
+          <entry key="project.open.time.11" value="6" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="5" />
           <entry key="project.open.time.15" value="3" />
           <entry key="project.open.time.19" value="1" />
-          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.2" value="2" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="36" />
+          <entry key="project.opened" value="41" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="7" />
           <entry key="gradle" value="1" />
-          <entry key="java" value="317" />
+          <entry key="java" value="334" />
+          <entry key="md" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="7" />
           <entry key="Groovy" value="1" />
-          <entry key="JAVA" value="317" />
+          <entry key="JAVA" value="334" />
+          <entry key="Markdown" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="15" />
-          <entry key="java" value="5232" />
+          <entry key="java" value="5434" />
           <entry key="txt" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="5232" />
+          <entry key="JAVA" value="5434" />
           <entry key="PLAIN_TEXT" value="33" />
         </counts>
       </usages-collector>
@@ -263,86 +185,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/TaskExecutorPoolManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1760">
-              <caret line="91" selection-start-line="91" selection-end-line="91" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/interfaces/ITaskContainer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="11" column="31" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/TaskContainer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2340">
-              <caret line="135" column="5" selection-start-line="135" selection-start-column="5" selection-end-line="135" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1400">
-              <caret line="81" selection-start-line="81" selection-end-line="81" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerTaskExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="920">
-              <caret line="49" column="55" selection-start-line="49" selection-start-column="55" selection-end-line="49" selection-end-column="55" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/SocketCoreTask.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/SocketTaskExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/message/ThreadAnnotation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="34" column="31" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+            <state relative-caret-position="-3863">
+              <caret line="100" column="21" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#3382#3383#0" expanded="true" />
+                <element signature="e#3412#3413#0" expanded="true" />
+                <element signature="e#3621#3622#0" expanded="true" />
+                <element signature="e#3651#3652#0" expanded="true" />
+                <element signature="e#4375#4376#0" expanded="true" />
+                <element signature="e#4403#4404#0" expanded="true" />
+                <element signature="e#6372#6373#0" expanded="true" />
+                <element signature="e#6399#6400#0" expanded="true" />
+                <element signature="e#8549#8550#0" expanded="true" />
+                <element signature="e#8584#8585#0" expanded="true" />
+                <element signature="e#8634#8635#0" expanded="true" />
+                <element signature="e#8663#8664#0" expanded="true" />
+                <element signature="e#8714#8715#0" expanded="true" />
+                <element signature="e#8744#8745#0" expanded="true" />
+                <element signature="e#8906#8907#0" expanded="true" />
+                <element signature="e#8940#8941#0" expanded="true" />
+                <element signature="e#9009#9010#0" expanded="true" />
+                <element signature="e#9048#9049#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
@@ -359,10 +226,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>socketTaskExecutor</find>
-      <find>mConsumerTask</find>
-      <find>getLoopState</find>
-      <find>isIdleStateSleep</find>
       <find>mConsumerTaskExecutor</find>
       <find>mCoreTask</find>
       <find>mTaskExecutor</find>
@@ -370,7 +233,6 @@
       <find>getIdleStopState</find>
       <find>executor</find>
       <find>socketTask</find>
-      <find>container</find>
       <find>task</find>
       <find>isIdleState</find>
       <find>mAsyncTaskExecutor</find>
@@ -389,6 +251,11 @@
       <find>ThreadAnnotation</find>
       <find>consumerTask</find>
       <find>attribute</find>
+      <find>RwLockEntity</find>
+      <find>container</find>
+      <find>isLoopInit</find>
+      <find>condition</find>
+      <find>isStart</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -689,7 +556,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/task/executor/BaseLoopTask.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/BaseConsumerTask.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/utils/ThreadAnnotation.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/utils/MultiplexCache.java" />
@@ -726,7 +592,6 @@
         <option value="$PROJECT_DIR$/src/main/java/task/message/MessagePostOffice.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/MultiTask.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/message/MessageCourier.java" />
-        <option value="$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/cache/SerializableUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/interfaces/IThreadPoolManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/TaskExecutorPoolManager.java" />
@@ -736,10 +601,12 @@
         <option value="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ITaskContainer.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/TaskContainer.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/ConsumerTaskExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/executor/SocketTaskExecutor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/task/cache/RwLockFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/task/message/ThreadAnnotation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java" />
       </list>
     </option>
   </component>
@@ -755,7 +622,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="378" />
     <option name="y" value="88" />
     <option name="width" value="1416" />
@@ -767,48 +634,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-              <item name="task" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-              <item name="task" type="1f31426a:PackageElementNode" />
-              <item name="executor" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-              <item name="task" type="1f31426a:PackageElementNode" />
-              <item name="executor" type="1f31426a:PackageElementNode" />
-              <item name="interfaces" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-              <item name="task" type="1f31426a:PackageElementNode" />
-              <item name="message" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
-              <item name="task" type="1f31426a:PackageElementNode" />
-              <item name="utils" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="AndroidView" />
       <pane id="Scope">
         <subPane subId="Scope 'Production'; set:Production; class com.intellij.psi.search.scope.ProjectProductionScope">
           <expand>
@@ -892,20 +717,7 @@
             <path>
               <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
               <item name="CurrencyThreadTask" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CurrencyThreadTask" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CurrencyThreadTask" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="CurrencyThreadTask_jar" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
@@ -933,6 +745,65 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="task" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CurrencyThreadTask" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="task" type="462c0819:PsiDirectoryNode" />
+              <item name="executor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CurrencyThreadTask" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="task" type="462c0819:PsiDirectoryNode" />
+              <item name="message" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+              <item name="task" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+              <item name="task" type="1f31426a:PackageElementNode" />
+              <item name="executor" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+              <item name="task" type="1f31426a:PackageElementNode" />
+              <item name="executor" type="1f31426a:PackageElementNode" />
+              <item name="interfaces" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+              <item name="task" type="1f31426a:PackageElementNode" />
+              <item name="message" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CurrencyThreadTask" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CurrencyThreadTask_main" type="616d4139:PackageViewModuleNode" />
+              <item name="task" type="1f31426a:PackageElementNode" />
+              <item name="utils" type="1f31426a:PackageElementNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -945,10 +816,10 @@
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="currencythreadtask" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="LinkedHashMap&#9;PSI&#9;JAVA://java.util.LinkedHashMap&#10;Loop&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java&#10;Taskc&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/TaskContainer.java&#10;IConsumerTaskExecutor&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/interfaces/IConsumerTaskExecutor.java&#10;IoU&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/utils/IoUtils.java&#10;LoopTaskExecutor&#9;FILE&#9;file://J:/Project/GitHub/CurrencyThreadTask/src/main/java/task/executor/LoopTaskExecutor.java&#10;Base&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/BaseLoopTask.java&#10;ANotifyListener&#9;PSI&#9;JAVA://task.message.interfaces.IMsgPostOffice#removeAllNotifyListener&#10;MultiTask&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/MultiTask.java" />
+    <property name="SearchEverywhereHistoryKey" value="Loo&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/LoopTaskExecutor.java&#10;LinkedHashMap&#9;PSI&#9;JAVA://java.util.LinkedHashMap&#10;Loop&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java&#10;Taskc&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/TaskContainer.java&#10;IConsumerTaskExecutor&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/interfaces/IConsumerTaskExecutor.java&#10;IoU&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/utils/IoUtils.java&#10;LoopTaskExecutor&#9;FILE&#9;file://J:/Project/GitHub/CurrencyThreadTask/src/main/java/task/executor/LoopTaskExecutor.java&#10;Base&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/BaseLoopTask.java&#10;ANotifyListener&#9;PSI&#9;JAVA://task.message.interfaces.IMsgPostOffice#removeAllNotifyListener&#10;MultiTask&#9;FILE&#9;file:///home/dev-ubuntu/AllProject/GitHub/CurrencyThreadTask/src/main/java/task/executor/MultiTask.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537170288671" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538020678764" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../JavaUtils" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -984,20 +855,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="TestMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="task.TestMain" />
-      <module name="CurrencyThreadTask_main" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="task.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -1033,11 +890,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.TestMain" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -1144,7 +996,13 @@
       <workItem from="1537166138555" duration="4924000" />
       <workItem from="1537197176040" duration="619000" />
       <workItem from="1537242537257" duration="3669000" />
-      <workItem from="1537322877852" duration="1279000" />
+      <workItem from="1537322877852" duration="2025000" />
+      <workItem from="1537408353495" duration="1528000" />
+      <workItem from="1537437513211" duration="1292000" />
+      <workItem from="1537699429401" duration="1422000" />
+      <workItem from="1537867970727" duration="1091000" />
+      <workItem from="1537940953437" duration="1490000" />
+      <workItem from="1538019902219" duration="3477000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1526892113654</created>
@@ -1209,16 +1067,23 @@
       <option name="project" value="LOCAL" />
       <updated>1535863010373</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="调整架构，分离部分工具类出去，新增线程安全的缓存">
+      <created>1537347562982</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1537347562982</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="231805000" />
+    <option name="totallyTimeSpent" value="242851000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="34" width="1853" height="1046" extended-state="7" />
+    <frame x="67" y="34" width="1853" height="1046" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.255119" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27891532" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1227,7 +1092,7 @@
       <window_info id="Capture Tool" order="6" />
       <window_info id="JRebel" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3249453" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32465753" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32932165" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39934355" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -1269,7 +1134,8 @@
     <MESSAGE value="增加线程池接口" />
     <MESSAGE value="修改Ioutils工具类读取SocketChannel的bug" />
     <MESSAGE value="1.修改一些bug，调整架构新增Attribute类，完善了PoolManager功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.修改一些bug，调整架构新增Attribute类，完善了PoolManager功能" />
+    <MESSAGE value="调整架构，分离部分工具类出去，新增线程安全的缓存" />
+    <option name="LAST_COMMIT_MESSAGE" value="调整架构，分离部分工具类出去，新增线程安全的缓存" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -1325,10 +1191,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/Iterable.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/AbstractCollection.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/AbstractList.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/AbstractSequentialList.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/LinkedList.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Collections.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/jre/lib/rt.jar!/sun/misc/Unsafe.class" />
@@ -1343,30 +1205,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/task/utils/ProxyClass.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/task/utils/NetUtils.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/task/utils/MultiplexCache.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessagePostOffice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="281" column="56" selection-start-line="281" selection-start-column="40" selection-end-line="281" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessageEnvelope.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessageCourier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-600">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/AsyncProcessDataTask.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
@@ -1409,20 +1247,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerMapAttribute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerQueueAttribute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/MultiTask.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="550">
@@ -1434,55 +1258,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-80">
-          <caret line="21" column="11" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheManger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="24" column="28" lean-forward="true" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheMemory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/LinkedCacheMemory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/RwLockEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/RwLockFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="37" column="16" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/SerializableUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-20">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
@@ -1549,17 +1324,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1400">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerTaskExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="920">
           <caret line="49" column="55" selection-start-line="49" selection-start-column="55" selection-end-line="49" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="100">
+            <caret line="5" selection-start-line="5" selection-end-line="5" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/JavaUtils.jar!/util/StringUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheFile.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/joggle/ICache.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/joggle/ICacheResultListener.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheManger.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/CacheMemory.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/LinkedCacheMemory.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/RwLockEntity.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/SerializableUtils.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/cache/RwLockFactory.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerQueueAttribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>
@@ -1577,19 +1385,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/interfaces/ILoopTaskExecutor.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/ThreadAnnotation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        <state relative-caret-position="560">
+          <caret line="32" column="46" selection-start-line="32" selection-start-column="46" selection-end-line="32" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/ThreadAnnotation.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessagePostOffice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="34" column="31" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+        <state relative-caret-position="5280">
+          <caret line="281" column="56" selection-start-line="281" selection-start-column="40" selection-end-line="281" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessageEnvelope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/ConsumerMapAttribute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/message/MessageCourier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="120" column="45" selection-start-line="120" selection-start-column="45" selection-end-line="120" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/task/executor/LoopTaskExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3863">
+          <caret line="100" column="21" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#3382#3383#0" expanded="true" />
+            <element signature="e#3412#3413#0" expanded="true" />
+            <element signature="e#3621#3622#0" expanded="true" />
+            <element signature="e#3651#3652#0" expanded="true" />
+            <element signature="e#4375#4376#0" expanded="true" />
+            <element signature="e#4403#4404#0" expanded="true" />
+            <element signature="e#6372#6373#0" expanded="true" />
+            <element signature="e#6399#6400#0" expanded="true" />
+            <element signature="e#8549#8550#0" expanded="true" />
+            <element signature="e#8584#8585#0" expanded="true" />
+            <element signature="e#8634#8635#0" expanded="true" />
+            <element signature="e#8663#8664#0" expanded="true" />
+            <element signature="e#8714#8715#0" expanded="true" />
+            <element signature="e#8744#8745#0" expanded="true" />
+            <element signature="e#8906#8907#0" expanded="true" />
+            <element signature="e#8940#8941#0" expanded="true" />
+            <element signature="e#9009#9010#0" expanded="true" />
+            <element signature="e#9048#9049#0" expanded="true" />
           </folding>
         </state>
       </provider>

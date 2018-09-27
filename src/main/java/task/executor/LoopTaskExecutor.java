@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class LoopTaskExecutor implements ILoopTaskExecutor {
 
-    private Lock lock = new ReentrantLock(true);
+    private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
 
     private ITaskContainer container;
@@ -88,6 +88,8 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             isAlive = true;
             // 设置线程非空闲状态
             isIdle = false;
+            //notify wait thread
+            notifyWaitThread();
 
             do {
                 //执行初始化事件
@@ -127,6 +129,19 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
             isStart = false;
             isAlive = false;
+            //notify wait thread
+            notifyWaitThread();
+        }
+    }
+
+    private void notifyWaitThread() {
+        lock.lock();
+        try {
+            condition.signal();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -198,6 +213,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     @Override
     public void startTask(String threadName) {
         if (!getAliveState() && !isStartState()) {
+            isStart = true;
             setLoopState(true);
             try {
                 container.getThread().setName(threadName);
@@ -207,7 +223,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 thread.setName(threadName);
                 thread.start();
             }
-            isStart = true;
         }
     }
 
@@ -218,22 +233,16 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void blockStartTask(String threadName) {
-        while (!getLoopState() && !getMultiplexState() && getAliveState()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
-        }
         startTask(threadName);
         //循环等待状态被改变
-        while (!getAliveState() && isStartState()) {
+        if (!getAliveState() && isStartState()) {
+            lock.lock();
             try {
-                Thread.sleep(10);
+                condition.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -255,12 +264,14 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     public void blockStopTask() {
         stopTask();
         //循环等待状态被改变
-        while (getAliveState() && !isStartState()) {
+        if (getAliveState() || isStartState()) {
+            lock.lock();
             try {
-                Thread.sleep(10);
+                condition.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock();
             }
         }
     }
