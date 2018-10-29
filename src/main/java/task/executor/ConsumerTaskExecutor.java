@@ -1,10 +1,10 @@
 package task.executor;
 
 
-import task.executor.interfaces.IAttribute;
-import task.executor.interfaces.IConsumerAttribute;
-import task.executor.interfaces.IConsumerTaskExecutor;
-import task.executor.interfaces.ILoopTaskExecutor;
+import task.executor.joggle.IAttribute;
+import task.executor.joggle.IConsumerAttribute;
+import task.executor.joggle.IConsumerTaskExecutor;
+import task.executor.joggle.ILoopTaskExecutor;
 
 /**
  * 消费任务执行者
@@ -30,7 +30,7 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
     protected ConsumerTaskExecutor(TaskContainer container) {
         super(container);
         BaseConsumerTask consumerTask = container.getTask();
-        executorTask = new ConsumerCoreTask(this, consumerTask);
+        executorTask = new ConsumerEngine(this, consumerTask);
     }
 
     /**
@@ -40,14 +40,14 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
      */
     @Override
     public <T> T getAttribute() {
-        ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+        ConsumerEngine coreTask = (ConsumerEngine) executorTask;
         return (T) coreTask.getAttribute();
     }
 
 
     @Override
     public void setAttribute(IAttribute attribute) {
-        ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+        ConsumerEngine coreTask = (ConsumerEngine) executorTask;
         coreTask.setAttribute((IConsumerAttribute) attribute);
     }
 
@@ -80,7 +80,7 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
     @Override
     public synchronized void startAsyncProcessData() {
         if (asyncTaskExecutor == null) {
-            ConsumerCoreTask coreTask = (ConsumerCoreTask) executorTask;
+            ConsumerEngine coreTask = (ConsumerEngine) executorTask;
             AsyncProcessDataTask asyncTask = new AsyncProcessDataTask(coreTask);
             asyncTaskExecutor = asyncTask.startTask();
         }

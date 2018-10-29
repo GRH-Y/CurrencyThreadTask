@@ -1,6 +1,6 @@
 package task.executor;
 
-import task.executor.interfaces.IConsumerAttribute;
+import task.executor.joggle.IConsumerAttribute;
 
 import java.util.Map;
 import java.util.Set;
@@ -34,12 +34,12 @@ public class ConsumerMapAttribute<D> implements IConsumerAttribute<D> {
     }
 
     @Override
-    public void setCacheMaxCount(int i) {
+    public void setCacheMaxCount(int count) {
 
     }
 
     @Override
-    public void setPushDataModel(boolean b) {
+    public void setPushDataModel(boolean isCrowdOut) {
 
     }
 

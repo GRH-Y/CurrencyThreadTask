@@ -1,4 +1,4 @@
-package task.message.interfaces;
+package task.message.joggle;
 
 /**
  * IMsgCourier 消息接收者

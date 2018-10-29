@@ -1,7 +1,8 @@
 package task.message;
 
 
-import util.ReflectionCache;
+import util.SpeedReflex;
+import util.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -26,18 +27,18 @@ public class ThreadAnnotation {
      * @param data       data
      */
     public static void disposeMessage(String methodName, Object target, Object data) {
-        if (methodName == null || target == null) {
+        if (StringUtils.isEmpty(methodName) || target == null) {
             return;
         }
         try {
-            ReflectionCache cache = ReflectionCache.getCache();
+            SpeedReflex reflex = SpeedReflex.getCache();
             Class cls = target.getClass();
             if (data == null) {
-                Method method = cache.getMethod(cls, methodName);
+                Method method = reflex.getMethod(cls, methodName);
                 method.setAccessible(true);
                 method.invoke(target);
             } else {
-                Method method = cache.getMethod(cls, methodName, data.getClass());
+                Method method = reflex.getMethod(cls, methodName, data.getClass());
                 method.setAccessible(true);
                 method.invoke(target, data);
             }

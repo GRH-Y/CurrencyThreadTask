@@ -1,15 +1,15 @@
 package task.executor;
 
-import task.executor.interfaces.IConsumerAttribute;
+import task.executor.joggle.IConsumerAttribute;
 
-public class ConsumerCoreTask<D> extends BaseConsumerTask<D> {
+public class ConsumerEngine<D> extends BaseConsumerTask<D> {
 
 
     protected BaseConsumerTask mConsumerTask;
     private IConsumerAttribute mAttribute;
     private ConsumerTaskExecutor executor;
 
-    public ConsumerCoreTask(ConsumerTaskExecutor executor, BaseConsumerTask task) {
+    public ConsumerEngine(ConsumerTaskExecutor executor, BaseConsumerTask task) {
         this.mConsumerTask = task;
         this.executor = executor;
     }

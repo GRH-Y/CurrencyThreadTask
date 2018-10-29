@@ -1,7 +1,7 @@
 package task.executor;
 
 
-import task.executor.interfaces.*;
+import task.executor.joggle.*;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -72,6 +72,9 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     private ITaskContainer runTask(BaseLoopTask loopTask, BaseConsumerTask consumerTask, IAttribute attribute) {
+        if (loopTask == null && consumerTask == null) {
+            return null;
+        }
         ITaskContainer taskContainer = getTaskContainer();
         if (taskContainer == null) {
             if (loopTask == null) {
@@ -108,8 +111,8 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         for (ITaskContainer container : containerCache) {
             if (container instanceof ConsumerTaskExecutor) {
                 ConsumerTaskExecutor taskExecutor = (ConsumerTaskExecutor) container;
-                if (taskExecutor.executorTask instanceof ConsumerCoreTask) {
-                    ConsumerCoreTask coreTask = (ConsumerCoreTask) taskExecutor.executorTask;
+                if (taskExecutor.executorTask instanceof ConsumerEngine) {
+                    ConsumerEngine coreTask = (ConsumerEngine) taskExecutor.executorTask;
                     if (coreTask == consumerTask) {
                         taskExecutor.stopTask();
                         return;

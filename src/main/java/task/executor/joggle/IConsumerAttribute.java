@@ -1,4 +1,4 @@
-package task.executor.interfaces;
+package task.executor.joggle;
 
 public interface IConsumerAttribute<D> extends IAttribute {
 

@@ -5,10 +5,10 @@ import task.executor.BaseConsumerTask;
 import task.executor.ConsumerQueueAttribute;
 import task.executor.ConsumerTaskExecutor;
 import task.executor.TaskContainer;
-import task.executor.interfaces.IConsumerAttribute;
-import task.message.interfaces.IEnvelope;
-import task.message.interfaces.IMsgCourier;
-import task.message.interfaces.IMsgPostOffice;
+import task.executor.joggle.IConsumerAttribute;
+import task.message.joggle.IEnvelope;
+import task.message.joggle.IMsgCourier;
+import task.message.joggle.IMsgPostOffice;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @date 4/13/2017.
  */
 public class MessagePostOffice implements IMsgPostOffice {
+
     /*** 消息通知最大耗时，超过则会引发开新线程处理*/
     private static final double TASK_EXEC_MAX_TIME = 2 * 10e9;
     private volatile boolean isBusy = false;
@@ -29,7 +30,7 @@ public class MessagePostOffice implements IMsgPostOffice {
     private Map<String, IMsgCourier> courierMap;
     private List<ThreadHandler> threadList;
     private List<IMsgPostOffice> msgPostOfficeList;
-    private Queue<Entity> busyCache;
+    private Queue<MegOperation> busyCache;
 
 
     public MessagePostOffice() {
@@ -76,11 +77,11 @@ public class MessagePostOffice implements IMsgPostOffice {
      * 处理在分发数据中的没有注册的对象
      */
     private void execCache() {
-        if (!busyCache.isEmpty()) {
-            Entity entity = busyCache.remove();
-            if (entity == Entity.ADD) {
+        while (!busyCache.isEmpty()) {
+            MegOperation entity = busyCache.remove();
+            if (entity == MegOperation.ADD) {
                 registeredListener(entity.getCourier());
-            } else if (entity == Entity.DEL) {
+            } else if (entity == MegOperation.DEL) {
                 unRegisteredListener(entity.getCourier());
             } else {
                 courierMap.clear();
@@ -226,7 +227,7 @@ public class MessagePostOffice implements IMsgPostOffice {
     public void registeredListener(IMsgCourier receive) {
         if (receive != null) {
             if (isNotify) {
-                busyCache.add(Entity.ADD.setCourier(receive));
+                busyCache.add(MegOperation.ADD.setCourier(receive));
             } else {
                 String key = receive.getCourierKey();
                 if (!courierMap.containsKey(key)) {
@@ -243,7 +244,7 @@ public class MessagePostOffice implements IMsgPostOffice {
     public void unRegisteredListener(IMsgCourier receive) {
         if (receive != null && courierMap != null) {
             if (isNotify) {
-                busyCache.add(Entity.DEL.setCourier(receive));
+                busyCache.add(MegOperation.DEL.setCourier(receive));
             } else {
                 courierMap.remove(receive.getCourierKey());
                 receive.removeEnvelopeServer(this);
@@ -262,12 +263,12 @@ public class MessagePostOffice implements IMsgPostOffice {
             for (Map.Entry<String, IMsgCourier> entry : entrySet) {
                 IMsgCourier receive = entry.getValue();
                 if (isNotify) {
-                    busyCache.add(Entity.DEL.setCourier(receive));
+                    busyCache.add(MegOperation.DEL.setCourier(receive));
                 }
                 receive.removeEnvelopeServer(this);
             }
             if (isNotify) {
-                busyCache.add(Entity.DEL_ALL);
+                busyCache.add(MegOperation.DEL_ALL);
             } else {
                 courierMap.clear();
             }
@@ -291,6 +292,7 @@ public class MessagePostOffice implements IMsgPostOffice {
             executor = container.getTaskExecutor();
             attribute = new ConsumerQueueAttribute<>();
             container.setAttribute(attribute);
+            executor.startTask();
         }
 
         public ConsumerTaskExecutor<IEnvelope> getExecutor() {
@@ -332,25 +334,6 @@ public class MessagePostOffice implements IMsgPostOffice {
         }
     }
 
-    private enum Entity {
-        /**
-         * ADD 添加
-         * DEL 删除
-         * DEL_ALL 删除所有
-         */
-        ADD(), DEL(), DEL_ALL();
-        /*** 消息接收者*/
-        private IMsgCourier courier = null;
-
-        public Entity setCourier(IMsgCourier courier) {
-            this.courier = courier;
-            return this;
-        }
-
-        public IMsgCourier getCourier() {
-            return courier;
-        }
-    }
 
     /**
      * 虚拟机退出Hook线程

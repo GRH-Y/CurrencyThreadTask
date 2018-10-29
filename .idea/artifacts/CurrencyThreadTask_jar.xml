@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/CurrencyThreadTask_jar</output-path>
     <root id="archive" name="CurrencyThreadTask.jar">
       <element id="module-output" name="CurrencyThreadTask_main" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JavaUtils.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

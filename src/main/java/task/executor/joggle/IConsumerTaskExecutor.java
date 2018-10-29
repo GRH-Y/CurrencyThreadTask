@@ -1,4 +1,4 @@
-package task.executor.interfaces;
+package task.executor.joggle;
 
 /**
  * 消费任务执行者接口

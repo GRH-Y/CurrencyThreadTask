@@ -1,4 +1,4 @@
-package task.message.interfaces;
+package task.message.joggle;
 
 /**
  * IEnvelope

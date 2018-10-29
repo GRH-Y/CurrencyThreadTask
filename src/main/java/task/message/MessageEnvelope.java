@@ -1,8 +1,8 @@
 package task.message;
 
 
-import task.message.interfaces.IEnvelope;
-import task.message.interfaces.IMsgPostOffice;
+import task.message.joggle.IEnvelope;
+import task.message.joggle.IMsgPostOffice;
 
 /**
  * 线程消息类

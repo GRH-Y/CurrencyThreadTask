@@ -1,9 +1,9 @@
 package task.executor;
 
 
-import task.executor.interfaces.IAttribute;
-import task.executor.interfaces.ILoopTaskExecutor;
-import task.executor.interfaces.ITaskContainer;
+import task.executor.joggle.IAttribute;
+import task.executor.joggle.ILoopTaskExecutor;
+import task.executor.joggle.ITaskContainer;
 
 /**
  * 线程实体
@@ -75,31 +75,31 @@ public class TaskContainer implements ITaskContainer {
         }
     }
 
-    /**
-     * 创建socket通讯任务
-     *
-     * @param task socket任务
-     */
-    public <D> TaskContainer(BaseSocketTask<D> task) {
-        this(task, task.getClass().getName());
-    }
-
-    /**
-     * 创建socket通讯任务
-     *
-     * @param task
-     * @param threadName socket任务名
-     */
-    public <D> TaskContainer(BaseSocketTask<D> task, String threadName) {
-        if (task == null) {
-            throw new NullPointerException(EXCEPTION);
-        } else {
-            this.task = task;
-            SocketTaskExecutor<D> executor = new SocketTaskExecutor(this);
-            thread = new Thread(executor.getRunnable(), threadName);
-            objectExecutor = executor;
-        }
-    }
+//    /**
+//     * 创建socket通讯任务
+//     *
+//     * @param task socket任务
+//     */
+//    public <D> TaskContainer(BaseSocketTask<D> task) {
+//        this(task, task.getClass().getName());
+//    }
+//
+//    /**
+//     * 创建socket通讯任务
+//     *
+//     * @param task
+//     * @param threadName socket任务名
+//     */
+//    public <D> TaskContainer(BaseSocketTask<D> task, String threadName) {
+//        if (task == null) {
+//            throw new NullPointerException(EXCEPTION);
+//        } else {
+//            this.task = task;
+//            SocketTaskExecutor<D> executor = new SocketTaskExecutor(this);
+//            thread = new Thread(executor.getRunnable(), threadName);
+//            objectExecutor = executor;
+//        }
+//    }
 
 
     @Override

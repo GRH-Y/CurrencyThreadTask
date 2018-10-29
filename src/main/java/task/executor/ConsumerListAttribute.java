@@ -1,6 +1,6 @@
 package task.executor;
 
-import task.executor.interfaces.IConsumerAttribute;
+import task.executor.joggle.IConsumerAttribute;
 
 import java.util.LinkedList;
 import java.util.List;

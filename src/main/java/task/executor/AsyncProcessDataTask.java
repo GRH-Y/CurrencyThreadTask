@@ -1,16 +1,16 @@
 package task.executor;
 
-import task.executor.interfaces.ILoopTaskExecutor;
+import task.executor.joggle.ILoopTaskExecutor;
 
 /**
  * 异步处理数据线程
  */
 public class AsyncProcessDataTask extends BaseLoopTask {
 
-    private ConsumerCoreTask mCoreTask;
+    private ConsumerEngine mCoreTask;
     private ILoopTaskExecutor mAsyncTaskExecutor;
 
-    public AsyncProcessDataTask(ConsumerCoreTask coreTask) {
+    public AsyncProcessDataTask(ConsumerEngine coreTask) {
         this.mCoreTask = coreTask;
     }
 

@@ -1,9 +1,9 @@
 package task.executor;
 
 
-import task.executor.interfaces.IAttribute;
-import task.executor.interfaces.ILoopTaskExecutor;
-import task.executor.interfaces.ITaskContainer;
+import task.executor.joggle.IAttribute;
+import task.executor.joggle.ILoopTaskExecutor;
+import task.executor.joggle.ITaskContainer;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -25,7 +25,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     /*** 任务*/
     protected BaseLoopTask executorTask;
     /*** 执行接口*/
-    private Engine engine;
+    private LoopEngine engine;
 
     /*** 线程状态*/
     private volatile boolean isAlive = false;
@@ -62,7 +62,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
         this.container = container;
         this.executorTask = container.getTask();
-        engine = new Engine();
+        engine = new LoopEngine();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     }
 
 
-    private class Engine implements Runnable {
+    private class LoopEngine implements Runnable {
 
         @Override
         public void run() {

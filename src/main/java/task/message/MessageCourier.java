@@ -1,10 +1,10 @@
 package task.message;
 
 
-import task.message.interfaces.IEnvelope;
-import task.message.interfaces.IMsgCourier;
-import task.message.interfaces.IMsgPostOffice;
-import task.message.interfaces.INotifyListener;
+import task.message.joggle.IEnvelope;
+import task.message.joggle.IMsgCourier;
+import task.message.joggle.IMsgPostOffice;
+import task.message.joggle.INotifyListener;
 import util.JdkVersion;
 
 import java.util.Iterator;
@@ -142,7 +142,6 @@ public class MessageCourier implements IMsgCourier {
             message.setHighOverhead(false);
             sendEnvelop(message);
         }
-//        ThreadAnnotation.disposeMessage(target, message, message.getAnnotation());
     }
 
     /**

@@ -1,4 +1,4 @@
-package task.message.interfaces;
+package task.message.joggle;
 
 /**
  * 线程消息回调接口
