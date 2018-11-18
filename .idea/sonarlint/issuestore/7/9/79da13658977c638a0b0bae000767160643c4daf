@@ -1,20 +1,20 @@
 
 _squid:S2274ñ";Remove this call to "await" or move it into a "while" loop.(×œªìşÿÿÿÿ8²¥Ô­Ø,
-esquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8¤ø¶Ñá,
-Bsquid:S1181İ"%Catch Exception instead of Throwable.(‡˜ÚÚøÿÿÿÿ
-@squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-@squid:S1148ó"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-Gsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8¹öĞØ,
-esquid:S2142ò"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8£ø¶Ñá,
-_squid:S2274";Remove this call to "await" or move it into a "while" loop.(×œªìşÿÿÿÿ8¤ø¶Ñá,
-@squid:S1148¨"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-@squid:S1148á"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-_squid:S2274¼";Remove this call to "await" or move it into a "while" loop.(×œªìşÿÿÿÿ8¤ø¶Ñá,
-_squid:S2274¾";Remove this call to "await" or move it into a "while" loop.(µ¹¼‡şÿÿÿÿ8Ä¶Î­Ø,
 Gsquid:S3398‰"#Move this method into "LoopEngine".(º²ˆĞúÿÿÿÿ8¢ø¶Ñá,
-squid:S1186O"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(“€©'8ÙµÅ•Û,
+Gsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8¹öĞØ,
+esquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8¤ø¶Ñá,
 ]
 squid:S899¾":Do something with the "boolean" value returned by "await".(µ¹¼‡şÿÿÿÿ8ªËÎ­Ø,
-@squid:S1148Ô"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
-isquid:S3776V"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(“–ış
+@squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
 @squid:S1148Â"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148á"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148¨"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+squid:S1186O"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(“€©'8ÙµÅ•Û,
+_squid:S2274¾";Remove this call to "await" or move it into a "while" loop.(µ¹¼‡şÿÿÿÿ8Ä¶Î­Ø,
+isquid:S3776V"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(“–ış
+@squid:S1148Ô"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+esquid:S2142ò"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8£ø¶Ñá,
+_squid:S2274";Remove this call to "await" or move it into a "while" loop.(×œªìşÿÿÿÿ8¤ø¶Ñá,
+Bsquid:S1181İ"%Catch Exception instead of Throwable.(‡˜ÚÚøÿÿÿÿ
+@squid:S1148ó"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+_squid:S2274¼";Remove this call to "await" or move it into a "while" loop.(×œªìşÿÿÿÿ8¤ø¶Ñá,

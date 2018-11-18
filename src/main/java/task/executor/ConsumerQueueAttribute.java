@@ -76,9 +76,12 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
         if (data == null) {
             return;
         }
-        if (mCacheMaxCount > 0) {
-            if (mCache.size() >= mCacheMaxCount && crowdOutModel) {
-                mCache.remove();
+        if (mCacheMaxCount > 0 && mCache.size() >= mCacheMaxCount) {
+            if (crowdOutModel) {
+                try {
+                    mCache.remove();
+                } catch (Exception e) {
+                }
                 mCache.add(data);
             }
         } else {

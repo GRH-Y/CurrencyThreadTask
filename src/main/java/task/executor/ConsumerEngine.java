@@ -14,12 +14,16 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         this.executor = executor;
     }
 
-    protected synchronized void setAttribute(IConsumerAttribute attribute) {
-        this.mAttribute = attribute;
+    protected void setAttribute(IConsumerAttribute attribute) {
+        synchronized (ConsumerEngine.class) {
+            this.mAttribute = attribute;
+        }
     }
 
-    protected synchronized IConsumerAttribute getAttribute() {
-        return mAttribute;
+    protected IConsumerAttribute getAttribute() {
+        synchronized (ConsumerEngine.class) {
+            return mAttribute;
+        }
     }
 
     @Override
@@ -32,11 +36,12 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         mConsumerTask.onRunLoopTask();
         onCreateData();
         // 没有数据是否需要线程休眠
-        if ((mAttribute == null && executor.isIdleStateSleep()) ||
-                (mAttribute.getCacheDataSize() == 0 && executor.isIdleStateSleep())) {
+        if (executor.isIdleStateSleep() && (mAttribute == null || mAttribute.getCacheDataSize() == 0)) {
             executor.waitTask();
-        } else if (executor.getAsyncTaskExecutor() == null && executor.getLoopState()) {
-            onProcess();
+        } else {
+            if (executor.getAsyncTaskExecutor() == null && executor.getLoopState()) {
+                onProcess();
+            }
         }
     }
 

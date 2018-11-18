@@ -42,7 +42,7 @@ X
 ;
 gradlew.bat,2/a/2a45a911a8f1836b0b6c5b758962572012d8f8c3
 9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 ?
 settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233
 _
@@ -53,3 +53,9 @@ e
 5src/main/java/task/message/joggle/IMsgPostOffice.java,1/9/19513a14dfc80e13fe390b686b35bf024c4fa4c3
 \
 ,src/main/java/task/message/MegOperation.java,8/3/83adbbcc8b27e0b0619074d4df05268a010511ce
+`
+0src/main/java/task/message/joggle/IEnvelope.java,2/f/2fb429ef5020060caece8d565755b99c7bd5e5ff
+f
+6src/main/java/task/message/joggle/INotifyListener.java,e/b/eb2112fb22add04587a1ffa281ca7ad6aad437d2
+j
+:src/main/java/task/executor/joggle/IConsumerAttribute.java,5/8/58ac6cd28bdca5dcd33cb69b021fce008f829b19
