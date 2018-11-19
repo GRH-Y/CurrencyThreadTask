@@ -61,7 +61,10 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
     public D popCacheData() {
         D data = null;
         if (!mCache.isEmpty()) {
-            data = mCache.remove();
+            try {
+                data = mCache.remove();
+            } catch (Exception e) {
+            }
         }
         return data;
     }
