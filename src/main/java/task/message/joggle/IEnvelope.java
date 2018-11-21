@@ -57,6 +57,12 @@ public interface IEnvelope {
     String getTargetKey();
 
     /**
+     * 设置接收者key
+     * @param targetKey
+     */
+    void setTargetKey(String targetKey);
+
+    /**
      * 获取该消息的类型
      *
      * @return

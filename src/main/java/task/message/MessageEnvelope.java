@@ -19,7 +19,7 @@ public class MessageEnvelope implements IEnvelope {
     private String mTargetKey = null;
     private String mSenderKey = null;
     private Object mData = null;
-    private MegType mType = null;
+    private MegType mType = MegType.INSTANT;
     private IMsgPostOffice sender = null;
 
 
@@ -32,7 +32,7 @@ public class MessageEnvelope implements IEnvelope {
     }
 
     public MessageEnvelope(String receiveKey) {
-        init(mType, receiveKey, false, false);
+        init(MegType.INSTANT, receiveKey, false, false);
     }
 
     /**
@@ -46,7 +46,7 @@ public class MessageEnvelope implements IEnvelope {
     }
 
     public MessageEnvelope(String targetKey, boolean highOverhead) {
-        init(mType, targetKey, highOverhead, false);
+        init(MegType.INSTANT, targetKey, highOverhead, false);
     }
 
 
@@ -56,7 +56,7 @@ public class MessageEnvelope implements IEnvelope {
 
 
     private void init(MegType type, String targetKey, boolean highOverhead, boolean radio) {
-        boolean existed = type == null || (targetKey == null && !radio);
+        boolean existed = targetKey == null && !radio;
         if (existed) {
             throw new NullPointerException("mType or mTargetKey cannot be null !");
         }
@@ -94,6 +94,18 @@ public class MessageEnvelope implements IEnvelope {
     @Override
     public String getTargetKey() {
         return mTargetKey;
+    }
+
+
+    /**
+     * 设置接收者key
+     *
+     * @param targetKey
+     */
+    @Override
+    public void setTargetKey(String targetKey) {
+        this.mTargetKey = targetKey;
+        this.mRadio = false;
     }
 
     /**
@@ -144,6 +156,9 @@ public class MessageEnvelope implements IEnvelope {
     @Override
     public void setRadio(boolean mRadio) {
         this.mRadio = mRadio;
+        if (mRadio) {
+            this.mTargetKey = null;
+        }
     }
 
     /**

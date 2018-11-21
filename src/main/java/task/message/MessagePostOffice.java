@@ -140,7 +140,7 @@ public class MessagePostOffice implements IMsgPostOffice {
      */
     private void notifyTargetCourier(IEnvelope message) {
         String targetKey = message.getTargetKey();
-        if (courierMap.containsKey(targetKey)) {
+        if (targetKey != null && courierMap.containsKey(targetKey)) {
             IMsgCourier target = courierMap.get(targetKey);
             message.setMsgPostOffice(this);
             target.onReceiveEnvelope(message);

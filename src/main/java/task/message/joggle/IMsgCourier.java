@@ -36,7 +36,7 @@ public interface IMsgCourier {
      *
      * @param postOffice 消息传递者
      */
-    void setEnvelopeServer(IMsgPostOffice postOffice);
+    void addEnvelopeServer(IMsgPostOffice postOffice);
 
     /**
      * 移除消息传递者

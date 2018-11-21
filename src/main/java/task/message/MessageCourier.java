@@ -95,7 +95,7 @@ public class MessageCourier implements IMsgCourier {
      * @param postOffice 消息发送者
      */
     @Override
-    public void setEnvelopeServer(IMsgPostOffice postOffice) {
+    public void addEnvelopeServer(IMsgPostOffice postOffice) {
         if (!serverQueue.contains(postOffice)) {
             serverQueue.add(postOffice);
             postOffice.registeredListener(this);
@@ -123,7 +123,7 @@ public class MessageCourier implements IMsgCourier {
         if (JdkVersion.isJava8()) {
             serverQueue.forEach(item -> item.sendEnvelope(message));
         } else {
-            Iterator<IMsgPostOffice> iterator =  serverQueue.iterator();
+            Iterator<IMsgPostOffice> iterator = serverQueue.iterator();
             while (iterator.hasNext()) {
                 IMsgPostOffice sender = iterator.next();
                 sender.sendEnvelope(message);
