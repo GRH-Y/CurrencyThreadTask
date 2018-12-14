@@ -289,7 +289,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         if (getAliveState()) {
             lock.lock();
             try {
-                while (isLoop && isIdle) {
+                while (isMultiplex && isIdle) {
                     condition.await();
                 }
             } catch (Exception e) {
