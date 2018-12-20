@@ -288,6 +288,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     protected void waitChangeTask() {
         if (getAliveState()) {
             lock.lock();
+            isPause = true;
             try {
                 while (isMultiplex && isIdle) {
                     condition.await();
@@ -295,6 +296,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
+                isPause = false;
                 lock.unlock();
             }
         }
@@ -321,8 +323,8 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                lock.unlock();
                 isPause = false;
+                lock.unlock();
             }
         }
     }
@@ -360,13 +362,14 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
 
     @Override
-    public final synchronized boolean changeTask(BaseLoopTask task) {
-        if (isIdleState()) {
-            this.executorTask = task;
-            setIdleState(false);
-            wakeUpTask();
+    public synchronized boolean changeTask(BaseLoopTask task) {
+        if (!isIdleState()) {
+            return false;
         }
-        return this.executorTask == task;
+        this.executorTask = task;
+        setIdleState(false);
+        wakeUpTask();
+        return true;
     }
 
     /**

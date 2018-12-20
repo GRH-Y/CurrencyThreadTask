@@ -20,6 +20,10 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         }
     }
 
+    protected void changeBaseConsumerTask(BaseConsumerTask task) {
+        this.mConsumerTask = task;
+    }
+
     protected IConsumerAttribute getAttribute() {
         synchronized (ConsumerEngine.class) {
             return mAttribute;

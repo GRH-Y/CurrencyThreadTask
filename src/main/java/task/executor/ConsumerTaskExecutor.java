@@ -33,6 +33,13 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
         executorTask = new ConsumerEngine(this, consumerTask);
     }
 
+    @Override
+    public synchronized boolean changeTask(BaseLoopTask task) {
+        ConsumerEngine consumerEngine = (ConsumerEngine) executorTask;
+        consumerEngine.changeBaseConsumerTask((BaseConsumerTask) task);
+        return super.changeTask(consumerEngine);
+    }
+
     /**
      * 获取属性
      *
