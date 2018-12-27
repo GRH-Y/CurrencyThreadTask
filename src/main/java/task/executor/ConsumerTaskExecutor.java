@@ -58,6 +58,22 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
         coreTask.setAttribute((IConsumerAttribute) attribute);
     }
 
+    @Override
+    public void resumeTask() {
+        super.resumeTask();
+        if (asyncTaskExecutor != null) {
+            asyncTaskExecutor.resumeTask();
+        }
+    }
+
+    @Override
+    public void pauseTask() {
+        super.pauseTask();
+        if (asyncTaskExecutor != null) {
+            asyncTaskExecutor.pauseTask();
+        }
+    }
+
     /**
      * 设置缓存区没有数据线程进入休眠
      *
@@ -72,11 +88,10 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
         return isIdleStateSleep;
     }
 
-
     @Override
     public void stopTask() {
-        super.stopTask();
         stopAsyncProcessData();
+        super.stopTask();
     }
 
 
@@ -103,7 +118,6 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
             asyncTaskExecutor = null;
         }
     }
-
 
     /**
      * 获取异步处理执行器

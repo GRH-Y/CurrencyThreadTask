@@ -13,6 +13,7 @@ import task.message.joggle.IMsgPostOffice;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 线程消息服务者
@@ -26,19 +27,20 @@ public class MessagePostOffice implements IMsgPostOffice {
     /*** 消息通知最大耗时，超过则会引发开新线程处理*/
     private static final double TASK_EXEC_MAX_TIME = 2 * 10e9;
     private volatile boolean isBusy = false;
-    private volatile boolean isNotify = false;
+    private volatile AtomicBoolean isNotify;
     private Map<String, IMsgCourier> courierMap;
-    private List<ThreadHandler> threadList;
-    private List<IMsgPostOffice> msgPostOfficeList;
+    private Queue<ThreadHandler> threadList;
+    private Queue<IMsgPostOffice> msgPostOfficeList;
     private Queue<MegOperation> busyCache;
 
 
     public MessagePostOffice() {
+        isNotify = new AtomicBoolean(false);
         Runtime.getRuntime().addShutdownHook(new HookThread());
         courierMap = new ConcurrentHashMap<>();
         busyCache = new ConcurrentLinkedQueue();
-        threadList = new ArrayList<>();
-        msgPostOfficeList = new ArrayList<>();
+        threadList = new ConcurrentLinkedQueue<>();
+        msgPostOfficeList = new ConcurrentLinkedQueue<>();
     }
 
     /**
@@ -111,7 +113,7 @@ public class MessagePostOffice implements IMsgPostOffice {
                     assignmentMsg(message);
                 } else {
 //                    Logcat.i("调用线程执行....");//测试
-                    isNotify = true;
+                    isNotify.set(true);
                     disposeMessage(null, message);
                     execCache();
                 }
@@ -128,7 +130,7 @@ public class MessagePostOffice implements IMsgPostOffice {
             handler.getExecutor().stopTask();
         }
         threadList.clear();
-        removeAllNotifyListener();
+        removeAllMsgCourier();
 //        Logcat.e("消息转发器正在销毁....");//测试
     }
 
@@ -175,7 +177,7 @@ public class MessagePostOffice implements IMsgPostOffice {
      */
     private void disposeMessage(ThreadHandler handler, IEnvelope message) {
         //避免加线程锁
-        isNotify = true;
+        isNotify.set(true);
         long sTime = System.nanoTime();
         sTime = sTime > 0 ? sTime : System.currentTimeMillis();
         if (message.isRadio()) {
@@ -198,23 +200,23 @@ public class MessagePostOffice implements IMsgPostOffice {
             }
         }
         notifyOtherPostOffice(message);
-        isNotify = false;
+        isNotify.set(false);
     }
 
     @Override
-    public void addIMsgPostOffice(IMsgPostOffice postOffice) {
+    public void addMsgPostOffice(IMsgPostOffice postOffice) {
         if (!msgPostOfficeList.contains(postOffice)) {
             msgPostOfficeList.add(postOffice);
         }
     }
 
     @Override
-    public void removeIMsgPostOffice(IMsgPostOffice postOffice) {
+    public void removeMsgPostOffice(IMsgPostOffice postOffice) {
         msgPostOfficeList.remove(postOffice);
     }
 
     @Override
-    public void removeAllIMsgPostOffice() {
+    public void removeAllMsgPostOffice() {
         msgPostOfficeList.clear();
     }
 
@@ -223,10 +225,9 @@ public class MessagePostOffice implements IMsgPostOffice {
      *
      * @param receive 消息接收者
      */
-    @Override
-    public void registeredListener(IMsgCourier receive) {
+    protected void registeredListener(IMsgCourier receive) {
         if (receive != null) {
-            if (isNotify) {
+            if (isNotify.get()) {
                 busyCache.add(MegOperation.ADD.setCourier(receive));
             } else {
                 String key = receive.getCourierKey();
@@ -240,10 +241,9 @@ public class MessagePostOffice implements IMsgPostOffice {
     /**
      * 注销指定的监听器
      */
-    @Override
-    public void unRegisteredListener(IMsgCourier receive) {
+    protected void unRegisteredListener(IMsgCourier receive) {
         if (receive != null && courierMap != null) {
-            if (isNotify) {
+            if (isNotify.get()) {
                 busyCache.add(MegOperation.DEL.setCourier(receive));
             } else {
                 courierMap.remove(receive.getCourierKey());
@@ -257,21 +257,16 @@ public class MessagePostOffice implements IMsgPostOffice {
      * 注销和清除所有的监听器
      */
     @Override
-    public void removeAllNotifyListener() {
-        if (!isNotify) {
+    public void removeAllMsgCourier() {
+        if (isNotify.get()) {
+            busyCache.add(MegOperation.DEL_ALL);
+        } else {
             Set<Map.Entry<String, IMsgCourier>> entrySet = courierMap.entrySet();
             for (Map.Entry<String, IMsgCourier> entry : entrySet) {
                 IMsgCourier receive = entry.getValue();
-                if (isNotify) {
-                    busyCache.add(MegOperation.DEL.setCourier(receive));
-                }
                 receive.removeEnvelopeServer(this);
             }
-            if (isNotify) {
-                busyCache.add(MegOperation.DEL_ALL);
-            } else {
-                courierMap.clear();
-            }
+            courierMap.clear();
         }
     }
 
@@ -312,7 +307,7 @@ public class MessagePostOffice implements IMsgPostOffice {
         protected void onProcess() {
             IEnvelope envelope = attribute.popCacheData();
             if (envelope != null) {
-                isNotify = true;
+                isNotify.set(true);
                 disposeMessage(this, envelope);
                 execCache();
                 if (attribute.getCacheDataSize() == 0) {

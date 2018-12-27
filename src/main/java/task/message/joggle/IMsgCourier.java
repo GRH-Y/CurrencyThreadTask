@@ -1,5 +1,7 @@
 package task.message.joggle;
 
+import task.message.MessagePostOffice;
+
 /**
  * IMsgCourier 消息接收者
  * Created by prolog on 6/20/2016.
@@ -36,14 +38,14 @@ public interface IMsgCourier {
      *
      * @param postOffice 消息传递者
      */
-    void addEnvelopeServer(IMsgPostOffice postOffice);
+    void addEnvelopeServer(MessagePostOffice postOffice);
 
     /**
      * 移除消息传递者
      *
      * @param postOffice 消息传递者
      */
-    void removeEnvelopeServer(IMsgPostOffice postOffice);
+    void removeEnvelopeServer(MessagePostOffice postOffice);
 
     /**
      * 获取消息接收者唯一标识符

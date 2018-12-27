@@ -25,7 +25,7 @@ public class MessageCourier implements IMsgCourier {
     private final String courierKey;
     /***消息栈*/
     private Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
-    private final Queue<IMsgPostOffice> serverQueue = new ConcurrentLinkedQueue();
+    private final Queue<MessagePostOffice> serverQueue = new ConcurrentLinkedQueue();
 
     public MessageCourier(INotifyListener listener) {
         if (listener == null) {
@@ -68,8 +68,9 @@ public class MessageCourier implements IMsgCourier {
     }
 
     @Override
-    public void removeEnvelopeServer(IMsgPostOffice sender) {
+    public void removeEnvelopeServer(MessagePostOffice sender) {
         serverQueue.remove(sender);
+        sender.unRegisteredListener(this);
     }
 
     @Override
@@ -96,9 +97,9 @@ public class MessageCourier implements IMsgCourier {
      * @param postOffice 消息发送者
      */
     @Override
-    public void addEnvelopeServer(IMsgPostOffice postOffice) {
+    public void addEnvelopeServer(MessagePostOffice postOffice) {
         if (!serverQueue.contains(postOffice)) {
-            serverQueue.add(postOffice);
+            serverQueue.offer(postOffice);
             postOffice.registeredListener(this);
         }
     }
@@ -124,7 +125,7 @@ public class MessageCourier implements IMsgCourier {
         if (JdkVersion.isJava8()) {
             serverQueue.forEach(item -> item.sendEnvelope(message));
         } else {
-            Iterator<IMsgPostOffice> iterator = serverQueue.iterator();
+            Iterator<MessagePostOffice> iterator = serverQueue.iterator();
             while (iterator.hasNext()) {
                 IMsgPostOffice sender = iterator.next();
                 sender.sendEnvelope(message);
@@ -153,9 +154,9 @@ public class MessageCourier implements IMsgCourier {
         if (JdkVersion.isJava8()) {
             serverQueue.forEach(item -> item.unRegisteredListener(this));
         } else {
-            Iterator<IMsgPostOffice> iterator =  serverQueue.iterator();
+            Iterator<MessagePostOffice> iterator =  serverQueue.iterator();
             while (iterator.hasNext()) {
-                IMsgPostOffice sender = iterator.next();
+                MessagePostOffice sender = iterator.next();
                 sender.unRegisteredListener(this);
             }
         }

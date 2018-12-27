@@ -62,7 +62,7 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
         D data = null;
         if (!mCache.isEmpty()) {
             try {
-                data = mCache.remove();
+                data = mCache.poll();
             } catch (Exception e) {
             }
         }
@@ -82,13 +82,13 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
         if (mCacheMaxCount > 0 && mCache.size() >= mCacheMaxCount) {
             if (crowdOutModel) {
                 try {
-                    mCache.remove();
+                    mCache.poll();
                 } catch (Exception e) {
                 }
-                mCache.add(data);
+                mCache.offer(data);
             }
         } else {
-            mCache.add(data);
+            mCache.offer(data);
         }
     }
 
