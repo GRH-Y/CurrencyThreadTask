@@ -21,38 +21,38 @@ public class TaskContainer implements ITaskContainer {
     /**
      * 线程体
      */
-    private Thread thread ;
+    private Thread thread;
     /**
      * 执行体
      */
     private LoopTaskExecutor objectExecutor;
 
 
-    /**
-     * 创建生产消费处理任务
-     *
-     * @param task 普通任务
-     */
-    public <D> TaskContainer(BaseConsumerTask<D> task) {
-        this(task, task.getClass().getName());
-    }
-
-    /**
-     * 创建生产消费处理任务
-     *
-     * @param task       普通任务
-     * @param threadName 任务名
-     */
-    public <D> TaskContainer(BaseConsumerTask<D> task, String threadName) {
-        if (task == null) {
-            throw new NullPointerException(EXCEPTION);
-        } else {
-            this.task = task;
-            ConsumerTaskExecutor<D> executor = new ConsumerTaskExecutor(this);
-            thread = new Thread(executor.getRunnable(), threadName);
-            objectExecutor = executor;
-        }
-    }
+//    /**
+//     * 创建生产消费处理任务
+//     *
+//     * @param task 普通任务
+//     */
+//    public <D> TaskContainer(BaseConsumerTask<D> task) {
+//        this(task, task.getClass().getName());
+//    }
+//
+//    /**
+//     * 创建生产消费处理任务
+//     *
+//     * @param task       普通任务
+//     * @param threadName 任务名
+//     */
+//    public <D> TaskContainer(BaseConsumerTask<D> task, String threadName) {
+//        if (task == null) {
+//            throw new NullPointerException(EXCEPTION);
+//        } else {
+//            this.task = task;
+//            ConsumerTaskExecutor<D> executor = new ConsumerTaskExecutor(this);
+//            thread = new Thread(executor.getRunnable(), threadName);
+//            objectExecutor = executor;
+//        }
+//    }
 
 
     /**
@@ -69,11 +69,15 @@ public class TaskContainer implements ITaskContainer {
             throw new NullPointerException(EXCEPTION);
         } else {
             this.task = task;
-            LoopTaskExecutor taskExecutor = new LoopTaskExecutor(this);
-            thread = new Thread(taskExecutor.getRunnable(), threadName);
-            objectExecutor = taskExecutor;
+            if (task instanceof BaseConsumerTask) {
+                objectExecutor = new ConsumerTaskExecutor(this);
+            } else {
+                objectExecutor = new LoopTaskExecutor(this);
+            }
+            thread = new Thread(objectExecutor.getRunnable(), threadName);
         }
     }
+
 
 //    /**
 //     * 创建socket通讯任务

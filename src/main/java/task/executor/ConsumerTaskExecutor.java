@@ -94,7 +94,6 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
         super.stopTask();
     }
 
-
     /**
      * 开启异步处理数据模式,
      * 开启后 onCreateData ,onProcess 分别不同线程来执行

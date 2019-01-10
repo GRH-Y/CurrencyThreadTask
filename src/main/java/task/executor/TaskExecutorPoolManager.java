@@ -1,7 +1,10 @@
 package task.executor;
 
 
-import task.executor.joggle.*;
+import task.executor.joggle.IAttribute;
+import task.executor.joggle.ILoopTaskExecutor;
+import task.executor.joggle.ITaskContainer;
+import task.executor.joggle.IThreadPoolManager;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -75,19 +78,16 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         if (loopTask == null && consumerTask == null) {
             return null;
         }
+        BaseLoopTask execTask = loopTask == null ? consumerTask : loopTask;
         ITaskContainer taskContainer = getTaskContainer();
         if (taskContainer == null) {
-            if (loopTask == null) {
-                taskContainer = new TaskContainer(consumerTask);
-            } else {
-                taskContainer = new TaskContainer(loopTask);
-            }
+            taskContainer = new TaskContainer(execTask);
             taskContainer.setAttribute(attribute);
             taskContainer.getTaskExecutor().setMultiplexTask(true);
             taskContainer.getTaskExecutor().startTask();
             containerCache.add(taskContainer);
         } else {
-            taskContainer.getTaskExecutor().changeTask(consumerTask);
+            taskContainer.getTaskExecutor().changeTask(execTask);
         }
         return taskContainer;
     }

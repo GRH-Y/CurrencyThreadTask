@@ -264,14 +264,16 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     public void blockStopTask() {
         stopTask();
         //循环等待状态被改变
-        if (getAliveState() || isStartState()) {
-            lock.lock();
-            try {
-                condition.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                lock.unlock();
+        if (!(container.getThread() == Thread.currentThread())) {
+            if (getAliveState() || isStartState()) {
+                lock.lock();
+                try {
+                    condition.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    lock.unlock();
+                }
             }
         }
     }
