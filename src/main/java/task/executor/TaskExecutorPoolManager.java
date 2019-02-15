@@ -36,12 +36,17 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         return pool;
     }
 
-    private ITaskContainer getTaskContainer() {
+    private ITaskContainer getTaskContainer(BaseLoopTask task) {
         if (!containerCache.isEmpty()) {
             for (ITaskContainer container : containerCache) {
-                boolean isIdleState = container.getTaskExecutor().isIdleState();
+                ILoopTaskExecutor executor = container.getTaskExecutor();
+                boolean isIdleState = executor.isIdleState();
                 if (isIdleState) {
-                    return container;
+                    if (executor instanceof ConsumerTaskExecutor && task instanceof BaseConsumerTask) {
+                        return container;
+                    } else if (executor instanceof LoopTaskExecutor && !(task instanceof BaseConsumerTask)) {
+                        return container;
+                    }
                 }
             }
         }
@@ -79,7 +84,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
             return null;
         }
         BaseLoopTask execTask = loopTask == null ? consumerTask : loopTask;
-        ITaskContainer taskContainer = getTaskContainer();
+        ITaskContainer taskContainer = getTaskContainer(execTask);
         if (taskContainer == null) {
             taskContainer = new TaskContainer(execTask);
             taskContainer.setAttribute(attribute);
@@ -96,12 +101,10 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     @Override
     public void removeTask(BaseLoopTask loopTask) {
         for (ITaskContainer container : containerCache) {
-            if (container instanceof LoopTaskExecutor) {
-                LoopTaskExecutor taskExecutor = (LoopTaskExecutor) container;
-                if (taskExecutor.executorTask == loopTask) {
-                    taskExecutor.stopTask();
-                    return;
-                }
+            LoopTaskExecutor taskExecutor = container.getTaskExecutor();
+            if (taskExecutor.executorTask == loopTask) {
+                taskExecutor.stopTask();
+                return;
             }
         }
     }
@@ -109,14 +112,12 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     @Override
     public void removeTask(BaseConsumerTask consumerTask) {
         for (ITaskContainer container : containerCache) {
-            if (container instanceof ConsumerTaskExecutor) {
-                ConsumerTaskExecutor taskExecutor = (ConsumerTaskExecutor) container;
-                if (taskExecutor.executorTask instanceof ConsumerEngine) {
-                    ConsumerEngine coreTask = (ConsumerEngine) taskExecutor.executorTask;
-                    if (coreTask == consumerTask) {
-                        taskExecutor.stopTask();
-                        return;
-                    }
+            ConsumerTaskExecutor taskExecutor = container.getTaskExecutor();
+            if (taskExecutor.executorTask instanceof ConsumerEngine) {
+                ConsumerEngine coreTask = (ConsumerEngine) taskExecutor.executorTask;
+                if (coreTask.mConsumerTask == consumerTask) {
+                    taskExecutor.stopTask();
+                    return;
                 }
             }
         }

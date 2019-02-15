@@ -94,19 +94,18 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             do {
                 //执行初始化事件
                 executorTask.onInitTask();
-                while (getLoopState()) {
+                do {
                     // 是否暂停执行
                     if (getPauseState() && getLoopState()) {
                         waitTask();
                     }
-                    if (getLoopState()) {
-                        // 执行任务事件
-                        executorTask.onRunLoopTask();
-                    }
+                    // 执行任务事件
+                    executorTask.onRunLoopTask();
+
                     if (isLoopInit && getLoopState()) {
                         executorTask.onInitTask();
                     }
-                }
+                } while (getLoopState());
                 // 执行任务懒关闭事件
                 if (getIdleStopState()) {
                     executorTask.onIdleStop();

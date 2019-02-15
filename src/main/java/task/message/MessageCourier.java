@@ -67,11 +67,6 @@ public class MessageCourier implements IMsgCourier {
         }
     }
 
-    @Override
-    public void removeEnvelopeServer(MessagePostOffice sender) {
-        serverQueue.remove(sender);
-        sender.unRegisteredListener(this);
-    }
 
     @Override
     public String getCourierKey() {
@@ -91,6 +86,7 @@ public class MessageCourier implements IMsgCourier {
         return data;
     }
 
+
     /**
      * 设置消息发送者
      *
@@ -101,6 +97,14 @@ public class MessageCourier implements IMsgCourier {
         if (!serverQueue.contains(postOffice)) {
             serverQueue.offer(postOffice);
             postOffice.registeredListener(this);
+        }
+    }
+
+    @Override
+    public void removeEnvelopeServer(MessagePostOffice postOffice) {
+        if (serverQueue.contains(postOffice)) {
+            serverQueue.remove(postOffice);
+            postOffice.unRegisteredListener(this);
         }
     }
 
@@ -151,10 +155,10 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void release() {
-        if (JdkVersion.isJava8()) {
+        if (JdkVersion.isJava8Above()) {
             serverQueue.forEach(item -> item.unRegisteredListener(this));
         } else {
-            Iterator<MessagePostOffice> iterator =  serverQueue.iterator();
+            Iterator<MessagePostOffice> iterator = serverQueue.iterator();
             while (iterator.hasNext()) {
                 MessagePostOffice sender = iterator.next();
                 sender.unRegisteredListener(this);

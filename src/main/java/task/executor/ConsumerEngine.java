@@ -43,7 +43,7 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         if (executor.isIdleStateSleep() && (mAttribute == null || mAttribute.getCacheDataSize() == 0)) {
             executor.waitTask();
         } else {
-            if (executor.getAsyncTaskExecutor() == null && executor.getLoopState()) {
+            if (executor.getAsyncTaskExecutor() == null) {
                 onProcess();
             }
         }

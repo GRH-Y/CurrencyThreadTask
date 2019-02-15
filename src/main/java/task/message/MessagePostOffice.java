@@ -249,7 +249,6 @@ public class MessagePostOffice implements IMsgPostOffice {
                 busyCache.add(MegOperation.DEL.setCourier(receive));
             } else {
                 courierMap.remove(receive.getCourierKey());
-                receive.removeEnvelopeServer(this);
             }
         }
     }
