@@ -1,10 +1,7 @@
 package task.message;
 
 
-import task.message.joggle.IEnvelope;
-import task.message.joggle.IMsgCourier;
-import task.message.joggle.IMsgPostOffice;
-import task.message.joggle.INotifyListener;
+import task.message.joggle.*;
 import util.JdkVersion;
 import util.ThreadAnnotation;
 
@@ -19,10 +16,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @date 4/10/2017.
  * Created by prolog on 4/10/2017.
  */
-public class MessageCourier implements IMsgCourier {
+public class MessageCourier implements IMsgCourier, IMsgHandler {
     private INotifyListener listener;
     private Object target = null;
     private final String courierKey;
+
+    private IMsgHandler msgHandler = null;
     /***消息栈*/
     private Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
     private final Queue<MessagePostOffice> serverQueue = new ConcurrentLinkedQueue();
@@ -43,6 +42,10 @@ public class MessageCourier implements IMsgCourier {
         this.target = target;
     }
 
+    public void setMsgHandler(IMsgHandler msgHandler) {
+        this.msgHandler = msgHandler;
+    }
+
     /**
      * //线程间通信接口，其它线程发送数据可以在这里收到
      *
@@ -54,10 +57,10 @@ public class MessageCourier implements IMsgCourier {
             //即时消息
             case INSTANT:
             default:
-                if (listener == null) {
-                    ThreadAnnotation.disposeMessage(message.getMethodName(), target, message);
+                if (msgHandler != null) {
+                    msgHandler.handler(message);
                 } else {
-                    listener.onInstantMessage(message);
+                    handler(message);
                 }
                 break;
             //非即时消息
@@ -67,6 +70,14 @@ public class MessageCourier implements IMsgCourier {
         }
     }
 
+    @Override
+    public void handler(IEnvelope message) {
+        if (listener == null) {
+            ThreadAnnotation.disposeMessage(message.getMethodName(), target, message);
+        } else {
+            listener.onInstantMessage(message);
+        }
+    }
 
     @Override
     public String getCourierKey() {
@@ -167,4 +178,5 @@ public class MessageCourier implements IMsgCourier {
         serverQueue.clear();
         msgQueue.clear();
     }
+
 }
