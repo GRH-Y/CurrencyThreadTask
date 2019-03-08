@@ -1,7 +1,10 @@
 package task.message;
 
 
-import task.message.joggle.*;
+import task.message.joggle.IEnvelope;
+import task.message.joggle.IMsgCourier;
+import task.message.joggle.IMsgPostOffice;
+import task.message.joggle.INotifyListener;
 import util.JdkVersion;
 import util.ThreadAnnotation;
 
@@ -16,14 +19,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @date 4/10/2017.
  * Created by prolog on 4/10/2017.
  */
-public class MessageCourier implements IMsgCourier, IMsgHandler {
-    private INotifyListener listener;
-    private Object target = null;
+public class MessageCourier implements IMsgCourier {
+    protected INotifyListener listener;
+    protected Object target = null;
     private final String courierKey;
 
-    private IMsgHandler msgHandler = null;
     /***消息栈*/
-    private Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
+    protected Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
     private final Queue<MessagePostOffice> serverQueue = new ConcurrentLinkedQueue();
 
     public MessageCourier(INotifyListener listener) {
@@ -42,9 +44,6 @@ public class MessageCourier implements IMsgCourier, IMsgHandler {
         this.target = target;
     }
 
-    public void setMsgHandler(IMsgHandler msgHandler) {
-        this.msgHandler = msgHandler;
-    }
 
     /**
      * //线程间通信接口，其它线程发送数据可以在这里收到
@@ -57,25 +56,16 @@ public class MessageCourier implements IMsgCourier, IMsgHandler {
             //即时消息
             case INSTANT:
             default:
-                if (msgHandler != null) {
-                    msgHandler.handler(message);
+                if (listener == null) {
+                    ThreadAnnotation.disposeMessage(message.getMethodName(), target, message);
                 } else {
-                    handler(message);
+                    listener.onInstantMessage(message);
                 }
                 break;
             //非即时消息
             case MAIL:
                 msgQueue.add(message);
                 break;
-        }
-    }
-
-    @Override
-    public void handler(IEnvelope message) {
-        if (listener == null) {
-            ThreadAnnotation.disposeMessage(message.getMethodName(), target, message);
-        } else {
-            listener.onInstantMessage(message);
         }
     }
 
