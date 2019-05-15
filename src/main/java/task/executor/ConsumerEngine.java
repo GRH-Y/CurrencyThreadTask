@@ -5,7 +5,7 @@ import task.executor.joggle.IConsumerAttribute;
 public class ConsumerEngine<D> extends BaseConsumerTask<D> {
 
 
-    protected BaseConsumerTask mConsumerTask;
+    private BaseConsumerTask mConsumerTask;
     private IConsumerAttribute mAttribute;
     private ConsumerTaskExecutor executor;
 
@@ -18,6 +18,10 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         synchronized (ConsumerEngine.class) {
             this.mAttribute = attribute;
         }
+    }
+
+    protected BaseConsumerTask getTask() {
+        return mConsumerTask;
     }
 
     protected void changeBaseConsumerTask(BaseConsumerTask task) {

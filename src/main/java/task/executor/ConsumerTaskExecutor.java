@@ -15,7 +15,7 @@ import task.executor.joggle.ILoopTaskExecutor;
 public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsumerTaskExecutor<D> {
 
     /***没有输任务则休眠标志位，为true则休眠*/
-    private boolean isIdleStateSleep = false;
+    private volatile boolean isIdleStateSleep = false;
 
     /***异步处理数据任务*/
     private volatile ILoopTaskExecutor asyncTaskExecutor = null;
@@ -99,12 +99,13 @@ public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsum
      * 开启后 onCreateData ,onProcess 分别不同线程来执行
      */
     @Override
-    public synchronized void startAsyncProcessData() {
+    public synchronized ILoopTaskExecutor startAsyncProcessData() {
         if (asyncTaskExecutor == null) {
             ConsumerEngine coreTask = (ConsumerEngine) executorTask;
             AsyncProcessDataTask asyncTask = new AsyncProcessDataTask(coreTask);
             asyncTaskExecutor = asyncTask.startTask();
         }
+        return asyncTaskExecutor;
     }
 
     /**

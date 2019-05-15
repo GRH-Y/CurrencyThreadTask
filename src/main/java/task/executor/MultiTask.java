@@ -23,12 +23,21 @@ public abstract class MultiTask<T> {
     /***消费标记*/
     private long consumerMark = 0;
 
+    public MultiTask() {
+        int count = Runtime.getRuntime().availableProcessors();
+        init(count);
+    }
+
     /**
      * 多线程并发处理任务
      *
      * @param count 开启线程的数量
      */
     public MultiTask(int count) {
+        init(count);
+    }
+
+    private void init(int count) {
         taskList = new ArrayList<>(count);
         lockList = new ArrayList<>();
         for (int index = 0; index < count; index++) {

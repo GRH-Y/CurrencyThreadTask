@@ -115,7 +115,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
             ConsumerTaskExecutor taskExecutor = container.getTaskExecutor();
             if (taskExecutor.executorTask instanceof ConsumerEngine) {
                 ConsumerEngine coreTask = (ConsumerEngine) taskExecutor.executorTask;
-                if (coreTask.mConsumerTask == consumerTask) {
+                if (coreTask.getTask() == consumerTask) {
                     taskExecutor.stopTask();
                     return;
                 }

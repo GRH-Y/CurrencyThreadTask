@@ -16,11 +16,11 @@ public class AsyncProcessDataTask extends BaseLoopTask {
 
     @Override
     public void onRunLoopTask() {
-        if (mCoreTask.getAttribute() != null && mCoreTask.getAttribute().getCacheDataSize() > 0) {
+//        if (mCoreTask.getAttribute() != null && mCoreTask.getAttribute().getCacheDataSize() > 0) {
             mCoreTask.onProcess();
-        } else {
-            mAsyncTaskExecutor.waitTask(0);
-        }
+//        } else {
+//            mAsyncTaskExecutor.waitTask(0);
+//        }
     }
 
     public ILoopTaskExecutor startTask() {
