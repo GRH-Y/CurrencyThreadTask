@@ -34,14 +34,14 @@ public interface IThreadPoolManager {
      *
      * @param loopTask
      */
-    void removeTask(BaseLoopTask loopTask);
+    void closeTask(BaseLoopTask loopTask);
 
     /**
      * 移除任务
      *
      * @param loopTask
      */
-    void removeTask(BaseConsumerTask loopTask);
+    void closeTask(BaseConsumerTask loopTask);
 
 
     /**
@@ -49,7 +49,7 @@ public interface IThreadPoolManager {
      *
      * @param container 线程
      */
-    void recycleThread(ITaskContainer container);
+    void multiplexThread(ITaskContainer container);
 
     /**
      * 切换任务

@@ -99,7 +99,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
 
     @Override
-    public void removeTask(BaseLoopTask loopTask) {
+    public void closeTask(BaseLoopTask loopTask) {
         for (ITaskContainer container : containerCache) {
             LoopTaskExecutor taskExecutor = container.getTaskExecutor();
             if (taskExecutor.executorTask == loopTask) {
@@ -110,7 +110,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public void removeTask(BaseConsumerTask consumerTask) {
+    public void closeTask(BaseConsumerTask consumerTask) {
         for (ITaskContainer container : containerCache) {
             ConsumerTaskExecutor taskExecutor = container.getTaskExecutor();
             if (taskExecutor.executorTask instanceof ConsumerEngine) {
@@ -124,7 +124,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public void recycleThread(ITaskContainer container) {
+    public void multiplexThread(ITaskContainer container) {
         ILoopTaskExecutor executor = container.getTaskExecutor();
         boolean state = executor.getMultiplexState() && executor.isIdleState();
         if (state) {
