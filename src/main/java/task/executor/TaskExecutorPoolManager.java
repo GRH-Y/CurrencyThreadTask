@@ -54,18 +54,26 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public ITaskContainer createJThread(BaseLoopTask loopTask) {
-        TaskContainer thread = new TaskContainer(loopTask);
-        thread.getTaskExecutor().setMultiplexTask(true);
-        containerCache.add(thread);
-        return thread;
+    public ITaskContainer createLoopTask(BaseLoopTask loopTask, IAttribute attribute) {
+        return createPoolTask(loopTask, null, attribute);
     }
 
-    public ITaskContainer createJThread(BaseConsumerTask consumerTask) {
-        TaskContainer thread = new TaskContainer(consumerTask);
-        thread.getTaskExecutor().setMultiplexTask(true);
-        containerCache.add(thread);
-        return thread;
+    public ITaskContainer createConsumerTask(BaseConsumerTask consumerTask, IAttribute attribute) {
+        return createPoolTask(null, consumerTask, attribute);
+    }
+
+    private ITaskContainer createPoolTask(BaseLoopTask loopTask, BaseConsumerTask consumerTask, IAttribute attribute) {
+        BaseLoopTask execTask = loopTask == null ? consumerTask : loopTask;
+        ITaskContainer taskContainer = getTaskContainer(execTask);
+        if (taskContainer != null) {
+            changeTask(taskContainer, execTask, attribute);
+        } else {
+            taskContainer = new TaskContainer(execTask);
+            taskContainer.setAttribute(attribute);
+            taskContainer.getTaskExecutor().setMultiplexTask(true);
+            containerCache.add(taskContainer);
+        }
+        return taskContainer;
     }
 
 
@@ -133,8 +141,9 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     }
 
     @Override
-    public final boolean changeTask(ITaskContainer container, BaseLoopTask newTask) {
+    public final boolean changeTask(ITaskContainer container, BaseLoopTask newTask, IAttribute attribute) {
         ILoopTaskExecutor executor = container.getTaskExecutor();
+        executor.setAttribute(attribute);
         return executor.changeTask(newTask);
     }
 

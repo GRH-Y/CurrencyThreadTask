@@ -11,9 +11,9 @@ import task.executor.BaseLoopTask;
  */
 public interface IThreadPoolManager {
 
-    ITaskContainer createJThread(BaseLoopTask loopTask);
+    ITaskContainer createLoopTask(BaseLoopTask loopTask, IAttribute attribute);
 
-    ITaskContainer createJThread(BaseConsumerTask consumerTask);
+    ITaskContainer createConsumerTask(BaseConsumerTask consumerTask, IAttribute attribute);
 
     /**
      * 添加任务,线程池会自动执行
@@ -57,7 +57,7 @@ public interface IThreadPoolManager {
      * @param runnable 任务
      * @return true 切换任务成功
      */
-    boolean changeTask(ITaskContainer thread, BaseLoopTask runnable);
+    boolean changeTask(ITaskContainer thread, BaseLoopTask runnable, IAttribute attribute);
 
     /**
      * 销毁线程
