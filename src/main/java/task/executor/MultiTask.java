@@ -141,21 +141,21 @@ public abstract class MultiTask<T> {
     /**
      * 任务线程
      */
-    protected class Task extends BaseConsumerTask<TaskEntity> {
+    protected class Task extends BaseConsumerTask {
         protected int token;
         private TaskContainer container;
-        private ConsumerTaskExecutor<TaskEntity> executor;
+        private ConsumerTaskExecutor executor;
         private IConsumerAttribute<TaskEntity> attribute;
 
         Task(int token) {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
             attribute = new ConsumerQueueAttribute<>();
-            container.setAttribute(attribute);
+            executor.setAttribute(attribute);
             this.token = token;
         }
 
-        public ConsumerTaskExecutor<TaskEntity> getExecutor() {
+        public ConsumerTaskExecutor getExecutor() {
             return executor;
         }
 

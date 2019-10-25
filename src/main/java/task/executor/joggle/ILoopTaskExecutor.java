@@ -32,12 +32,6 @@ public interface ILoopTaskExecutor {
      */
     boolean getLoopState();
 
-    /**
-     * 获取执行接口
-     *
-     * @return
-     */
-    Runnable getRunnable();
 
     /**
      * 获取任务执行的状态
@@ -46,12 +40,6 @@ public interface ILoopTaskExecutor {
      **/
     boolean getAliveState();
 
-    /**
-     * 每次循环会执行一次 onInitTask
-     *
-     * @param isLoop true 为每次循环会执行一次
-     */
-    void setLoopInit(boolean isLoop);
 
     /**
      * 任务是否是暂停状态

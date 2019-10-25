@@ -12,7 +12,7 @@ import task.executor.joggle.ILoopTaskExecutor;
  *
  * @author yyz
  */
-public class ConsumerTaskExecutor<D> extends LoopTaskExecutor implements IConsumerTaskExecutor<D> {
+public class ConsumerTaskExecutor extends LoopTaskExecutor implements IConsumerTaskExecutor {
 
     /***没有输任务则休眠标志位，为true则休眠*/
     private volatile boolean isIdleStateSleep = false;

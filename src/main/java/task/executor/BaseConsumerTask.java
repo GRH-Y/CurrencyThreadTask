@@ -10,7 +10,7 @@ package task.executor;
  *
  * @author yyz
  */
-public class BaseConsumerTask extends BaseLoopTask {
+public class BaseConsumerTask<D> extends BaseLoopTask {
 
     /**
      * 创建数据
@@ -25,5 +25,4 @@ public class BaseConsumerTask extends BaseLoopTask {
     protected void onProcess() {
         //Do something
     }
-
 }

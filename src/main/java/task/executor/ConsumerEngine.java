@@ -15,9 +15,7 @@ public class ConsumerEngine extends BaseConsumerTask {
     }
 
     protected void setAttribute(IConsumerAttribute attribute) {
-        synchronized (ConsumerEngine.class) {
-            this.mAttribute = attribute;
-        }
+        this.mAttribute = attribute;
     }
 
     protected BaseConsumerTask getTask() {
@@ -29,9 +27,7 @@ public class ConsumerEngine extends BaseConsumerTask {
     }
 
     protected IConsumerAttribute getAttribute() {
-        synchronized (ConsumerEngine.class) {
-            return mAttribute;
-        }
+        return mAttribute;
     }
 
     @Override
