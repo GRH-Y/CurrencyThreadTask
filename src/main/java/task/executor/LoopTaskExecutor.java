@@ -79,7 +79,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     public void setAttribute(IAttribute attribute) {
     }
 
-
     private class LoopEngine implements Runnable {
 
         @Override
@@ -106,6 +105,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                         executorTask.onInitTask();
                     }
                 } while (getLoopState());
+
                 // 执行任务懒关闭事件
                 if (getIdleStopState()) {
                     executorTask.onIdleStop();

@@ -2,7 +2,7 @@ package task.executor;
 
 import task.executor.joggle.IConsumerAttribute;
 
-public class ConsumerEngine<D> extends BaseConsumerTask<D> {
+public class ConsumerEngine extends BaseConsumerTask {
 
 
     private BaseConsumerTask mConsumerTask;
@@ -53,7 +53,6 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
         }
     }
 
-
     @Override
     protected void onCreateData() {
         mConsumerTask.onCreateData();
@@ -63,7 +62,6 @@ public class ConsumerEngine<D> extends BaseConsumerTask<D> {
     protected void onProcess() {
         mConsumerTask.onProcess();
     }
-
 
     @Override
     protected void onIdleStop() {
