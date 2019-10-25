@@ -3,7 +3,6 @@ package task.executor;
 
 import task.executor.joggle.IAttribute;
 import task.executor.joggle.ILoopTaskExecutor;
-import task.executor.joggle.ITaskContainer;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

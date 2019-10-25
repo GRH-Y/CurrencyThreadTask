@@ -69,7 +69,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
             changeTask(taskContainer, execTask, attribute);
         } else {
             taskContainer = new TaskContainer(execTask);
-            taskContainer.setAttribute(attribute);
+            taskContainer.getTaskExecutor().setAttribute(attribute);
             taskContainer.getTaskExecutor().setMultiplexTask(true);
             containerCache.add(taskContainer);
         }
@@ -95,7 +95,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         ITaskContainer taskContainer = getTaskContainer(execTask);
         if (taskContainer == null) {
             taskContainer = new TaskContainer(execTask);
-            taskContainer.setAttribute(attribute);
+            taskContainer.getTaskExecutor().setAttribute(attribute);
             taskContainer.getTaskExecutor().setMultiplexTask(true);
             taskContainer.getTaskExecutor().startTask();
             containerCache.add(taskContainer);

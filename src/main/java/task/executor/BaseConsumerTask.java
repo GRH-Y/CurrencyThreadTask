@@ -10,7 +10,7 @@ package task.executor;
  *
  * @author yyz
  */
-public class BaseConsumerTask<D> extends BaseLoopTask {
+public class BaseConsumerTask extends BaseLoopTask {
 
     /**
      * 创建数据

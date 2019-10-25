@@ -11,13 +11,13 @@ import task.executor.BaseLoopTask;
  */
 public interface ITaskContainer {
 
-//    /**
-//     * 获取线程体
-//     *
-//     * @return 获取线程实体
-//     */
-//    Thread getThread();
-//
+    /**
+     * 获取线程体
+     *
+     * @return 获取线程实体
+     */
+    Thread getThread();
+
 //    /**
 //     * 获取新的线程体（该方法不要滥用）
 //     *

@@ -53,7 +53,8 @@ public class TaskContainer implements ITaskContainer {
         return thread;
     }
 
-    protected Thread getThread() {
+    @Override
+    public Thread getThread() {
         return thread;
     }
 
