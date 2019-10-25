@@ -20,7 +20,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
 
-    private ITaskContainer container;
+    private TaskContainer container;
 
     /*** 任务*/
     protected BaseLoopTask executorTask;
@@ -32,9 +32,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     /*** 线程准备运行状态*/
     private volatile boolean isStart = false;
-
-    /*** 是否循环执行初始化状态*/
-    private volatile boolean isLoopInit = false;
 
     /*** 线程是否循环执行*/
     private volatile boolean isLoop = true;
@@ -56,7 +53,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      *
      * @param container 任务容器
      */
-    protected LoopTaskExecutor(TaskContainer container) {
+    LoopTaskExecutor(TaskContainer container) {
         if (container == null) {
             throw new NullPointerException(" container is null");
         }
@@ -65,8 +62,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         engine = new LoopEngine();
     }
 
-    @Override
-    public Runnable getRunnable() {
+    protected Runnable getRunnable() {
         return engine;
     }
 
@@ -102,9 +98,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                     // 执行任务事件
                     executorTask.onRunLoopTask();
 
-                    if (isLoopInit && getLoopState()) {
-                        executorTask.onInitTask();
-                    }
                 } while (getLoopState());
                 // 执行任务懒关闭事件
                 if (getIdleStopState()) {
@@ -161,16 +154,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     @Override
     public void setLoopState(boolean state) {
         isLoop = state;
-    }
-
-    /**
-     * 每次循环onRunTask 执行onInitTask
-     *
-     * @param isLoop 默认是false，true则循环一次则调用onInitTask()
-     */
-    @Override
-    public void setLoopInit(boolean isLoop) {
-        isLoopInit = isLoop;
     }
 
     // -------------------End get set LoopState setLoopInit ---------------------

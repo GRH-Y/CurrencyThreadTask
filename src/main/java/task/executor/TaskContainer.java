@@ -1,9 +1,9 @@
 package task.executor;
 
 
-import task.executor.joggle.IAttribute;
 import task.executor.joggle.ILoopTaskExecutor;
 import task.executor.joggle.ITaskContainer;
+import util.StringEnvoy;
 
 /**
  * 线程实体
@@ -11,8 +11,6 @@ import task.executor.joggle.ITaskContainer;
  * @author yyz
  */
 public class TaskContainer implements ITaskContainer {
-
-    private static final String EXCEPTION = "task is null";
 
     /**
      * 要执行的任务
@@ -28,33 +26,6 @@ public class TaskContainer implements ITaskContainer {
     private LoopTaskExecutor objectExecutor;
 
 
-//    /**
-//     * 创建生产消费处理任务
-//     *
-//     * @param task 普通任务
-//     */
-//    public <D> TaskContainer(BaseConsumerTask<D> task) {
-//        this(task, task.getClass().getName());
-//    }
-//
-//    /**
-//     * 创建生产消费处理任务
-//     *
-//     * @param task       普通任务
-//     * @param threadName 任务名
-//     */
-//    public <D> TaskContainer(BaseConsumerTask<D> task, String threadName) {
-//        if (task == null) {
-//            throw new NullPointerException(EXCEPTION);
-//        } else {
-//            this.task = task;
-//            ConsumerTaskExecutor<D> executor = new ConsumerTaskExecutor(this);
-//            thread = new Thread(executor.getRunnable(), threadName);
-//            objectExecutor = executor;
-//        }
-//    }
-
-
     /**
      * 创建循环任务任务
      *
@@ -65,55 +36,24 @@ public class TaskContainer implements ITaskContainer {
     }
 
     public TaskContainer(BaseLoopTask task, String threadName) {
-        if (task == null) {
-            throw new NullPointerException(EXCEPTION);
-        } else {
-            this.task = task;
-            if (task instanceof BaseConsumerTask) {
-                objectExecutor = new ConsumerTaskExecutor(this);
-            } else {
-                objectExecutor = new LoopTaskExecutor(this);
-            }
-            thread = new Thread(objectExecutor.getRunnable(), threadName);
+        if (task == null || StringEnvoy.isEmpty(threadName)) {
+            throw new NullPointerException("task or threadName is null");
         }
+        this.task = task;
+        if (task instanceof BaseConsumerTask) {
+            objectExecutor = new ConsumerTaskExecutor(this);
+        } else {
+            objectExecutor = new LoopTaskExecutor(this);
+        }
+        thread = new Thread(objectExecutor.getRunnable(), threadName);
     }
 
-
-//    /**
-//     * 创建socket通讯任务
-//     *
-//     * @param task socket任务
-//     */
-//    public <D> TaskContainer(BaseSocketTask<D> task) {
-//        this(task, task.getClass().getName());
-//    }
-//
-//    /**
-//     * 创建socket通讯任务
-//     *
-//     * @param task
-//     * @param threadName socket任务名
-//     */
-//    public <D> TaskContainer(BaseSocketTask<D> task, String threadName) {
-//        if (task == null) {
-//            throw new NullPointerException(EXCEPTION);
-//        } else {
-//            this.task = task;
-//            SocketTaskExecutor<D> executor = new SocketTaskExecutor(this);
-//            thread = new Thread(executor.getRunnable(), threadName);
-//            objectExecutor = executor;
-//        }
-//    }
-
-
-    @Override
-    public Thread getNewThread() {
+    protected Thread getNewThread() {
         thread = new Thread(objectExecutor.getRunnable(), objectExecutor.getClass().getName());
         return thread;
     }
 
-    @Override
-    public Thread getThread() {
+    protected Thread getThread() {
         return thread;
     }
 
@@ -128,14 +68,4 @@ public class TaskContainer implements ITaskContainer {
         return (T) task;
     }
 
-
-    @Override
-    public <T> T getAttribute() {
-        return objectExecutor.getAttribute();
-    }
-
-    @Override
-    public void setAttribute(IAttribute attribute) {
-        objectExecutor.setAttribute(attribute);
-    }
 }

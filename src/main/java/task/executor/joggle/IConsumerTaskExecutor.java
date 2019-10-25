@@ -7,7 +7,7 @@ package task.executor.joggle;
  * @author yyz
  */
 
-public interface IConsumerTaskExecutor<D>{
+public interface IConsumerTaskExecutor{
 
 
     /**

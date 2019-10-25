@@ -276,26 +276,26 @@ public class MessagePostOffice implements IMsgPostOffice {
      *
      * @author prolog
      */
-    private class ThreadHandler extends BaseConsumerTask<IEnvelope> {
+    private class ThreadHandler extends BaseConsumerTask{
         private boolean isBusy = false;
 
         private TaskContainer container;
-        private ConsumerTaskExecutor<IEnvelope> executor;
+        private ConsumerTaskExecutor executor;
         private IConsumerAttribute<IEnvelope> attribute;
 
         public ThreadHandler() {
             container = new TaskContainer(this);
             executor = container.getTaskExecutor();
             attribute = new ConsumerQueueAttribute<>();
-            container.setAttribute(attribute);
+            executor.setAttribute(attribute);
             executor.startTask();
         }
 
-        public ConsumerTaskExecutor<IEnvelope> getExecutor() {
+        public ConsumerTaskExecutor getExecutor() {
             return executor;
         }
 
-        public IConsumerAttribute getAttribute() {
+        public IConsumerAttribute<IEnvelope> getAttribute() {
             return attribute;
         }
 
