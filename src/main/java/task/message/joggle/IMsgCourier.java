@@ -1,5 +1,6 @@
 package task.message.joggle;
 
+import task.message.MessageEnvelope;
 import task.message.MessagePostOffice;
 
 /**
@@ -15,7 +16,7 @@ public interface IMsgCourier {
      *
      * @param message 消息
      */
-    void sendEnvelopeProxy(IEnvelope message);
+    void sendEnvelopeProxy(MessageEnvelope message);
 
 
     /**
@@ -23,29 +24,22 @@ public interface IMsgCourier {
      *
      * @param message 消息
      */
-    void sendEnvelopSelf(IEnvelope message);
+    void sendEnvelopSelf(MessageEnvelope message);
 
-
-    /**
-     * 消息接收回调接口
-     *
-     * @param message 消息
-     */
-    void onReceiveEnvelope(IEnvelope message);
 
     /**
      * 设置消息传递者
      *
      * @param postOffice 消息传递者
      */
-    void addEnvelopeServer(MessagePostOffice postOffice);
+    void regMsgPostOffice(MessagePostOffice postOffice);
 
     /**
      * 移除消息传递者
      *
      * @param postOffice 消息传递者
      */
-    void removeEnvelopeServer(MessagePostOffice postOffice);
+    void unRegMsgPostOffice(MessagePostOffice postOffice);
 
     /**
      * 获取消息接收者唯一标识符

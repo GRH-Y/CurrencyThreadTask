@@ -6,7 +6,7 @@ import task.message.joggle.IMsgCourier;
 import task.message.joggle.IMsgPostOffice;
 import task.message.joggle.INotifyListener;
 import util.JdkVersion;
-import util.ThreadAnnotation;
+import util.ReflectionCall;
 
 import java.util.Iterator;
 import java.util.Queue;
@@ -50,14 +50,13 @@ public class MessageCourier implements IMsgCourier {
      *
      * @param message 传递的数据
      */
-    @Override
-    public void onReceiveEnvelope(IEnvelope message) {
+    protected void onReceiveEnvelope(MessageEnvelope message) {
         switch (message.getType()) {
             //即时消息
             case INSTANT:
             default:
                 if (listener == null) {
-                    ThreadAnnotation.disposeMessage(message.getMethodName(), target, message);
+                    ReflectionCall.invoke(target, message.getMethodName(), new Class[]{MessageEnvelope.class}, message);
                 } else {
                     listener.onInstantMessage(message);
                 }
@@ -94,7 +93,7 @@ public class MessageCourier implements IMsgCourier {
      * @param postOffice 消息发送者
      */
     @Override
-    public void addEnvelopeServer(MessagePostOffice postOffice) {
+    public void regMsgPostOffice(MessagePostOffice postOffice) {
         if (!serverQueue.contains(postOffice)) {
             serverQueue.offer(postOffice);
             postOffice.registeredListener(this);
@@ -102,7 +101,7 @@ public class MessageCourier implements IMsgCourier {
     }
 
     @Override
-    public void removeEnvelopeServer(MessagePostOffice postOffice) {
+    public void unRegMsgPostOffice(MessagePostOffice postOffice) {
         if (serverQueue.contains(postOffice)) {
             serverQueue.remove(postOffice);
             postOffice.unRegisteredListener(this);
@@ -116,17 +115,15 @@ public class MessageCourier implements IMsgCourier {
      * @param message 消息
      */
     @Override
-    public void sendEnvelopeProxy(IEnvelope message) {
+    public void sendEnvelopeProxy(MessageEnvelope message) {
         if (message != null) {
             message.setHighOverhead(true);
             sendEnvelop(message);
         }
     }
 
-    private void sendEnvelop(IEnvelope message) {
-        if (message.getSenderKey() == null) {
-            message.setSenderKey(courierKey);
-        }
+    private void sendEnvelop(MessageEnvelope message) {
+        message.setSenderKey(courierKey);
         if (JdkVersion.isJava8()) {
             serverQueue.forEach(item -> item.sendEnvelope(message));
         } else {
@@ -144,7 +141,7 @@ public class MessageCourier implements IMsgCourier {
      * @param message 消息
      */
     @Override
-    public void sendEnvelopSelf(IEnvelope message) {
+    public void sendEnvelopSelf(MessageEnvelope message) {
         if (message != null) {
             message.setHighOverhead(false);
             sendEnvelop(message);

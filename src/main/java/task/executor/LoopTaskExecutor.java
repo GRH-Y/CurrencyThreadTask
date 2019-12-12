@@ -321,7 +321,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         if (isPause) {
             lock.lock();
             try {
-                isPause = false;
                 condition.signal();
             } catch (Exception e) {
                 e.printStackTrace();

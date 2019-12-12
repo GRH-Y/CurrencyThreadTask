@@ -1,7 +1,5 @@
 package task.message;
 
-import task.message.joggle.IMsgCourier;
-
 enum MegOperation {
 
     /**
@@ -11,14 +9,14 @@ enum MegOperation {
      */
     ADD(), DEL(), DEL_ALL();
     /*** 消息接收者*/
-    private IMsgCourier courier = null;
+    private MessageCourier courier = null;
 
-    public MegOperation setCourier(IMsgCourier courier) {
+    public MegOperation setCourier(MessageCourier courier) {
         this.courier = courier;
         return this;
     }
 
-    public IMsgCourier getCourier() {
+    public MessageCourier getCourier() {
         return courier;
     }
 }

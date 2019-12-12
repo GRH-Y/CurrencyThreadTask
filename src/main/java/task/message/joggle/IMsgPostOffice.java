@@ -1,6 +1,8 @@
 package task.message.joggle;
 
 
+import task.message.MessageEnvelope;
+
 /**
  * IMsgPostOffice 消息转发者
  * Created by prolog on 11/18/2016.
@@ -10,57 +12,18 @@ package task.message.joggle;
  */
 
 public interface IMsgPostOffice {
-    /**
-     * 添加消息传递着
-     *
-     * @param postOffice 消息传递着
-     */
-    void addMsgPostOffice(IMsgPostOffice postOffice);
-
-    /**
-     * 移除指定的消息传递着
-     *
-     * @param postOffice 消息传递着
-     */
-    void removeMsgPostOffice(IMsgPostOffice postOffice);
-
-    /**
-     * 移除所有的IMsgPostOffice
-     */
-    void removeAllMsgPostOffice();
-
-//    /**
-//     * 注册消息监听
-//     *
-//     * @param receive 消息接收者
-//     */
-//    void registeredListener(IMsgCourier receive);
-//
-//    /**
-//     * 注销指定的监听器
-//     *
-//     * @param receive 消息接收者
-//     */
-//    void unRegisteredListener(IMsgCourier receive);
 
     /**
      * 注销所有的监听器
      */
-    void removeAllMsgCourier();
-
-    /**
-     * 获取消息接收者数量
-     *
-     * @return 返回 消息接收者数量
-     */
-    int getMsgCourierCount();
+    void clearAllMsgCourier();
 
     /**
      * 发送消息
      *
      * @param message 消息
      */
-    void sendEnvelope(IEnvelope message);
+    void sendEnvelope(MessageEnvelope message);
 
     /**
      * 释放资源

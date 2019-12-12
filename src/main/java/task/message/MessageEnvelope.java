@@ -23,51 +23,7 @@ public class MessageEnvelope implements IEnvelope {
     private IMsgPostOffice sender = null;
 
 
-    public MessageEnvelope() {
-        init(MegType.INSTANT, null, false, true);
-    }
-
-    public MessageEnvelope(MegType type) {
-        init(type, null, false, true);
-    }
-
-    public MessageEnvelope(String receiveKey) {
-        init(MegType.INSTANT, receiveKey, false, false);
-    }
-
-    /**
-     * 线程消息
-     *
-     * @param type         消息类型
-     * @param highOverhead 为true则以高效方式传送处理消息
-     */
-    public MessageEnvelope(MegType type, boolean highOverhead) {
-        init(type, null, highOverhead, true);
-    }
-
-    public MessageEnvelope(String targetKey, boolean highOverhead) {
-        init(MegType.INSTANT, targetKey, highOverhead, false);
-    }
-
-
-    public MessageEnvelope(MegType type, String targetKey, boolean highOverhead) {
-        init(type, targetKey, highOverhead, false);
-    }
-
-
-    private void init(MegType type, String targetKey, boolean highOverhead, boolean radio) {
-        boolean existed = targetKey == null && !radio;
-        if (existed) {
-            throw new NullPointerException("mType or mTargetKey cannot be null !");
-        }
-        this.mType = type;
-        this.mTargetKey = targetKey;
-        mHighOverhead = highOverhead;
-        this.mRadio = radio;
-    }
-
-    @Override
-    public String getMethodName() {
+    protected String getMethodName() {
         return mMethodName;
     }
 
@@ -113,8 +69,7 @@ public class MessageEnvelope implements IEnvelope {
      *
      * @param mSenderKey 接收者key
      */
-    @Override
-    public void setSenderKey(String mSenderKey) {
+    protected void setSenderKey(String mSenderKey) {
         this.mSenderKey = mSenderKey;
     }
 
@@ -136,6 +91,13 @@ public class MessageEnvelope implements IEnvelope {
     @Override
     public MegType getType() {
         return mType;
+    }
+
+
+    public void setType(MegType type) {
+        if (type != null) {
+            this.mType = type;
+        }
     }
 
     /**
@@ -187,8 +149,7 @@ public class MessageEnvelope implements IEnvelope {
      *
      * @param sender 消息发送者
      */
-    @Override
-    public void setMsgPostOffice(IMsgPostOffice sender) {
+    protected void setMsgPostOffice(IMsgPostOffice sender) {
         this.sender = sender;
     }
 

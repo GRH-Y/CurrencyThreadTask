@@ -17,7 +17,6 @@ public interface IEnvelope {
         INSTANT, MAIL
     }
 
-    String getMethodName();
 
     void setMethodName(String methodName);
 
@@ -35,12 +34,6 @@ public interface IEnvelope {
      */
     void setData(Object mData);
 
-    /**
-     * 设置发送者的密钥（密钥作用于区分不同的类，或者同名的类）
-     *
-     * @param mSenderKey
-     */
-    void setSenderKey(String mSenderKey);
 
     /**
      * 获取发送者的密钥
@@ -70,6 +63,9 @@ public interface IEnvelope {
      */
     MegType getType();
 
+
+    void setType(MegType type);
+
     /**
      * 该消息是否广播消息（此类型消息所有接收类都能接收）
      *
@@ -97,13 +93,6 @@ public interface IEnvelope {
      * @param mHighOverhead true为即时消息
      */
     void setHighOverhead(boolean mHighOverhead);
-
-    /**
-     * 设置消息传递者
-     *
-     * @param sender 传递者
-     */
-    void setMsgPostOffice(IMsgPostOffice sender);
 
     /**
      * 回应消息给发送者
