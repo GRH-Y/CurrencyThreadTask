@@ -15,7 +15,7 @@ public class MessageEnvelope implements IEnvelope {
 
     private String mMethodName = null;
     private boolean mHighOverhead = false;
-    private boolean mRadio = false;
+    private boolean mRadio = true;
     private String mTargetKey = null;
     private String mSenderKey = null;
     private Object mData = null;

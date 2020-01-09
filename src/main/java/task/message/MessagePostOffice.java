@@ -126,8 +126,8 @@ public class MessagePostOffice implements IMsgPostOffice {
      */
     private void notifyTargetCourier(MessageEnvelope message) {
         String targetKey = message.getTargetKey();
-        if (StringEnvoy.isNotEmpty(targetKey) && courierMap.containsKey(targetKey)) {
-            MessageCourier target = courierMap.get(targetKey);
+        MessageCourier target = courierMap.get(targetKey);
+        if (target != null) {
             message.setMsgPostOffice(this);
             target.onReceiveEnvelope(message);
         }
@@ -155,10 +155,11 @@ public class MessagePostOffice implements IMsgPostOffice {
      */
     private void disposeMessage(MessageEnvelope message) {
         isNotify.set(true);
-        if (message.isRadio()) {
-            notifyAllCourier(message);
-        } else {
+        String targetKey = message.getTargetKey();
+        if (StringEnvoy.isNotEmpty(targetKey) && !message.isRadio()) {
             notifyTargetCourier(message);
+        } else {
+            notifyAllCourier(message);
         }
         isNotify.set(false);
     }

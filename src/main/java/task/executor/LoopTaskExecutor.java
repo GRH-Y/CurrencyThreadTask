@@ -33,13 +33,13 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     private volatile boolean isStart = false;
 
     /*** 线程是否循环执行*/
-    private volatile boolean isLoop = true;
+    private volatile boolean isLoop = false;
 
     /*** 线程是否暂停执行*/
     private volatile boolean isPause = false;
 
     /*** 线程空闲状态标志位*/
-    private volatile boolean isIdle = false;
+    private volatile boolean isIdle = true;
 
     /*** 懒停止（提交完缓存区数据后再关闭）*/
     private volatile boolean idleStop = false;
@@ -90,33 +90,33 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 executorTask.onInitTask();
                 do {
                     // 是否暂停执行
-                    if (getPauseState() && getLoopState()) {
+                    if (isPause) {
                         waitTask();
                     }
                     // 执行任务事件
                     executorTask.onRunLoopTask();
 
-                } while (getLoopState());
+                } while (isLoop);
 
                 // 执行任务懒关闭事件
-                if (getIdleStopState()) {
+                if (idleStop) {
                     executorTask.onIdleStop();
                 }
                 //执行销毁事件
                 executorTask.onDestroyTask();
 
-                if (getMultiplexState()) {
+                if (isMultiplex) {
                     // 设置线程空闲状态
-                    setIdleState(true);
+                    isIdle = true;
                     // 线程挂起 等待切换任务或者停止
                     waitChangeTask();
                     // 设置线程非空闲状态
-                    setIdleState(false);
+                    isIdle = false;
                     // 设置任务为循环状态
-                    setLoopState(true);
+                    isLoop = true;
                 }
 
-            } while (getMultiplexState());
+            } while (isMultiplex);
 
             isStart = false;
             isAlive = false;
@@ -193,9 +193,9 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void startTask(String threadName) {
-        if (!getAliveState() && !isStartState()) {
+        if (!isAlive && !isStart) {
             isStart = true;
-            setLoopState(true);
+            isLoop = true;
             try {
                 container.getThread().setName(threadName);
                 container.getThread().start();
@@ -217,7 +217,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         startTask(threadName);
         //循环等待状态被改变
         if (!(container.getThread() == Thread.currentThread())) {
-            if (!getAliveState() && isStartState()) {
+            if (!isAlive && isStart) {
                 lock.lock();
                 try {
                     condition.await();
@@ -239,8 +239,8 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void stopTask() {
-        setLoopState(false);
-        resumeTask();
+        isLoop = false;
+        wakeUpTask();
     }
 
     @Override
@@ -248,7 +248,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         stopTask();
         //循环等待状态被改变
         if (!(container.getThread() == Thread.currentThread())) {
-            if (getAliveState() && isStartState()) {
+            if (isAlive && isStart) {
                 lock.lock();
                 try {
                     condition.await();
@@ -271,7 +271,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     }
 
     protected void waitChangeTask() {
-        if (getAliveState()) {
+        if (isAlive) {
             lock.lock();
             isPause = true;
             try {
@@ -294,21 +294,19 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      */
     @Override
     public void waitTask(long time) {
-        if (getAliveState()) {
+        if (isAlive && isLoop) {
             lock.lock();
             try {
-                if (isLoop) {
-                    isPause = true;
-                    if (time == 0) {
-                        condition.await();
-                    } else {
-                        condition.await(time, TimeUnit.MILLISECONDS);
-                    }
+                isPause = true;
+                if (time == 0) {
+                    condition.await();
+                } else {
+                    condition.await(time, TimeUnit.MILLISECONDS);
                 }
+                isPause = false;
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                isPause = false;
                 lock.unlock();
             }
         }
@@ -332,7 +330,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void sleepTask(long time) {
-        if (getLoopState()) {
+        if (isLoop) {
             try {
                 Thread.sleep(time);
             } catch (InterruptedException e) {
@@ -351,23 +349,16 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             return false;
         }
         this.executorTask = task;
-        setIdleState(false);
+        //设置线程空闲状态位
+        this.isIdle = false;
         wakeUpTask();
         return true;
     }
 
-    /**
-     * 设置线程空闲状态位
-     *
-     * @param state
-     */
-    private void setIdleState(boolean state) {
-        this.isIdle = state;
-    }
 
     @Override
     public boolean isIdleState() {
-        return isIdle;
+        return isIdle && isAlive && isStart;
     }
 
     @Override
@@ -377,7 +368,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void destroyTask() {
-        setMultiplexTask(false);
+        isMultiplex = false;
         stopTask();
     }
 
