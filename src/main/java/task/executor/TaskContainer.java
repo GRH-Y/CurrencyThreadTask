@@ -69,4 +69,11 @@ public class TaskContainer implements ITaskContainer {
         return (T) task;
     }
 
+    @Override
+    public void release() {
+        objectExecutor = null;
+        thread = null;
+        task = null;
+    }
+
 }

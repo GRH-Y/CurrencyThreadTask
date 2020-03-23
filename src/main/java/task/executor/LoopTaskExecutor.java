@@ -108,12 +108,16 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 if (isMultiplex) {
                     // 设置线程空闲状态
                     isIdle = true;
+                    //notify wait thread
+                    notifyWaitThread();
                     // 线程挂起 等待切换任务或者停止
                     waitChangeTask();
                     // 设置线程非空闲状态
                     isIdle = false;
-                    // 设置任务为循环状态
-                    isLoop = true;
+                    if (isMultiplex) {
+                        // 设置任务为循环状态
+                        isLoop = true;
+                    }
                 }
 
             } while (isMultiplex);
@@ -122,6 +126,10 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             isAlive = false;
             //notify wait thread
             notifyWaitThread();
+
+            executorTask = null;
+            container = null;
+            engine = null;
         }
     }
 
@@ -358,7 +366,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public boolean isIdleState() {
-        return isIdle && isAlive && isStart;
+        return isIdle && isAlive && isStart && isMultiplex;
     }
 
     @Override

@@ -40,4 +40,7 @@ public interface ITaskContainer {
      */
     <T extends BaseLoopTask> T getTask();
 
+
+    void release();
+
 }

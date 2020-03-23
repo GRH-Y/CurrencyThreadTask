@@ -6,7 +6,6 @@ import task.executor.joggle.ILoopTaskExecutor;
 import task.executor.joggle.ITaskContainer;
 import task.executor.joggle.IThreadPoolManager;
 
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -15,11 +14,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author YDZ
  */
 public class TaskExecutorPoolManager implements IThreadPoolManager {
+
     private static TaskExecutorPoolManager pool = null;
     /**
      * 缓存线程栈
      */
-    private static Queue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
+    private static ConcurrentLinkedQueue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
 
     private TaskExecutorPoolManager() {
         DestroyTask recycleTask = new DestroyTask();
@@ -38,14 +38,16 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     private ITaskContainer getTaskContainer(BaseLoopTask task) {
         if (!containerCache.isEmpty()) {
-            for (ITaskContainer container : containerCache) {
-                ILoopTaskExecutor executor = container.getTaskExecutor();
-                boolean isIdleState = executor.isIdleState();
-                if (isIdleState) {
-                    if (executor instanceof ConsumerTaskExecutor && task instanceof BaseConsumerTask) {
-                        return container;
-                    } else if (executor instanceof LoopTaskExecutor && !(task instanceof BaseConsumerTask)) {
-                        return container;
+            synchronized (containerCache) {
+                for (ITaskContainer container : containerCache) {
+                    ILoopTaskExecutor executor = container.getTaskExecutor();
+                    boolean isIdleState = executor.isIdleState();
+                    if (isIdleState) {
+                        if (executor instanceof ConsumerTaskExecutor && task instanceof BaseConsumerTask) {
+                            return container;
+                        } else if (!(executor instanceof ConsumerTaskExecutor) && !(task instanceof BaseConsumerTask)) {
+                            return container;
+                        }
                     }
                 }
             }
@@ -111,7 +113,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         for (ITaskContainer container : containerCache) {
             LoopTaskExecutor taskExecutor = container.getTaskExecutor();
             if (taskExecutor.executorTask == loopTask) {
-                taskExecutor.stopTask();
+                taskExecutor.blockStopTask();
                 return;
             }
         }
@@ -124,7 +126,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
             if (taskExecutor.executorTask instanceof ConsumerEngine) {
                 ConsumerEngine coreTask = (ConsumerEngine) taskExecutor.executorTask;
                 if (coreTask.getTask() == consumerTask) {
-                    taskExecutor.stopTask();
+                    taskExecutor.blockStopTask();
                     return;
                 }
             }
@@ -152,6 +154,8 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     public void destroy(ITaskContainer container) {
         ILoopTaskExecutor executor = container.getTaskExecutor();
         executor.destroyTask();
+        container.release();
+        containerCache.remove(container);
     }
 
     @Override
@@ -163,7 +167,10 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
     public void destroyAll() {
         for (ITaskContainer container : containerCache) {
             ILoopTaskExecutor executor = container.getTaskExecutor();
-            executor.destroyTask();
+            if (executor != null) {
+                executor.destroyTask();
+            }
+            container.release();
         }
         containerCache.clear();
     }
