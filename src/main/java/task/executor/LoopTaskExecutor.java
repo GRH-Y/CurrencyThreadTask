@@ -126,10 +126,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
             isAlive = false;
             //notify wait thread
             notifyWaitThread();
-
-            executorTask = null;
-            container = null;
-            engine = null;
         }
     }
 
@@ -196,33 +192,23 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void startTask() {
-        startTask(executorTask.getClass().getName());
-    }
-
-    @Override
-    public void startTask(String threadName) {
         if (!isAlive && !isStart) {
             isStart = true;
             isLoop = true;
             try {
-                container.getThread().setName(threadName);
                 container.getThread().start();
             } catch (Throwable e) {
-                Thread thread = container.getNewThread();
-                thread.setName(threadName);
-                thread.start();
+                Thread oldThread = container.getThread();
+                Thread newThread = container.getNewThread();
+                newThread.setName(oldThread.getName());
+                newThread.start();
             }
         }
     }
 
     @Override
     public void blockStartTask() {
-        blockStartTask(executorTask.getClass().getName());
-    }
-
-    @Override
-    public void blockStartTask(String threadName) {
-        startTask(threadName);
+        startTask();
         //循环等待状态被改变
         if (!(container.getThread() == Thread.currentThread())) {
             if (!isAlive && isStart) {

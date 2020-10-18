@@ -1,6 +1,7 @@
 package task.executor;
 
 
+import log.LogDog;
 import task.executor.joggle.IAttribute;
 import task.executor.joggle.ILoopTaskExecutor;
 import task.executor.joggle.ITaskContainer;
@@ -135,6 +136,9 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     @Override
     public void multiplexThread(ITaskContainer container) {
+        if (container == null || container.getTaskExecutor() == null) {
+            LogDog.e("## multiplexThread() container or  container.getTaskExecutor()  is null !!! ");
+        }
         ILoopTaskExecutor executor = container.getTaskExecutor();
         boolean state = executor.getMultiplexState() && executor.isIdleState();
         if (state) {
@@ -144,6 +148,10 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     @Override
     public final boolean changeTask(ITaskContainer container, BaseLoopTask newTask, IAttribute attribute) {
+        if (container == null || container.getTaskExecutor() == null || newTask == null) {
+            LogDog.e("## changeTask() container container.getTaskExecutor() or newTask is null !!! ");
+            return false;
+        }
         ILoopTaskExecutor executor = container.getTaskExecutor();
         executor.setAttribute(attribute);
         return executor.changeTask(newTask);
@@ -152,14 +160,22 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
 
     @Override
     public void destroy(ITaskContainer container) {
-        ILoopTaskExecutor executor = container.getTaskExecutor();
-        executor.destroyTask();
-        container.release();
-        containerCache.remove(container);
+        if (container != null) {
+            ILoopTaskExecutor executor = container.getTaskExecutor();
+            if (executor != null) {
+                executor.destroyTask();
+            }
+            container.release();
+            containerCache.remove(container);
+        }
     }
 
     @Override
     public boolean isIdleState(ITaskContainer container) {
+        if (container == null || container.getTaskExecutor() == null) {
+            LogDog.e("## isIdleState() container or container.getTaskExecutor() is null !!! ");
+            return false;
+        }
         return container.getTaskExecutor().isIdleState();
     }
 

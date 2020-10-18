@@ -86,23 +86,9 @@ public interface ILoopTaskExecutor {
     void startTask();
 
     /**
-     * 开始执行任务
-     *
-     * @param threadName 线程名称，方便调试
-     */
-    void startTask(String threadName);
-
-    /**
      * 阻塞式开始执行任务
      */
     void blockStartTask();
-
-    /**
-     * 阻塞式开始执行任务
-     *
-     * @param threadName 线程名称，方便调试
-     */
-    void blockStartTask(String threadName);
 
     /**
      * 停止运行任务

@@ -18,7 +18,7 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
     private int mCacheMaxCount = 0;
 
     /***缓冲区*/
-    private final List<D> mList;
+    private final LinkedList<D> mList;
 //    private final ConcurrentLinkedDeque<D> mList = new ConcurrentLinkedDeque<>();
 
     /***true 则缓冲区满时挤掉最早的数据，false为缓冲区满则不保存*/
@@ -26,10 +26,6 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
 
     public ConsumerListAttribute() {
         mList = new LinkedList<>();
-    }
-
-    public ConsumerListAttribute(List<D> list) {
-        mList = list;
     }
 
     /**
@@ -60,11 +56,7 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
      */
     @Override
     public D popCacheData() {
-        D data = null;
-        if (!mList.isEmpty()) {
-            data = mList.remove(0);
-        }
-        return data;
+        return mList.pollFirst();
     }
 
     /**
