@@ -67,7 +67,7 @@ public class ConsumerEngine extends BaseConsumerTask {
     @Override
     protected void onDestroyTask() {
         mConsumerTask.onDestroyTask();
-        if (!executor.getIdleStopState() && mAttribute != null) {
+        if (mAttribute != null) {
             mAttribute.clearCacheData();
         }
     }

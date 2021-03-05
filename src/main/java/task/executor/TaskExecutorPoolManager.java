@@ -140,7 +140,7 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
             LogDog.e("## multiplexThread() container or  container.getTaskExecutor()  is null !!! ");
         }
         ILoopTaskExecutor executor = container.getTaskExecutor();
-        boolean state = executor.getMultiplexState() && executor.isIdleState();
+        boolean state = executor.isMultiplexState() && executor.isIdleState();
         if (state) {
             containerCache.add(container);
         }

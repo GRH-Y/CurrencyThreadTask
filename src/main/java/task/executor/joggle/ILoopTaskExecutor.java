@@ -18,19 +18,13 @@ public interface ILoopTaskExecutor {
      */
     void setAttribute(IAttribute attribute);
 
-    /**
-     * 设置任务是否循环执行
-     *
-     * @param state true 为循环模式
-     */
-    void setLoopState(boolean state);
 
     /**
      * 任务是否是循环状态
      *
      * @return true 为循环状态
      */
-    boolean getLoopState();
+    boolean isLoopState();
 
 
     /**
@@ -38,7 +32,7 @@ public interface ILoopTaskExecutor {
      *
      * @return true 任务还在运行
      **/
-    boolean getAliveState();
+    boolean isAliveState();
 
 
     /**
@@ -46,14 +40,7 @@ public interface ILoopTaskExecutor {
      *
      * @return
      */
-    boolean getPauseState();
-
-    /**
-     * 获取当前任务是否是懒关闭状态
-     *
-     * @return true 为懒关闭状态
-     */
-    boolean getIdleStopState();
+    boolean isPauseState();
 
     /**
      * 暂停执行任务
@@ -100,11 +87,6 @@ public interface ILoopTaskExecutor {
      */
     void blockStopTask();
 
-    /**
-     * 懒关闭方式停止任务
-     */
-    void idleStopTask();
-
 
     /**
      * 线程准备运行状态
@@ -140,7 +122,7 @@ public interface ILoopTaskExecutor {
      *
      * @return true 为复用线程
      */
-    boolean getMultiplexState();
+    boolean isMultiplexState();
 
     /**
      * 设置线程是否是复用线程

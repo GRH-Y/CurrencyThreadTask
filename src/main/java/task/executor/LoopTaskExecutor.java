@@ -41,9 +41,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     /*** 线程空闲状态标志位*/
     private volatile boolean isIdle = true;
 
-    /*** 懒停止（提交完缓存区数据后再关闭）*/
-    private volatile boolean idleStop = false;
-
     /*** 是否复用线程*/
     private volatile boolean isMultiplex = false;
 
@@ -98,10 +95,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
                 } while (isLoop);
 
-                // 执行任务懒关闭事件
-                if (idleStop) {
-                    executorTask.onIdleStop();
-                }
                 //执行销毁事件
                 executorTask.onDestroyTask();
 
@@ -129,37 +122,19 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
     }
 
-    private void notifyWaitThread() {
-        lock.lock();
-        try {
-            condition.signal();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
-    }
+    // -------------------End run -------------------------------
 
-    // -------------------End run ---------------------
+    // -------------------start status --------------------------
 
     @Override
-    public boolean getAliveState() {
+    public boolean isAliveState() {
         return isAlive;
     }
 
-    // -------------------End get ThreadState---------------------
-
     @Override
-    public boolean getLoopState() {
+    public boolean isLoopState() {
         return isLoop;
     }
-
-    @Override
-    public void setLoopState(boolean state) {
-        isLoop = state;
-    }
-
-    // -------------------End get set LoopState setLoopInit ---------------------
 
     /**
      * 获取线程暂停状态
@@ -167,16 +142,31 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      * @return true 为线程是暂停状态
      */
     @Override
-    public boolean getPauseState() {
+    public boolean isPauseState() {
         return isPause;
     }
 
     @Override
-    public boolean getIdleStopState() {
-        return idleStop;
+    public boolean isIdleState() {
+        return isIdle && isAlive && isStart && isMultiplex;
     }
 
-    // -------------------End setPauseState getPauseState-----------------
+    @Override
+    public boolean isStartState() {
+        return isStart;
+    }
+
+    @Override
+    public boolean isMultiplexState() {
+        return isMultiplex;
+    }
+
+    @Override
+    public void setMultiplexTask(boolean multiplex) {
+        isMultiplex = multiplex;
+    }
+
+    // -------------------End status ----------------------------
 
     @Override
     public void pauseTask() {
@@ -188,7 +178,9 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         wakeUpTask();
     }
 
+
     // -------------------End pauseTask resumeTask-----------------
+
 
     @Override
     public void startTask() {
@@ -224,12 +216,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
     }
 
-    @Override
-    public void idleStopTask() {
-        idleStop = true;
-        stopTask();
-    }
-
 
     @Override
     public void stopTask() {
@@ -257,6 +243,17 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     // ------------------End startTask stopTask ----------------
 
+    private void notifyWaitThread() {
+        lock.lock();
+        try {
+            condition.signal();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /**
      * 暂停线程
      */
@@ -279,6 +276,18 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
                 lock.unlock();
             }
         }
+    }
+
+    @Override
+    public synchronized boolean changeTask(BaseLoopTask task) {
+        if (!isIdleState()) {
+            return false;
+        }
+        this.executorTask = task;
+        //设置线程空闲状态位
+        this.isIdle = false;
+        wakeUpTask();
+        return true;
     }
 
     /**
@@ -334,45 +343,11 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
     }
 
-    // -------------------End waitTask wakeUpTask sleepTask-----------------
-
-
-    @Override
-    public synchronized boolean changeTask(BaseLoopTask task) {
-        if (!isIdleState()) {
-            return false;
-        }
-        this.executorTask = task;
-        //设置线程空闲状态位
-        this.isIdle = false;
-        wakeUpTask();
-        return true;
-    }
-
-
-    @Override
-    public boolean isIdleState() {
-        return isIdle && isAlive && isStart && isMultiplex;
-    }
-
-    @Override
-    public boolean isStartState() {
-        return isStart;
-    }
-
     @Override
     public void destroyTask() {
         isMultiplex = false;
         stopTask();
     }
 
-    @Override
-    public boolean getMultiplexState() {
-        return isMultiplex;
-    }
-
-    @Override
-    public void setMultiplexTask(boolean multiplex) {
-        isMultiplex = multiplex;
-    }
+    // -------------------End waitTask wakeUpTask sleepTask-----------------
 }

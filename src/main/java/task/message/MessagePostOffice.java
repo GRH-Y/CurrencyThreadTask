@@ -65,7 +65,7 @@ public class MessagePostOffice implements IMsgPostOffice {
     private void assignmentMsg(MessageEnvelope message) {
         ThreadHandler handler = getNoBusyThread();
         handler.getAttribute().pushToCache(message);
-        if (!handler.getContainer().getTaskExecutor().getAliveState()) {
+        if (!handler.getContainer().getTaskExecutor().isAliveState()) {
             handler.getContainer().getTaskExecutor().startTask();
         } else {
             handler.getContainer().getTaskExecutor().resumeTask();
