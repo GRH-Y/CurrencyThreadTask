@@ -2,7 +2,7 @@ package task.executor;
 
 
 /**
- * 循环任务
+ * 循环任务事务
  * Created by prolog on 2018/2/16.
  *
  * @author yyz
