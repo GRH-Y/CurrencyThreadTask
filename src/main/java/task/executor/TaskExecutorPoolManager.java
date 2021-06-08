@@ -16,25 +16,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class TaskExecutorPoolManager implements IThreadPoolManager {
 
-    private static TaskExecutorPoolManager pool = null;
     /**
      * 缓存线程栈
      */
-    private static ConcurrentLinkedQueue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
+    private ConcurrentLinkedQueue<ITaskContainer> containerCache = new ConcurrentLinkedQueue();
 
     private TaskExecutorPoolManager() {
-        DestroyTask recycleTask = new DestroyTask();
-        Thread thread = new Thread(recycleTask);
-        Runtime.getRuntime().addShutdownHook(thread);
     }
 
-    public static synchronized TaskExecutorPoolManager getInstance() {
-        if (pool == null) {
-            synchronized (TaskExecutorPoolManager.class) {
-                pool = new TaskExecutorPoolManager();
-            }
-        }
-        return pool;
+    private static class Inner {
+        private static final TaskExecutorPoolManager pool = new TaskExecutorPoolManager();
+    }
+
+    public static TaskExecutorPoolManager getInstance() {
+        return Inner.pool;
     }
 
     private ITaskContainer getTaskContainer(BaseLoopTask task) {
@@ -190,13 +185,4 @@ public class TaskExecutorPoolManager implements IThreadPoolManager {
         }
         containerCache.clear();
     }
-
-    private class DestroyTask implements Runnable {
-
-        @Override
-        public void run() {
-            destroyAll();
-        }
-    }
-
 }

@@ -5,7 +5,6 @@ import task.message.joggle.IEnvelope;
 import task.message.joggle.IMsgCourier;
 import task.message.joggle.IMsgPostOffice;
 import task.message.joggle.INotifyListener;
-import util.JdkVersion;
 import util.ReflectionCall;
 
 import java.util.Iterator;
@@ -124,14 +123,10 @@ public class MessageCourier implements IMsgCourier {
 
     private void sendEnvelop(MessageEnvelope message) {
         message.setSenderKey(courierKey);
-        if (JdkVersion.isJava8()) {
-            serverQueue.forEach(item -> item.sendEnvelope(message));
-        } else {
-            Iterator<MessagePostOffice> iterator = serverQueue.iterator();
-            while (iterator.hasNext()) {
-                IMsgPostOffice sender = iterator.next();
-                sender.sendEnvelope(message);
-            }
+        Iterator<MessagePostOffice> iterator = serverQueue.iterator();
+        while (iterator.hasNext()) {
+            IMsgPostOffice sender = iterator.next();
+            sender.sendEnvelope(message);
         }
     }
 
@@ -153,14 +148,10 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void release() {
-        if (JdkVersion.isJava8Above()) {
-            serverQueue.forEach(item -> item.unRegisteredListener(this));
-        } else {
-            Iterator<MessagePostOffice> iterator = serverQueue.iterator();
-            while (iterator.hasNext()) {
-                MessagePostOffice sender = iterator.next();
-                sender.unRegisteredListener(this);
-            }
+        Iterator<MessagePostOffice> iterator = serverQueue.iterator();
+        while (iterator.hasNext()) {
+            MessagePostOffice sender = iterator.next();
+            sender.unRegisteredListener(this);
         }
         serverQueue.clear();
         msgQueue.clear();
