@@ -1,6 +1,6 @@
 package task.executor;
 
-import task.executor.joggle.IConsumerAttribute;
+import task.executor.joggle.IAttribute;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * 非线程安全的缓存
  *
- * @param <D>
+ * @param <T>
  */
-public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
+public class ConsumerListAttribute<T> implements IAttribute<T> {
     /**
      * 设置缓存区的大小
      * (特别注意:如果设置为小于1则存储为无限，当大于0时，如果当前缓存区数据大于该值，则会根据crowdOutModel来处理)
@@ -18,11 +18,11 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
     private int mCacheMaxCount = 0;
 
     /***缓冲区*/
-    private final LinkedList<D> mList;
+    private final LinkedList<T> mList;
 //    private final ConcurrentLinkedDeque<D> mList = new ConcurrentLinkedDeque<>();
 
     /***true 则缓冲区满时挤掉最早的数据，false为缓冲区满则不保存*/
-    private boolean crowdOutModel = false;
+    private boolean mCrowdOutModel = false;
 
     public ConsumerListAttribute() {
         mList = new LinkedList<>();
@@ -46,7 +46,7 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
      */
     @Override
     public void setPushDataModel(boolean isCrowdOut) {
-        this.crowdOutModel = isCrowdOut;
+        this.mCrowdOutModel = isCrowdOut;
     }
 
     /**
@@ -55,7 +55,7 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
      * @return 返回栈低的数据
      */
     @Override
-    public D popCacheData() {
+    public T popCacheData() {
         return mList.pollFirst();
     }
 
@@ -65,12 +65,12 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
      * @param data 数据
      */
     @Override
-    public void pushToCache(D data) {
+    public void pushToCache(T data) {
         if (data == null) {
             return;
         }
         if (mCacheMaxCount > 0) {
-            if (mList.size() >= mCacheMaxCount && crowdOutModel) {
+            if (mList.size() >= mCacheMaxCount && mCrowdOutModel) {
                 mList.remove(0);
                 mList.add(data);
             }
@@ -90,7 +90,7 @@ public class ConsumerListAttribute<D> implements IConsumerAttribute<D> {
     }
 
     @Override
-    public List<D> getCache() {
+    public List<T> getCache() {
         return mList;
     }
 

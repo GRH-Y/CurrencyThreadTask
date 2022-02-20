@@ -19,28 +19,28 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by prolog on 4/10/2017.
  */
 public class MessageCourier implements IMsgCourier {
-    protected INotifyListener listener;
-    protected Object target = null;
-    private final String courierKey;
+    protected INotifyListener mListener;
+    protected Object mTarget = null;
+    private final String mCourierKey;
 
     /***消息栈*/
-    protected Queue<IEnvelope> msgQueue = new ConcurrentLinkedQueue();
-    private final Queue<MessagePostOffice> serverQueue = new ConcurrentLinkedQueue();
+    protected final Queue<IEnvelope> mMsgQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<MessagePostOffice> mServerQueue = new ConcurrentLinkedQueue<>();
 
     public MessageCourier(INotifyListener listener) {
         if (listener == null) {
             throw new NullPointerException("listener cannot be null");
         }
-        courierKey = toString();
-        this.listener = listener;
+        mCourierKey = toString();
+        this.mListener = listener;
     }
 
     public MessageCourier(Object target) {
         if (target == null) {
             throw new NullPointerException("target cannot be null");
         }
-        courierKey = toString();
-        this.target = target;
+        mCourierKey = toString();
+        this.mTarget = target;
     }
 
 
@@ -54,22 +54,22 @@ public class MessageCourier implements IMsgCourier {
             //即时消息
             case INSTANT:
             default:
-                if (listener == null) {
-                    ReflectionCall.invoke(target, message.getMethodName(), new Class[]{MessageEnvelope.class}, message);
+                if (mListener == null) {
+                    ReflectionCall.invoke(mTarget, message.getMethodName(), new Class[]{MessageEnvelope.class}, message);
                 } else {
-                    listener.onInstantMessage(message);
+                    mListener.onInstantMessage(message);
                 }
                 break;
             //非即时消息
             case MAIL:
-                msgQueue.add(message);
+                mMsgQueue.add(message);
                 break;
         }
     }
 
     @Override
     public String getCourierKey() {
-        return courierKey;
+        return mCourierKey;
     }
 
     /**
@@ -79,8 +79,8 @@ public class MessageCourier implements IMsgCourier {
      */
     public IEnvelope popMessage() {
         IEnvelope data = null;
-        if (!msgQueue.isEmpty()) {
-            data = msgQueue.remove();
+        if (!mMsgQueue.isEmpty()) {
+            data = mMsgQueue.remove();
         }
         return data;
     }
@@ -93,16 +93,16 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void regMsgPostOffice(MessagePostOffice postOffice) {
-        if (!serverQueue.contains(postOffice)) {
-            serverQueue.offer(postOffice);
+        if (!mServerQueue.contains(postOffice)) {
+            mServerQueue.offer(postOffice);
             postOffice.registeredListener(this);
         }
     }
 
     @Override
     public void unRegMsgPostOffice(MessagePostOffice postOffice) {
-        if (serverQueue.contains(postOffice)) {
-            serverQueue.remove(postOffice);
+        if (mServerQueue.contains(postOffice)) {
+            mServerQueue.remove(postOffice);
             postOffice.unRegisteredListener(this);
         }
     }
@@ -122,8 +122,8 @@ public class MessageCourier implements IMsgCourier {
     }
 
     private void sendEnvelop(MessageEnvelope message) {
-        message.setSenderKey(courierKey);
-        Iterator<MessagePostOffice> iterator = serverQueue.iterator();
+        message.setSenderKey(mCourierKey);
+        Iterator<MessagePostOffice> iterator = mServerQueue.iterator();
         while (iterator.hasNext()) {
             IMsgPostOffice sender = iterator.next();
             sender.sendEnvelope(message);
@@ -148,13 +148,13 @@ public class MessageCourier implements IMsgCourier {
      */
     @Override
     public void release() {
-        Iterator<MessagePostOffice> iterator = serverQueue.iterator();
+        Iterator<MessagePostOffice> iterator = mServerQueue.iterator();
         while (iterator.hasNext()) {
             MessagePostOffice sender = iterator.next();
             sender.unRegisteredListener(this);
         }
-        serverQueue.clear();
-        msgQueue.clear();
+        mServerQueue.clear();
+        mMsgQueue.clear();
     }
 
 }

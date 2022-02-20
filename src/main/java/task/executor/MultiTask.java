@@ -1,7 +1,7 @@
 package task.executor;
 
 
-import task.executor.joggle.IConsumerAttribute;
+import task.executor.joggle.IAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
  */
 
 public abstract class MultiTask<T> {
-    private List<StackTraceElement> lockList;
-    private List<Task> taskList;
-    private int token = 0;
+    private List<StackTraceElement> mLockList;
+    private List<Task> mTaskList;
+    private int mToken = 0;
     /***生产标记*/
-    private long productionMark = 0;
+    private long mProductionMark = 0;
     /***消费标记*/
-    private long consumerMark = 0;
+    private long mConsumerMark = 0;
 
     public MultiTask() {
         int count = Runtime.getRuntime().availableProcessors();
@@ -38,11 +38,11 @@ public abstract class MultiTask<T> {
     }
 
     private void init(int count) {
-        taskList = new ArrayList<>(count);
-        lockList = new ArrayList<>();
+        mTaskList = new ArrayList<>(count);
+        mLockList = new ArrayList<>();
         for (int index = 0; index < count; index++) {
             Task task = new Task(index);
-            taskList.add(task);
+            mTaskList.add(task);
             task.getExecutor().startTask();
         }
     }
@@ -53,7 +53,7 @@ public abstract class MultiTask<T> {
      * @param count 缓冲区大小
      */
     public void setCacheMaxCount(int count) {
-        for (Task task : taskList) {
+        for (Task task : mTaskList) {
             task.getAttribute().setCacheMaxCount(count);
         }
     }
@@ -64,12 +64,12 @@ public abstract class MultiTask<T> {
      * @param data 数据
      */
     public void pushData(T data) {
-        Task task = taskList.get(token++);
-        TaskEntity entity = new TaskEntity(productionMark++, data);
+        Task task = mTaskList.get(mToken++);
+        TaskEntity entity = new TaskEntity(mProductionMark++, data);
         task.getAttribute().pushToCache(entity);
         task.getExecutor().resumeTask();
-        if (token >= taskList.size()) {
-            token = 0;
+        if (mToken >= mTaskList.size()) {
+            mToken = 0;
         }
     }
 
@@ -83,7 +83,7 @@ public abstract class MultiTask<T> {
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
         StackTraceElement currentElement = elements[elements.length - 1];
         boolean isHas = false;
-        for (StackTraceElement element : lockList) {
+        for (StackTraceElement element : mLockList) {
             if (currentElement.getClassName().equals(element.getClassName())
                     && currentElement.getMethodName().equals(element.getMethodName())
                     && currentElement.getLineNumber() == element.getLineNumber()) {
@@ -91,10 +91,10 @@ public abstract class MultiTask<T> {
                 break;
             }
         }
-        if (isHas && taskList.size() > 1) {
+        if (isHas && mTaskList.size() > 1) {
             task.getExecutor().waitTask(0);
         } else {
-            lockList.add(elements[elements.length - 1]);
+            mLockList.add(elements[elements.length - 1]);
         }
     }
 
@@ -105,7 +105,7 @@ public abstract class MultiTask<T> {
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
         StackTraceElement currentElement = elements[elements.length - 1];
         int index = 0;
-        for (StackTraceElement element : lockList) {
+        for (StackTraceElement element : mLockList) {
             if (currentElement.getClassName().equals(element.getClassName())
                     && currentElement.getMethodName().equals(element.getMethodName())
                     && currentElement.getLineNumber() == element.getLineNumber()) {
@@ -113,14 +113,14 @@ public abstract class MultiTask<T> {
             }
             index++;
         }
-        lockList.remove(index);
-        for (Task tmp : taskList) {
+        mLockList.remove(index);
+        for (Task tmp : mTaskList) {
             tmp.getExecutor().resumeTask();
         }
     }
 
     protected synchronized void nextTask() {
-        consumerMark++;
+        mConsumerMark++;
     }
 
     protected void onInitTask() {
@@ -141,21 +141,19 @@ public abstract class MultiTask<T> {
     /**
      * 任务线程
      */
-    protected class Task extends BaseConsumerTask {
-        protected int token;
-        private TaskContainer container;
-        private ConsumerTaskExecutor executor;
-        private IConsumerAttribute<TaskEntity> attribute;
+    protected class Task extends LoopTask {
+        protected final int token;
+        private final LoopTaskExecutor executor;
+        private final IAttribute<TaskEntity> attribute;
 
         Task(int token) {
-            container = new TaskContainer(this);
+            TaskContainer container = new TaskContainer(this, "MultiTask.Task." + token);
             executor = container.getTaskExecutor();
             attribute = new ConsumerQueueAttribute<>();
-            executor.setAttribute(attribute);
             this.token = token;
         }
 
-        public ConsumerTaskExecutor getExecutor() {
+        public LoopTaskExecutor getExecutor() {
             return executor;
         }
 
@@ -163,23 +161,25 @@ public abstract class MultiTask<T> {
             return token;
         }
 
-        public IConsumerAttribute getAttribute() {
+        public IAttribute<TaskEntity> getAttribute() {
             return attribute;
         }
 
         @Override
         protected void onInitTask() {
             MultiTask.this.onInitTask();
-            executor.setIdleStateSleep(true);
         }
 
         @Override
-        protected void onProcess() {
+        protected void onRunLoopTask() {
             TaskEntity entity = attribute.popCacheData();
             if (entity != null) {
-                onExecTask(this, entity.data, entity.mark);
+                onExecTask(this, entity.mData, entity.mMark);
+            } else {
+                executor.waitTask();
             }
         }
+
 
         @Override
         protected void onDestroyTask() {
@@ -192,12 +192,12 @@ public abstract class MultiTask<T> {
      * 任务Entity
      */
     private class TaskEntity {
-        long mark = 0;
-        T data = null;
+        long mMark;
+        T mData;
 
         TaskEntity(long mark, T data) {
-            this.mark = mark;
-            this.data = data;
+            this.mMark = mark;
+            this.mData = data;
         }
     }
 
@@ -205,12 +205,12 @@ public abstract class MultiTask<T> {
      * 释放资源
      */
     public void release() {
-        if (taskList != null) {
-            for (Task task : taskList) {
+        if (mTaskList != null) {
+            for (Task task : mTaskList) {
                 task.getExecutor().stopTask();
             }
-            taskList.clear();
-            taskList = null;
+            mTaskList.clear();
+            mTaskList = null;
         }
     }
 }

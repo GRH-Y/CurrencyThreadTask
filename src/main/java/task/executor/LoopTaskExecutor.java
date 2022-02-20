@@ -1,7 +1,6 @@
 package task.executor;
 
 
-import task.executor.joggle.IAttribute;
 import task.executor.joggle.ILoopTaskExecutor;
 
 import java.util.concurrent.TimeUnit;
@@ -16,110 +15,105 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class LoopTaskExecutor implements ILoopTaskExecutor {
 
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private final Lock mLock = new ReentrantLock();
+    private final Condition mCondition = mLock.newCondition();
 
-    private TaskContainer container;
+    private final TaskContainer mContainer;
 
     /*** 任务*/
-    protected BaseLoopTask executorTask;
-    /*** 执行接口*/
-    private LoopEngine engine;
+    protected LoopTask mExecutorTask;
+
+    private final ExecutorEngine mEngine;
 
     /*** 线程状态*/
-    private volatile boolean isAlive = false;
+    private volatile boolean mIsAlive = false;
 
     /*** 线程准备运行状态*/
-    private volatile boolean isStart = false;
+    private volatile boolean mIsStart = false;
 
     /*** 线程是否循环执行*/
-    private volatile boolean isLoop = false;
+    private volatile boolean mIsLoop = false;
 
     /*** 线程是否暂停执行*/
-    private volatile boolean isPause = false;
+    private volatile boolean mIsPause = false;
 
     /*** 线程空闲状态标志位*/
-    private volatile boolean isIdle = true;
+    private volatile boolean mIsIdle = true;
 
     /*** 是否复用线程*/
-    private volatile boolean isMultiplex = false;
+    private volatile boolean mIsMultiplex = false;
 
     /**
      * 创建任务
      *
-     * @param container 任务容器
+     * @param task 任务
+     * @param task 任务名字
      */
-    LoopTaskExecutor(TaskContainer container) {
-        if (container == null) {
-            throw new NullPointerException(" container is null");
+    protected LoopTaskExecutor(LoopTask task, TaskContainer container) {
+        if (task == null || container == null) {
+            throw new NullPointerException("task or container is null");
         }
-        this.container = container;
-        this.executorTask = container.getTask();
-        engine = new LoopEngine();
+        this.mExecutorTask = task;
+        this.mContainer = container;
+        mEngine = new ExecutorEngine();
     }
 
-    protected Runnable getRunnable() {
-        return engine;
-    }
 
-    @Override
-    public <T> T getAttribute() {
-        return null;
-    }
-
-    @Override
-    public void setAttribute(IAttribute attribute) {
-    }
-
-    private class LoopEngine implements Runnable {
+    private class ExecutorEngine implements Runnable {
 
         @Override
         public void run() {
             //设置线程激活状态
-            isAlive = true;
+            mIsAlive = true;
             // 设置线程非空闲状态
-            isIdle = false;
+            mIsIdle = false;
             //notify wait thread
             notifyWaitThread();
 
             do {
                 //执行初始化事件
-                executorTask.onInitTask();
+                mExecutorTask.onInitTask();
                 do {
                     // 是否暂停执行
-                    if (isPause) {
+                    if (mIsPause) {
                         waitTask();
                     }
                     // 执行任务事件
-                    executorTask.onRunLoopTask();
+                    mExecutorTask.onRunLoopTask();
 
-                } while (isLoop);
+                } while (mIsLoop);
 
                 //执行销毁事件
-                executorTask.onDestroyTask();
+                mExecutorTask.onDestroyTask();
 
-                if (isMultiplex) {
+                if (mIsMultiplex) {
                     // 设置线程空闲状态
-                    isIdle = true;
+                    mIsIdle = true;
+                    mExecutorTask.onInIdleTask();
                     //notify wait thread
                     notifyWaitThread();
                     // 线程挂起 等待切换任务或者停止
                     waitChangeTask();
                     // 设置线程非空闲状态
-                    isIdle = false;
-                    if (isMultiplex) {
+                    mIsIdle = false;
+                    mExecutorTask.onOutIdleTask();
+                    if (mIsMultiplex) {
                         // 设置任务为循环状态
-                        isLoop = true;
+                        mIsLoop = true;
                     }
                 }
 
-            } while (isMultiplex);
+            } while (mIsMultiplex);
 
-            isStart = false;
-            isAlive = false;
+            mIsStart = false;
+            mIsAlive = false;
             //notify wait thread
             notifyWaitThread();
         }
+    }
+
+    protected ExecutorEngine getEngine() {
+        return mEngine;
     }
 
     // -------------------End run -------------------------------
@@ -128,12 +122,12 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public boolean isAliveState() {
-        return isAlive;
+        return mIsAlive;
     }
 
     @Override
     public boolean isLoopState() {
-        return isLoop;
+        return mIsLoop;
     }
 
     /**
@@ -143,34 +137,34 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      */
     @Override
     public boolean isPauseState() {
-        return isPause;
+        return mIsPause;
     }
 
     @Override
     public boolean isIdleState() {
-        return isIdle && isAlive && isStart && isMultiplex;
+        return mIsIdle && mIsAlive && mIsStart && mIsMultiplex;
     }
 
     @Override
     public boolean isStartState() {
-        return isStart;
+        return mIsStart;
     }
 
     @Override
     public boolean isMultiplexState() {
-        return isMultiplex;
+        return mIsMultiplex;
     }
 
     @Override
     public void setMultiplexTask(boolean multiplex) {
-        isMultiplex = multiplex;
+        mIsMultiplex = multiplex;
     }
 
     // -------------------End status ----------------------------
 
     @Override
     public void pauseTask() {
-        isPause = true;
+        mIsPause = true;
     }
 
     @Override
@@ -184,17 +178,10 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void startTask() {
-        if (!isAlive && !isStart) {
-            isStart = true;
-            isLoop = true;
-            try {
-                container.getThread().start();
-            } catch (Throwable e) {
-                Thread oldThread = container.getThread();
-                Thread newThread = container.getNewThread();
-                newThread.setName(oldThread.getName());
-                newThread.start();
-            }
+        if (!mIsAlive && !mIsStart) {
+            mIsStart = true;
+            mIsLoop = true;
+            mContainer.getThread().start();
         }
     }
 
@@ -202,15 +189,15 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     public void blockStartTask() {
         startTask();
         //循环等待状态被改变
-        if (!(container.getThread() == Thread.currentThread())) {
-            if (!isAlive && isStart) {
-                lock.lock();
+        if (!(mContainer.getThread() == Thread.currentThread())) {
+            if (!mIsAlive && mIsStart) {
+                mLock.lock();
                 try {
-                    condition.await();
+                    mCondition.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    lock.unlock();
+                    mLock.unlock();
                 }
             }
         }
@@ -219,7 +206,7 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void stopTask() {
-        isLoop = false;
+        mIsLoop = false;
         wakeUpTask();
     }
 
@@ -227,15 +214,15 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     public void blockStopTask() {
         stopTask();
         //循环等待状态被改变
-        if (!(container.getThread() == Thread.currentThread())) {
-            if (isAlive && isStart) {
-                lock.lock();
+        if (!(mContainer.getThread() == Thread.currentThread())) {
+            if (mIsAlive && mIsStart) {
+                mLock.lock();
                 try {
-                    condition.await();
+                    mCondition.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    lock.unlock();
+                    mLock.unlock();
                 }
             }
         }
@@ -244,13 +231,13 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
     // ------------------End startTask stopTask ----------------
 
     private void notifyWaitThread() {
-        lock.lock();
+        mLock.lock();
         try {
-            condition.signal();
+            mCondition.signal();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            lock.unlock();
+            mLock.unlock();
         }
     }
 
@@ -261,31 +248,33 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         waitTask(0);
     }
 
+
     protected void waitChangeTask() {
-        if (isAlive) {
-            lock.lock();
-            isPause = true;
+        if (mIsAlive) {
+            mLock.lock();
+            mIsPause = true;
             try {
-                while (isMultiplex && isIdle) {
-                    condition.await();
+                while (mIsMultiplex && mIsIdle) {
+                    mCondition.await();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                isPause = false;
-                lock.unlock();
+                mIsPause = false;
+                mLock.unlock();
             }
         }
     }
 
     @Override
-    public synchronized boolean changeTask(BaseLoopTask task) {
-        if (!isIdleState()) {
+    public synchronized boolean changeTask(LoopTask task) {
+        if (task == null || !isIdleState()) {
             return false;
         }
-        this.executorTask = task;
+        this.mExecutorTask = task;
+        mContainer.getThread().setName(task.getClass().getName());
         //设置线程空闲状态位
-        this.isIdle = false;
+        this.mIsIdle = false;
         wakeUpTask();
         return true;
     }
@@ -297,20 +286,26 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      */
     @Override
     public void waitTask(long time) {
-        if (isAlive && isLoop) {
-            lock.lock();
+        if (mIsAlive && mIsLoop) {
+            mLock.lock();
             try {
-                isPause = true;
+                mIsPause = true;
                 if (time == 0) {
-                    condition.await();
+                    mCondition.await();
                 } else {
-                    condition.await(time, TimeUnit.MILLISECONDS);
+                    do {
+                        boolean ret = mCondition.await(time, TimeUnit.MILLISECONDS);
+                        //没有达到通知时间则返回true
+                        if (!ret) {
+                            break;
+                        }
+                    } while (true);
                 }
-                isPause = false;
+                mIsPause = false;
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                lock.unlock();
+                mLock.unlock();
             }
         }
     }
@@ -319,33 +314,32 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
      * 唤醒线程
      */
     protected void wakeUpTask() {
-        if (isPause) {
-            lock.lock();
+        if (mIsPause) {
+            mLock.lock();
             try {
-                condition.signal();
+                mCondition.signal();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                lock.unlock();
+                mLock.unlock();
             }
         }
     }
 
     @Override
     public void sleepTask(long time) {
-        if (isLoop) {
+        if (mIsLoop) {
             try {
                 Thread.sleep(time);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                Thread.currentThread().interrupt();
             }
         }
     }
 
     @Override
     public void destroyTask() {
-        isMultiplex = false;
+        mIsMultiplex = false;
         stopTask();
     }
 

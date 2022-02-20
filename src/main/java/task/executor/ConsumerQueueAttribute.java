@@ -1,6 +1,6 @@
 package task.executor;
 
-import task.executor.joggle.IConsumerAttribute;
+import task.executor.joggle.IAttribute;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -8,9 +8,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 线程安全的缓存
  *
- * @param <D>
+ * @param <T>
  */
-public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
+public class ConsumerQueueAttribute<T> implements IAttribute<T> {
     /**
      * 设置缓存区的大小
      * (特别注意:如果设置为小于1则存储为无限，当大于0时，如果当前缓存区数据大于该值，则会根据crowdOutModel来处理)
@@ -18,16 +18,16 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
     private int mCacheMaxCount = 0;
 
     /***缓冲区*/
-    private final Queue<D> mCache;
+    private final Queue<T> mCache;
 
     /***true 则缓冲区满时挤掉最早的数据，false为缓冲区满则不保存*/
-    private boolean crowdOutModel = false;
+    private boolean mCrowdOutModel = false;
 
     public ConsumerQueueAttribute() {
-        mCache = new ConcurrentLinkedQueue();
+        this(new ConcurrentLinkedQueue<>());
     }
 
-    public ConsumerQueueAttribute(Queue<D> queue) {
+    public ConsumerQueueAttribute(Queue<T> queue) {
         mCache = queue;
     }
 
@@ -49,7 +49,7 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
      */
     @Override
     public void setPushDataModel(boolean isCrowdOut) {
-        this.crowdOutModel = isCrowdOut;
+        this.mCrowdOutModel = isCrowdOut;
     }
 
     /**
@@ -58,13 +58,10 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
      * @return 返回栈低的数据
      */
     @Override
-    public D popCacheData() {
-        D data = null;
+    public T popCacheData() {
+        T data = null;
         if (!mCache.isEmpty()) {
-            try {
-                data = mCache.poll();
-            } catch (Exception e) {
-            }
+            data = mCache.poll();
         }
         return data;
     }
@@ -75,16 +72,13 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
      * @param data 数据
      */
     @Override
-    public void pushToCache(D data) {
+    public void pushToCache(T data) {
         if (data == null) {
             return;
         }
         if (mCacheMaxCount > 0 && mCache.size() >= mCacheMaxCount) {
-            if (crowdOutModel) {
-                try {
-                    mCache.poll();
-                } catch (Exception e) {
-                }
+            if (mCrowdOutModel) {
+                mCache.poll();
                 mCache.offer(data);
             }
         } else {
@@ -103,7 +97,7 @@ public class ConsumerQueueAttribute<D> implements IConsumerAttribute<D> {
     }
 
     @Override
-    public Queue<D> getCache() {
+    public Queue<T> getCache() {
         return mCache;
     }
 

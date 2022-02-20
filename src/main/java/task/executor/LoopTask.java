@@ -7,7 +7,7 @@ package task.executor;
  *
  * @author yyz
  */
-public class BaseLoopTask {
+public class LoopTask {
 
     /**
      * 初始化任务
@@ -24,16 +24,23 @@ public class BaseLoopTask {
     }
 
     /**
-     * 任务进入懒关闭状态，处理完该回调即将调用onDestroyTask
+     * 任务销毁
      */
-    protected void onIdleStop() {
+    protected void onDestroyTask() {
         //Do something
     }
 
     /**
-     * 任务销毁
+     * 任务开始进入空闲状态
      */
-    protected void onDestroyTask() {
+    protected void onInIdleTask() {
+        //Do something
+    }
+
+    /**
+     * 任务开始退出空闲状态
+     */
+    protected void onOutIdleTask() {
         //Do something
     }
 }

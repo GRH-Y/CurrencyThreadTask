@@ -20,7 +20,7 @@ public class MessageEnvelope implements IEnvelope {
     private String mSenderKey = null;
     private Object mData = null;
     private MegType mType = MegType.INSTANT;
-    private IMsgPostOffice sender = null;
+    private IMsgPostOffice mSender = null;
 
 
     protected String getMethodName() {
@@ -38,8 +38,8 @@ public class MessageEnvelope implements IEnvelope {
     }
 
     @Override
-    public void setData(Object mData) {
-        this.mData = mData;
+    public void setData(Object data) {
+        this.mData = data;
     }
 
     /**
@@ -67,10 +67,10 @@ public class MessageEnvelope implements IEnvelope {
     /**
      * 设置消息发送者的key
      *
-     * @param mSenderKey 接收者key
+     * @param senderKey 接收者key
      */
-    protected void setSenderKey(String mSenderKey) {
-        this.mSenderKey = mSenderKey;
+    protected void setSenderKey(String senderKey) {
+        this.mSenderKey = senderKey;
     }
 
     /**
@@ -113,11 +113,11 @@ public class MessageEnvelope implements IEnvelope {
     /**
      * 设置是否广播消息
      *
-     * @param mRadio true 则会广播给所有监听器
+     * @param radio true 则会广播给所有监听器
      */
     @Override
-    public void setRadio(boolean mRadio) {
-        this.mRadio = mRadio;
+    public void setRadio(boolean radio) {
+        this.mRadio = radio;
         if (mRadio) {
             this.mTargetKey = null;
         }
@@ -136,11 +136,11 @@ public class MessageEnvelope implements IEnvelope {
     /**
      * 设置为true是以高效方式传送处理消息，默认为false
      *
-     * @param mHighOverhead true为高开销
+     * @param highOverhead true为高开销
      */
     @Override
-    public void setHighOverhead(boolean mHighOverhead) {
-        this.mHighOverhead = mHighOverhead;
+    public void setHighOverhead(boolean highOverhead) {
+        this.mHighOverhead = highOverhead;
     }
 
 
@@ -150,17 +150,17 @@ public class MessageEnvelope implements IEnvelope {
      * @param sender 消息发送者
      */
     protected void setMsgPostOffice(IMsgPostOffice sender) {
-        this.sender = sender;
+        this.mSender = sender;
     }
 
 
     @Override
     public void sendToTarget(String methodName, Object data) {
-        if (sender == null) {
+        if (mSender == null) {
             throw new NullPointerException("The MsgPostOffice was not used and the specified MsgPostOffice was not found !");
         }
         setMethodName(methodName);
         setData(data);
-        sender.sendEnvelope(this);
+        mSender.sendEnvelope(this);
     }
 }

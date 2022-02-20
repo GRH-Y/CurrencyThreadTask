@@ -1,6 +1,6 @@
 package task.executor.joggle;
 
-import task.executor.BaseLoopTask;
+import task.executor.LoopTask;
 
 /**
  * 控制循环任务接口
@@ -9,15 +9,6 @@ import task.executor.BaseLoopTask;
  * @author yyz
  */
 public interface ILoopTaskExecutor {
-
-
-    <T> T getAttribute();
-
-    /**
-     * 设置扩展属性
-     */
-    void setAttribute(IAttribute attribute);
-
 
     /**
      * 任务是否是循环状态
@@ -102,7 +93,7 @@ public interface ILoopTaskExecutor {
      * @param runnable 任务
      * @return true 切换任务成功
      */
-    boolean changeTask(BaseLoopTask runnable);
+    boolean changeTask(LoopTask runnable);
 
 
     /**

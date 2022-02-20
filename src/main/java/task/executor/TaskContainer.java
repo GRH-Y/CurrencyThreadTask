@@ -1,8 +1,6 @@
 package task.executor;
 
 
-import task.executor.joggle.ILoopTaskExecutor;
-import task.executor.joggle.ITaskContainer;
 import util.StringEnvoy;
 
 /**
@@ -10,20 +8,16 @@ import util.StringEnvoy;
  *
  * @author yyz
  */
-public class TaskContainer implements ITaskContainer {
+public class TaskContainer {
 
-    /**
-     * 要执行的任务
-     */
-    private BaseLoopTask task;
     /**
      * 线程体
      */
-    private Thread thread;
+    private final Thread mThread;
     /**
      * 执行体
      */
-    private LoopTaskExecutor objectExecutor;
+    private final LoopTaskExecutor mExecutor;
 
 
     /**
@@ -31,49 +25,29 @@ public class TaskContainer implements ITaskContainer {
      *
      * @param task 循环任务
      */
-    public TaskContainer(BaseLoopTask task) {
+    public TaskContainer(LoopTask task) {
         this(task, task.getClass().getName());
     }
 
-    public TaskContainer(BaseLoopTask task, String threadName) {
+    public TaskContainer(LoopTask task, String threadName) {
         if (task == null || StringEnvoy.isEmpty(threadName)) {
             throw new NullPointerException("task or threadName is null");
         }
-        this.task = task;
-        if (task instanceof BaseConsumerTask) {
-            objectExecutor = new ConsumerTaskExecutor(this);
-        } else {
-            objectExecutor = new LoopTaskExecutor(this);
-        }
-        thread = new Thread(objectExecutor.getRunnable(), threadName);
+        mExecutor = new LoopTaskExecutor(task, this);
+        mThread = new Thread(mExecutor.getEngine(), threadName);
     }
 
-    protected Thread getNewThread() {
-        thread = new Thread(objectExecutor.getRunnable(), objectExecutor.getClass().getName());
-        return thread;
+    public void setThreadPriority(int newPriority) {
+        mThread.setPriority(newPriority);
     }
 
-    @Override
-    public Thread getThread() {
-        return thread;
+    protected Thread getThread() {
+        return mThread;
     }
 
 
-    @Override
-    public <T extends ILoopTaskExecutor> T getTaskExecutor() {
-        return (T) objectExecutor;
-    }
-
-    @Override
-    public <T extends BaseLoopTask> T getTask() {
-        return (T) task;
-    }
-
-    @Override
-    public void release() {
-        objectExecutor = null;
-        thread = null;
-        task = null;
+    public LoopTaskExecutor getTaskExecutor() {
+        return mExecutor;
     }
 
 }

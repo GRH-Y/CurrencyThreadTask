@@ -9,14 +9,14 @@ enum MegOperation {
      */
     ADD(), DEL(), DEL_ALL();
     /*** 消息接收者*/
-    private MessageCourier courier = null;
+    private MessageCourier mCourier = null;
 
     public MegOperation setCourier(MessageCourier courier) {
-        this.courier = courier;
+        this.mCourier = courier;
         return this;
     }
 
     public MessageCourier getCourier() {
-        return courier;
+        return mCourier;
     }
 }
