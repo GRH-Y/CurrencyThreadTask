@@ -1,11 +1,11 @@
-package task.message;
+package com.jav.thread.message;
 
 
-import task.message.joggle.IEnvelope;
-import task.message.joggle.IMsgCourier;
-import task.message.joggle.IMsgPostOffice;
-import task.message.joggle.INotifyListener;
-import util.ReflectionCall;
+import com.jav.common.util.ReflectionCall;
+import com.jav.thread.message.joggle.IMsgPostOffice;
+import com.jav.thread.message.joggle.IEnvelope;
+import com.jav.thread.message.joggle.IMsgCourier;
+import com.jav.thread.message.joggle.INotifyListener;
 
 import java.util.Iterator;
 import java.util.Queue;

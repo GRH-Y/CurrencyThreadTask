@@ -1,4 +1,4 @@
-package task.message;
+package com.jav.thread.message;
 
 enum MegOperation {
 

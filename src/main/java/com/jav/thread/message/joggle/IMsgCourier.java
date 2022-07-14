@@ -1,7 +1,7 @@
-package task.message.joggle;
+package com.jav.thread.message.joggle;
 
-import task.message.MessageEnvelope;
-import task.message.MessagePostOffice;
+import com.jav.thread.message.MessagePostOffice;
+import com.jav.thread.message.MessageEnvelope;
 
 /**
  * IMsgCourier 消息接收者

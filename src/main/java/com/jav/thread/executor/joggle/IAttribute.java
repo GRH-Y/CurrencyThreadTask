@@ -1,4 +1,4 @@
-package task.executor.joggle;
+package com.jav.thread.executor.joggle;
 
 public interface IAttribute<T>  {
 

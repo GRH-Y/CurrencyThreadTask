@@ -1,7 +1,7 @@
-package task.executor;
+package com.jav.thread.executor;
 
 
-import task.executor.joggle.ILoopTaskExecutor;
+import com.jav.thread.executor.joggle.ILoopTaskExecutor;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

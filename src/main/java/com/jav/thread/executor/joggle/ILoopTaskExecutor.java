@@ -1,6 +1,6 @@
-package task.executor.joggle;
+package com.jav.thread.executor.joggle;
 
-import task.executor.LoopTask;
+import com.jav.thread.executor.LoopTask;
 
 /**
  * 控制循环任务接口

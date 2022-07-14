@@ -1,7 +1,7 @@
-package task.executor;
+package com.jav.thread.executor;
 
 
-import log.LogDog;
+import com.jav.common.log.LogDog;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 

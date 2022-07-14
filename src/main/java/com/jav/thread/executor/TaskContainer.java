@@ -1,7 +1,7 @@
-package task.executor;
+package com.jav.thread.executor;
 
 
-import util.StringEnvoy;
+import com.jav.common.util.StringEnvoy;
 
 /**
  * 线程实体

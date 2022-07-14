@@ -1,4 +1,4 @@
-package task.message.joggle;
+package com.jav.thread.message.joggle;
 
 /**
  * IEnvelope

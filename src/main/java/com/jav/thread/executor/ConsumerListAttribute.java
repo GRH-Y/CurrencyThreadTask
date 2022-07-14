@@ -1,6 +1,6 @@
-package task.executor;
+package com.jav.thread.executor;
 
-import task.executor.joggle.IAttribute;
+import com.jav.thread.executor.joggle.IAttribute;
 
 import java.util.LinkedList;
 import java.util.List;

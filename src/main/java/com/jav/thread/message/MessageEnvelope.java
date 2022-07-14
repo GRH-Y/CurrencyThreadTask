@@ -1,8 +1,8 @@
-package task.message;
+package com.jav.thread.message;
 
 
-import task.message.joggle.IEnvelope;
-import task.message.joggle.IMsgPostOffice;
+import com.jav.thread.message.joggle.IEnvelope;
+import com.jav.thread.message.joggle.IMsgPostOffice;
 
 /**
  * 线程消息类

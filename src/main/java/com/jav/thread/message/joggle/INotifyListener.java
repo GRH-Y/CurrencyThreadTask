@@ -1,4 +1,4 @@
-package task.message.joggle;
+package com.jav.thread.message.joggle;
 
 /**
  * 线程消息回调接口

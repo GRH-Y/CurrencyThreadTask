@@ -1,14 +1,14 @@
-package task.message;
+package com.jav.thread.message;
 
 
-import task.executor.ConsumerQueueAttribute;
-import task.executor.LoopTask;
-import task.executor.LoopTaskExecutor;
-import task.executor.TaskContainer;
-import task.executor.joggle.IAttribute;
-import task.message.joggle.IMsgCourier;
-import task.message.joggle.IMsgPostOffice;
-import util.StringEnvoy;
+import com.jav.common.util.StringEnvoy;
+import com.jav.thread.executor.LoopTaskExecutor;
+import com.jav.thread.executor.TaskContainer;
+import com.jav.thread.message.joggle.IMsgPostOffice;
+import com.jav.thread.executor.ConsumerQueueAttribute;
+import com.jav.thread.executor.LoopTask;
+import com.jav.thread.executor.joggle.IAttribute;
+import com.jav.thread.message.joggle.IMsgCourier;
 
 import java.util.Map;
 import java.util.Queue;
