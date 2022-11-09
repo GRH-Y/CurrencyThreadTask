@@ -156,10 +156,10 @@ public class MessagePostOffice implements IMsgPostOffice {
     private void disposeMessage(MessageEnvelope message) {
         mIsNotify.set(true);
         String targetKey = message.getTargetKey();
-        if (StringEnvoy.isNotEmpty(targetKey) && !message.isRadio()) {
-            notifyTargetCourier(message);
-        } else {
+        if (StringEnvoy.isEmpty(targetKey) && message.isRadio()) {
             notifyAllCourier(message);
+        } else {
+            notifyTargetCourier(message);
         }
         mIsNotify.set(false);
     }

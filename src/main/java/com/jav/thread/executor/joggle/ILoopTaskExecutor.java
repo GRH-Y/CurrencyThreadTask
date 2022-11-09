@@ -88,6 +88,13 @@ public interface ILoopTaskExecutor {
 
 
     /**
+     * 线程准备结束
+     * @return
+     */
+    boolean isStopState();
+
+
+    /**
      * 切换任务
      *
      * @param runnable 任务

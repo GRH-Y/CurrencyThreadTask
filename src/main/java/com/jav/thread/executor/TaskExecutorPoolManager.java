@@ -44,7 +44,10 @@ public class TaskExecutorPoolManager {
     }
 
 
-    private TaskContainer createPoolTask(LoopTask loopTask) {
+    public void runTask(LoopTask loopTask) {
+        if (loopTask == null) {
+            return;
+        }
         TaskContainer container = getThreadContainer();
         if (container != null) {
             LoopTaskExecutor executor = container.getTaskExecutor();
@@ -54,18 +57,8 @@ public class TaskExecutorPoolManager {
             LoopTaskExecutor executor = container.getTaskExecutor();
             executor.setMultiplexTask(true);
             mContainerCache.add(container);
+            executor.startTask();
         }
-        return container;
-    }
-
-
-    public void runTask(LoopTask loopTask) {
-        if (loopTask == null) {
-            return;
-        }
-        TaskContainer container = createPoolTask(loopTask);
-        LoopTaskExecutor executor = container.getTaskExecutor();
-        executor.startTask();
     }
 
 
@@ -74,7 +67,6 @@ public class TaskExecutorPoolManager {
             LoopTaskExecutor executor = container.getTaskExecutor();
             if (executor.mExecutorTask == loopTask) {
                 executor.blockStopTask();
-                return;
             }
         }
     }

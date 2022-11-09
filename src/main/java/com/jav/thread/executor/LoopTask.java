@@ -30,17 +30,4 @@ public class LoopTask {
         //Do something
     }
 
-    /**
-     * 任务开始进入空闲状态
-     */
-    protected void onInIdleTask() {
-        //Do something
-    }
-
-    /**
-     * 任务开始退出空闲状态
-     */
-    protected void onOutIdleTask() {
-        //Do something
-    }
 }
