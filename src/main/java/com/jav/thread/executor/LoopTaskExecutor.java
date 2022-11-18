@@ -224,9 +224,10 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
 
     @Override
     public void stopTask() {
-        boolean isInvalid = mAliveState.get() == DESTROY || mIsStop.get();
-        boolean isNotStart = !mIsStart.get() && mAliveState.get() == INACTIVATED;
-        if (isInvalid || isNotStart) {
+        int state = mAliveState.get();
+        boolean isInvalid = state == DESTROY || mIsStop.get();
+        boolean isNotStart = !mIsStart.get() && state == INACTIVATED;
+        if (isInvalid && isNotStart) {
             LogDog.w("## The thread has not been activated or has been stopped !");
             return;
         }

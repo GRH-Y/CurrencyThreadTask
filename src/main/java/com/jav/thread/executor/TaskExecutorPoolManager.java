@@ -66,7 +66,7 @@ public class TaskExecutorPoolManager {
         for (TaskContainer container : mContainerCache) {
             LoopTaskExecutor executor = container.getTaskExecutor();
             if (executor.mExecutorTask == loopTask) {
-                executor.blockStopTask();
+                executor.stopTask();
             }
         }
     }
