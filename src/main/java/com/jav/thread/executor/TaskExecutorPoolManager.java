@@ -28,15 +28,16 @@ public class TaskExecutorPoolManager {
         return Inner.sPool;
     }
 
-    private TaskContainer getThreadContainer() {
-        if (!mContainerCache.isEmpty()) {
-            synchronized (mContainerCache) {
-                for (TaskContainer container : mContainerCache) {
-                    LoopTaskExecutor executor = container.getTaskExecutor();
-                    boolean isIdleState = executor.isIdleState();
-                    if (isIdleState) {
-                        return container;
-                    }
+    private TaskContainer getIdleSThreadContainer() {
+        if (mContainerCache.isEmpty()) {
+            return null;
+        }
+        synchronized (mContainerCache) {
+            for (TaskContainer container : mContainerCache) {
+                LoopTaskExecutor executor = container.getTaskExecutor();
+                boolean isIdleState = executor.isIdleState();
+                if (isIdleState) {
+                    return container;
                 }
             }
         }
@@ -48,7 +49,7 @@ public class TaskExecutorPoolManager {
         if (loopTask == null) {
             return;
         }
-        TaskContainer container = getThreadContainer();
+        TaskContainer container = getIdleSThreadContainer();
         if (container != null) {
             LoopTaskExecutor executor = container.getTaskExecutor();
             executor.changeTask(loopTask);
@@ -56,6 +57,7 @@ public class TaskExecutorPoolManager {
             container = new TaskContainer(loopTask);
             LoopTaskExecutor executor = container.getTaskExecutor();
             executor.setMultiplexTask(true);
+            executor.configSingleLoop();
             mContainerCache.add(container);
             executor.startTask();
         }

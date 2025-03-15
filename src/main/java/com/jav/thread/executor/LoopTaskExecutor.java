@@ -175,6 +175,10 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         mIsMultiplex.set(multiplex);
     }
 
+    protected void configSingleLoop() {
+        mIsLoop.set(false);
+    }
+
     // -------------------End status ----------------------------
 
     @Override
@@ -361,16 +365,6 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         }
     }
 
-    @Override
-    public void sleepTask(long time) {
-        if (isAliveState()) {
-            try {
-                Thread.sleep(time);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Override
     public void destroyTask() {
@@ -378,5 +372,5 @@ public class LoopTaskExecutor implements ILoopTaskExecutor {
         stopTask();
     }
 
-    // -------------------End waitTask wakeUpTask sleepTask-----------------
+    // -------------------End waitTask wakeUpTask -----------------
 }

@@ -59,11 +59,7 @@ public class ConsumerQueueAttribute<T> implements IAttribute<T> {
      */
     @Override
     public T popCacheData() {
-        T data = null;
-        if (!mCache.isEmpty()) {
-            data = mCache.poll();
-        }
-        return data;
+        return mCache.poll();
     }
 
     /**
@@ -94,11 +90,6 @@ public class ConsumerQueueAttribute<T> implements IAttribute<T> {
     @Override
     public int getCacheDataSize() {
         return mCache.size();
-    }
-
-    @Override
-    public Queue<T> getCache() {
-        return mCache;
     }
 
     /**

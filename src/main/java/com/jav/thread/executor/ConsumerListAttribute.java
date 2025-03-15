@@ -3,7 +3,6 @@ package com.jav.thread.executor;
 import com.jav.thread.executor.joggle.IAttribute;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 非线程安全的缓存
@@ -71,7 +70,7 @@ public class ConsumerListAttribute<T> implements IAttribute<T> {
         }
         if (mCacheMaxCount > 0) {
             if (mList.size() >= mCacheMaxCount && mCrowdOutModel) {
-                mList.remove(0);
+                mList.pollFirst();
                 mList.add(data);
             }
         } else {
@@ -89,10 +88,6 @@ public class ConsumerListAttribute<T> implements IAttribute<T> {
         return mList.size();
     }
 
-    @Override
-    public List<T> getCache() {
-        return mList;
-    }
 
     /**
      * 清理所有缓存要发送的数据

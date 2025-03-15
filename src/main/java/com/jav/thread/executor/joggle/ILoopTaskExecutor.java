@@ -51,12 +51,6 @@ public interface ILoopTaskExecutor {
      */
     void waitTask(long timeout);
 
-    /**
-     * 任务线程睡眠
-     *
-     * @param time
-     */
-    void sleepTask(long time);
 
     /**
      * 开始执行任务

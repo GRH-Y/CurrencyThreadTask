@@ -3,13 +3,6 @@ package com.jav.thread.executor.joggle;
 public interface IAttribute<T>  {
 
     /**
-     * 获取缓存集合
-     *
-     * @return
-     */
-    <T> T getCache();
-
-    /**
      * 获取当前缓存区数据的数量
      *
      * @return 返回数据数量
